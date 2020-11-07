@@ -1,0 +1,24 @@
+{
+  "name": "online-store",
+  "version": "0.0.1",
+  "description": "Сервис для размещения объявлений",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahaviev/online-store.git"
+  },
+  "keywords": [
+    "объявления",
+    "магазин",
+    "купить",
+    "продать"
+  ],
+  "author": "Rail Sakhaviev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sahaviev/online-store/issues"
+  },
+  "homepage": "https://github.com/sahaviev/online-store#readme"
+}
