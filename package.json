@@ -1,8 +1,8 @@
 {
   "name": "online-store",
   "version": "0.0.1",
+  "private": true,
   "description": "Сервис для размещения объявлений",
-  "main": "index.js",
   "scripts": {
   },
   "repository": {
