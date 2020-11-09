@@ -4,6 +4,7 @@
   "private": true,
   "description": "Сервис для размещения объявлений",
   "scripts": {
+    "test": "npm run eslint"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,10 @@
   "bugs": {
     "url": "https://github.com/sahaviev/online-store/issues"
   },
-  "homepage": "https://github.com/sahaviev/online-store#readme"
+  "homepage": "https://github.com/sahaviev/online-store#readme",
+  "devDependencies": {
+    "eslint": "7.13.0",
+    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-plugin-import": "2.22.1"
+  }
 }
