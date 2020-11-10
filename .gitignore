@@ -1,3 +1,7 @@
 /markup/
 /node_modules/
 .idea
+*.log
+
+public/bundle.js
+public/bundle.js.map
