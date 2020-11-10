@@ -8,3 +8,6 @@ env:
 
 extends:
   - 'airbnb-base'
+
+plugins:
+  - import
