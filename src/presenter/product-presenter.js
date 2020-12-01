@@ -57,7 +57,6 @@ export class ProductPresenter {
       case SortingOrder.CHEAP:
         return products.slice().sort(sortByPrice);
       case SortingOrder.NEW:
-        // ToDo: разобраться с сортировкой по дате
         return products.slice().sort(sortByDate);
       default:
         return products;

@@ -24,7 +24,7 @@ productPresenter.init();
 
 api.getProducts()
   .then((data) => {
-    productsModel.setProducts(UpdateType.INIT, data.products);
+    productsModel.setProducts(UpdateType.INIT, data.products.map(ProductModel.adaptToClient));
     // render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
     // siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });

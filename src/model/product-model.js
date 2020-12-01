@@ -1,4 +1,5 @@
 import { AbstractModel } from '../utils/abstract-model';
+import { adaptDate } from '../utils/product';
 
 export class ProductModel extends AbstractModel {
   constructor() {
@@ -7,6 +8,7 @@ export class ProductModel extends AbstractModel {
   }
 
   setProducts(updateType, products) {
+    console.log(products);
     this.products = products.slice();
 
     this.observer.notify(updateType, products);
@@ -14,5 +16,12 @@ export class ProductModel extends AbstractModel {
 
   getProducts() {
     return this.products;
+  }
+
+  static adaptToClient(product) {
+    return {
+      ...product,
+      date: adaptDate(product['data publishing']),
+    };
   }
 }
