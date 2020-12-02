@@ -1,6 +1,6 @@
 import { AbstractView } from './abstract-view.js';
 
-export class ProductView extends AbstractView {
+export class ProductLayoutView extends AbstractView {
   getSortingContainer() {
     return this.getElement().querySelector('.sorting__form');
   }

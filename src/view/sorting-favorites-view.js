@@ -1,6 +1,11 @@
 import { AbstractView } from './abstract-view.js';
 
 export class SortingFavoritesView extends AbstractView {
+  constructor() {
+    super();
+    this.showFavoriteClickHandler = this.showFavoriteClickHandler.bind(this);
+  }
+
   getTemplate() {
     return `<div class="sorting__favourites">
         <input class="visually-hidden" type="checkbox" name="favourites" id="favourites">
@@ -11,5 +16,15 @@ export class SortingFavoritesView extends AbstractView {
           Показать избранные
         </label>
       </div>`;
+  }
+
+  showFavoriteClickHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.showFavoriteClick(evt.target.checked);
+  }
+
+  setShowFavoriteClickHandler(callback) {
+    this.callbacks.showFavoriteClick = callback;
+    this.getElement().querySelector('#favourites').addEventListener('change', this.showFavoriteClickHandler);
   }
 }

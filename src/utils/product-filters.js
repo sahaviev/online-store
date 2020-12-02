@@ -1,5 +1,7 @@
 import { CategoryType } from '../const';
-import { adaptEstateType, adaptNotebookType } from './product-adapters';
+import {
+  adaptEstateType, adaptNotebookType, adaptCameraType, adaptCarcassType, adaptGearboxType,
+} from './product-adapters';
 
 function filterEstates(products, filters) {
   return products.filter((product) => {
@@ -74,6 +76,73 @@ function filterLaptops(products, filters) {
   });
 }
 
+function filterCameras(products, filters) {
+  return products.filter((product) => {
+    if (product.category !== CategoryType.CAMERA) {
+      return false;
+    }
+
+    const additional = product['additional-information'];
+
+    if (!additional || !additional.notebook) {
+      return false;
+    }
+
+    // ToDo: переделать сервер на нормальную структуру
+    const camera = additional.notebook;
+
+    const cameraType = filters['camera-type'];
+    if (cameraType && cameraType.length > 0 && !cameraType.includes(adaptCameraType(camera.type))) {
+      return false;
+    }
+
+    const matrixResolution = filters['resolution-matrix'];
+    if (matrixResolution && matrixResolution !== 'any' && Number(matrixResolution) < Math.floor(camera['matrix-resolution'])) {
+      return false;
+    }
+
+    const videoResolution = filters['resolution-video'];
+    if (videoResolution && videoResolution !== 'any' && videoResolution !== camera.supported) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+function filterCars(products, filters) {
+  return products.filter((product) => {
+    if (product.category !== CategoryType.CARS) {
+      return false;
+    }
+
+    const additional = product['additional-information'];
+
+    if (!additional || !additional.car) {
+      return false;
+    }
+
+    const { car } = additional;
+
+    const carYear = filters['car-year'];
+    if (carYear && carYear !== 'any' && Number(carYear) > Number(car['production-year'])) {
+      return false;
+    }
+
+    const gearboxType = filters.gearbox;
+    if (gearboxType && gearboxType !== 'any' && gearboxType !== adaptGearboxType(car.gearbox)) {
+      return false;
+    }
+
+    const carcass = filters['body-type'];
+    if (carcass && carcass.length > 0 && !carcass.includes(adaptCarcassType(car.carcass))) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
 export const filterProducts = (products, category, filters) => {
   switch (category) {
     case CategoryType.ALL:
@@ -83,9 +152,9 @@ export const filterProducts = (products, category, filters) => {
     case CategoryType.LAPTOPS:
       return filterLaptops(products, filters);
     case CategoryType.CAMERA:
-      return products;
+      return filterCameras(products, filters);
     case CategoryType.CARS:
-      return products;
+      return filterCars(products, filters);
     default:
       return products;
   }

@@ -14,3 +14,5 @@ export const sortProducts = (products, sortingOrder) => {
       return products;
   }
 };
+
+export const sortFavoriteProducts = (products) => products.filter((product) => product.is_favorite);

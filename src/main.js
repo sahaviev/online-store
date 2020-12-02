@@ -6,7 +6,7 @@ import { FilterModel } from './model/filter-model';
 import { ProductModel } from './model/product-model';
 
 import { FilterPresenter } from './presenter/filter-presenter';
-import { ProductPresenter } from './presenter/product-presenter';
+import { ProductLayoutPresenter } from './presenter/product-layout-presenter';
 
 const END_POINT = 'https://main-shop-fake-server.herokuapp.com';
 
@@ -20,7 +20,7 @@ const mainContainer = document.querySelector('.main');
 const appContainer = mainContainer.querySelector('.onlineshop-app__wrapper');
 
 const filterPresenter = new FilterPresenter(appContainer, categoryModel, filterModel);
-const productPresenter = new ProductPresenter(
+const productPresenter = new ProductLayoutPresenter(
   appContainer, categoryModel, filterModel, productsModel,
 );
 

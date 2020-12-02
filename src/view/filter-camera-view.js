@@ -25,7 +25,8 @@ const createCameraFilterTemplate = () => `<div class="filter__camera">
     <div class="filter__select-wrapper filter__select-wrapper--min-resolution">
       <label for="resolution-matrix">Минимальное разрешение матрицы</label>
       <select id="resolution-matrix" name="resolution-matrix">
-        <option value="1mp" selected>1 МП</option>
+        <option value="any" selected>Любое</option>
+        <option value="1mp">1 МП</option>
         <option value="3mp">3 МП</option>
         <option value="5mp">5 МП</option>
         <option value="7mp">7 МП</option>
@@ -40,7 +41,7 @@ const createCameraFilterTemplate = () => `<div class="filter__camera">
       <select id="resolution-video" name="resolution-video">
         <option value="any" selected>Любое</option>
         <option value="HD">HD</option>
-        <option value="Full_HD">Full HD</option>
+        <option value="Full-HD">Full HD</option>
         <option value="4K">4K</option>
         <option value="5K">5K</option>
       </select>
