@@ -1,26 +1,24 @@
-import { AbstractView } from '../utils/abstract-view.js';
+import { AbstractFilterView } from './abstract-filter-view.js';
 
-export class FilterEstateView extends AbstractView {
-  getTemplate() {
-    return `<div class="filter__estate">
+const createEstateFilterTemplate = () => `<div class="filter__estate">
   <div class="filter__range">
     <label for="range">Цена, ₽</label>
-    <input type="range" min="0" max="6000000" id="range">
+    <input name="range" type="range" min="0" max="6000000" id="range">
   </div>
   <fieldset class="filter__type filter__type--estate">
     <legend>Тип недвижимости</legend>
-    <ul class="filter__checkboxes-list filter__checkboxes-list--estate">
+    <ul class="filter__checkboxes-list filter__checkboxes-list--estate" id="estate-type">
       <li class="filter__checkboxes-item">
-        <input class="visually-hidden" type="checkbox" name="estate-type" value="house" id="house">
-        <label for="house">Дом</label>
+        <input class="visually-hidden" type="checkbox" name="estate-type" value="house" id="house_type" />
+        <label for="house_type">Дом</label>
       </li>
       <li class="filter__checkboxes-item">
-        <input class="visually-hidden" type="checkbox" name="estate-type" value="flat" id="flat">
-        <label for="flat">Квартира</label>
+        <input class="visually-hidden" type="checkbox" name="estate-type" value="flat" id="flat_type"  />
+        <label for="flat_type">Квартира</label>
       </li>
       <li class="filter__checkboxes-item">
-        <input class="visually-hidden" type="checkbox" name="estate-type" value="apartments" id="apartments">
-        <label for="apartments">Апартаменты</label>
+        <input class="visually-hidden" type="checkbox" name="estate-type" value="apartments" id="apartments_type" />
+        <label for="apartments_type">Апартаменты</label>
       </li>
     </ul>
   </fieldset>
@@ -30,33 +28,45 @@ export class FilterEstateView extends AbstractView {
   </div>
   <fieldset class="filter__radiobuttons filter__radiobuttons--ram">
     <legend>Количество комнат</legend>
-    <ul class="filter__ram-list">
+    <ul class="filter__ram-list" id="rooms">
       <li class="filter__radiobuttons-item">
-        <input class="visually-hidden" type="radio" name="rooms" value="any" id="any_room">
+        <input class="visually-hidden" type="radio" name="rooms" value="any" id="any_room" />
         <label for="any_room">Любое</label>
       </li>
       <li class="filter__radiobuttons-item">
-        <input class="visually-hidden" type="radio" name="rooms" value="one" id="one">
-        <label for="one">1</label>
+        <input class="visually-hidden" type="radio" name="rooms" value="1" id="one_room" />
+        <label for="one_room">1</label>
       </li>
       <li class="filter__radiobuttons-item">
-        <input class="visually-hidden" type="radio" name="rooms" value="two" id="two">
-        <label for="two">2</label>
+        <input class="visually-hidden" type="radio" name="rooms" value="2" id="two_room" />
+        <label for="two_room">2</label>
       </li>
       <li class="filter__radiobuttons-item">
-        <input class="visually-hidden" type="radio" name="rooms" value="three" id="three">
-        <label for="three">3</label>
+        <input class="visually-hidden" type="radio" name="rooms" value="3" id="three_room" />
+        <label for="three_room">3</label>
       </li>
       <li class="filter__radiobuttons-item">
-        <input class="visually-hidden" type="radio" name="rooms" value="four" id="four">
-        <label for="four">4</label>
+        <input class="visually-hidden" type="radio" name="rooms" value="4" id="four_room" />
+        <label for="four_room">4</label>
       </li>
       <li class="filter__radiobuttons-item">
-        <input class="visually-hidden" type="radio" name="rooms" value="fivemore" id="fivemore">
-        <label for="fivemore">5+</label>
+        <input class="visually-hidden" type="radio" name="rooms" value="five_and_more" id="five_and_more" />
+        <label for="five_and_more">5+</label>
       </li>
     </ul>
   </fieldset>
 </div>`;
+
+export class FilterEstateView extends AbstractFilterView {
+  setFilterChangeHandler(callback) {
+    this.callbacks.filterChange = callback;
+    this.getElement().querySelector('#range').addEventListener('change', this.handleFilterChange);
+    this.getElement().querySelector('#estate-type').addEventListener('change', this.handleFilterChange);
+    this.getElement().querySelector('#square').addEventListener('change', this.handleFilterChange);
+    this.getElement().querySelector('#rooms').addEventListener('change', this.handleFilterChange);
+  }
+
+  getTemplate() {
+    return createEstateFilterTemplate();
   }
 }

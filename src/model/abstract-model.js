@@ -1,4 +1,4 @@
-import { Observer } from './observer';
+import { Observer } from '../utils/observer';
 
 export class AbstractModel {
   constructor() {

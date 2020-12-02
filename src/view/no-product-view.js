@@ -1,4 +1,4 @@
-import { AbstractView } from '../utils/abstract-view.js';
+import { AbstractView } from './abstract-view.js';
 
 export class NoProductView extends AbstractView {
   getTemplate() {

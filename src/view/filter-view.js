@@ -1,6 +1,11 @@
-import { AbstractView } from '../utils/abstract-view.js';
+import { AbstractView } from './abstract-view.js';
 
 export class FilterView extends AbstractView {
+  constructor() {
+    super();
+    this.filterButtonClickHandler = this.filterButtonClickHandler.bind(this);
+  }
+
   getCategoriesContainer() {
     return this.getElement().querySelector('.filter__categories');
   }
@@ -15,8 +20,18 @@ export class FilterView extends AbstractView {
       <div class="filter__categories"></div>
       <div class="filter__category-filters"></div>
       <form class="filter__form" action="#" method="post">
-          <button class="button filter__button" type="submit">Показать</button>
+          <button class="button filter__button" type="submit" id="filter-button">Показать</button>
         </form>
       </section>`;
+  }
+
+  filterButtonClickHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.filterButtonClick();
+  }
+
+  setFilterButtonClickHandler(callback) {
+    this.callbacks.filterButtonClick = callback;
+    this.getElement().querySelector('.filter__form').addEventListener('submit', this.filterButtonClickHandler);
   }
 }

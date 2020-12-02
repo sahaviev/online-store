@@ -1,4 +1,4 @@
-import { AbstractView } from '../utils/abstract-view.js';
+import { AbstractView } from './abstract-view.js';
 
 export class SortingFavoritesView extends AbstractView {
   getTemplate() {

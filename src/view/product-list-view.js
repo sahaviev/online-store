@@ -1,4 +1,4 @@
-import { AbstractView } from '../utils/abstract-view.js';
+import { AbstractView } from './abstract-view.js';
 
 const createProductItemTemplate = (product) => (
   `<li class="results__item product">

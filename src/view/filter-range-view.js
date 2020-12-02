@@ -1,10 +1,17 @@
-import { AbstractView } from '../utils/abstract-view.js';
+import { AbstractFilterView } from './abstract-filter-view.js';
 
-export class FilterRangeView extends AbstractView {
-  getTemplate() {
-    return `<div class="filter__range">
+const createRangeFilterTemplate = () => `<div class="filter__range">
   <label for="range">Цена, ₽</label>
-  <input type="range" min="0" max="6000000" id="range">
+  <input name="range" type="range" min="0" max="6000000" id="range">
 </div>`;
+
+export class FilterRangeView extends AbstractFilterView {
+  setFilterChangeHandler(callback) {
+    this.callbacks.filterChange = callback;
+    this.getElement().querySelector('#range').addEventListener('change', this.handleFilterChange);
+  }
+
+  getTemplate() {
+    return createRangeFilterTemplate();
   }
 }

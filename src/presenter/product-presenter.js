@@ -1,9 +1,9 @@
 import {
   remove, render, replace, RenderPosition,
 } from '../utils/render';
-import { sortByDate, sortByPrice } from '../utils/product';
 
-import { SortingOrder } from '../const';
+import { sortProducts } from '../utils/product-sorters';
+import { filterProducts } from '../utils/product-filters';
 
 import { ProductView } from '../view/product-view';
 import { ProductListView } from '../view/product-list-view';
@@ -11,8 +11,10 @@ import { SortingOrderView } from '../view/sorting-order-view';
 import { SortingFavoritesView } from '../view/sorting-favorites-view';
 
 export class ProductPresenter {
-  constructor(appContainer, productsModel) {
+  constructor(appContainer, categoryModel, filterModel, productsModel) {
     this.appContainer = appContainer;
+    this.categoryModel = categoryModel;
+    this.filterModel = filterModel;
     this.productsModel = productsModel;
 
     this.currentSortingOrder = null;
@@ -38,6 +40,8 @@ export class ProductPresenter {
     render(this.productsContainer.getProductListContainer(), this.productListComponent);
     render(this.appContainer, this.productsContainer);
 
+    this.categoryModel.addSubscriber(this.handleModelEvent);
+    this.filterModel.addSubscriber(this.handleModelEvent);
     this.productsModel.addSubscriber(this.handleModelEvent);
   }
 
@@ -52,15 +56,15 @@ export class ProductPresenter {
 
   getProducts() {
     const products = this.productsModel.getProducts();
+    const currentCategory = this.categoryModel.getCategory();
+    const currentFilters = this.filterModel.getFilters();
 
-    switch (this.currentSortingOrder) {
-      case SortingOrder.CHEAP:
-        return products.slice().sort(sortByPrice);
-      case SortingOrder.NEW:
-        return products.slice().sort(sortByDate);
-      default:
-        return products;
-    }
+    const filtered = filterProducts(products, currentCategory, currentFilters);
+    console.log(currentFilters);
+
+    console.log(filtered);
+
+    return sortProducts(filtered, this.currentSortingOrder);
   }
 
   renderProducts() {

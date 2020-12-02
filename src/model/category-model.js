@@ -1,4 +1,4 @@
-import { AbstractModel } from '../utils/abstract-model';
+import { AbstractModel } from './abstract-model';
 import { CategoryType } from '../const';
 
 export class CategoryModel extends AbstractModel {

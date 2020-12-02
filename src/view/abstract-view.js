@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-import { createElement } from './render.js';
+import { createElement } from '../utils/render.js';
 
 export class AbstractView {
   constructor() {

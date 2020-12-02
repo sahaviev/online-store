@@ -1,5 +1,5 @@
-import { AbstractModel } from '../utils/abstract-model';
-import { adaptDate } from '../utils/product';
+import { AbstractModel } from './abstract-model';
+import { adaptCategory, adaptDate } from '../utils/product-adapters';
 
 export class ProductModel extends AbstractModel {
   constructor() {
@@ -21,6 +21,7 @@ export class ProductModel extends AbstractModel {
   static adaptToClient(product) {
     return {
       ...product,
+      category: adaptCategory(product.category),
       date: adaptDate(product['data publishing']),
     };
   }
