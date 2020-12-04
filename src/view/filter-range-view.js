@@ -7,7 +7,7 @@ const createRangeFilterTemplate = () => `<div class="filter__range">
 
 export class FilterRangeView extends AbstractFilterView {
   setFilterChangeHandler(callback) {
-    this.callbacks.filterChange = callback;
+    super.setFilterChangeHandler(callback);
     this.getElement().querySelector('#range').addEventListener('change', this.handleFilterChange);
   }
 

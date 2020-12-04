@@ -53,11 +53,16 @@ const createCameraFilterTemplate = () => `<div class="filter__camera">
 
 export class FilterCameraView extends AbstractFilterView {
   setFilterChangeHandler(callback) {
-    this.callbacks.filterChange = callback;
-    this.getElement().querySelector('#range').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#camera-type').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#resolution-matrix').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#resolution-video').addEventListener('change', this.handleFilterChange);
+    super.setFilterChangeHandler(callback);
+    const element = this.getElement();
+    element.querySelector('#range').addEventListener('change', this.handleFilterChange);
+    element.querySelector('#resolution-matrix').addEventListener('change', this.handleFilterChange);
+    element.querySelector('#resolution-video').addEventListener('change', this.handleFilterChange);
+  }
+
+  setCheckboxFilterChangeHandler(callback) {
+    super.setCheckboxFilterChangeHandler(callback);
+    this.getElement().querySelector('#camera-type').addEventListener('change', this.handleCheckboxFilterChange);
   }
 
   getTemplate() {

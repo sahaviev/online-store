@@ -49,7 +49,6 @@ export class ProductLayoutPresenter {
   }
 
   handleSortingOrderChange(sortingOrder) {
-    this.showFavorites = false;
     this.currentSortingOrder = sortingOrder;
     this.renderLayout();
   }
@@ -75,7 +74,8 @@ export class ProductLayoutPresenter {
     const products = this.productsModel.getProducts();
 
     if (this.showFavorites) {
-      return sortFavoriteProducts(products);
+      const favoriteProducts = sortFavoriteProducts(products);
+      return sortProducts(favoriteProducts, this.currentSortingOrder);
     }
 
     const currentCategory = this.categoryModel.getCategory();

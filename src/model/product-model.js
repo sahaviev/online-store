@@ -38,7 +38,7 @@ export class ProductModel extends AbstractModel {
       ...product,
       id: index + 1,
       category: adaptCategory(product.category),
-      date: adaptDate(product['data publishing']),
+      date: adaptDate(product['publish-date']),
     };
   }
 }

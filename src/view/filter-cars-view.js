@@ -69,11 +69,16 @@ const createCarFilterTemplate = () => `<div class="filter__car">
 
 export class FilterCarsView extends AbstractFilterView {
   setFilterChangeHandler(callback) {
-    this.callbacks.filterChange = callback;
-    this.getElement().querySelector('#range').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#car-year').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#body-type').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#gearbox-type').addEventListener('change', this.handleFilterChange);
+    super.setFilterChangeHandler(callback);
+    const element = this.getElement();
+    element.querySelector('#range').addEventListener('change', this.handleFilterChange);
+    element.querySelector('#car-year').addEventListener('change', this.handleFilterChange);
+    element.querySelector('#gearbox-type').addEventListener('change', this.handleFilterChange);
+  }
+
+  setCheckboxFilterChangeHandler(callback) {
+    super.setCheckboxFilterChangeHandler(callback);
+    this.getElement().querySelector('#body-type').addEventListener('change', this.handleCheckboxFilterChange);
   }
 
   getTemplate() {

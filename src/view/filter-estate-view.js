@@ -59,12 +59,18 @@ const createEstateFilterTemplate = () => `<div class="filter__estate">
 
 export class FilterEstateView extends AbstractFilterView {
   setFilterChangeHandler(callback) {
-    this.callbacks.filterChange = callback;
-    this.getElement().querySelector('#range').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#estate-type').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#square').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#rooms').addEventListener('change', this.handleFilterChange);
+    super.setFilterChangeHandler(callback);
+    const element = this.getElement();
+    element.querySelector('#range').addEventListener('change', this.handleFilterChange);
+    element.querySelector('#square').addEventListener('change', this.handleFilterChange);
+    element.querySelector('#rooms').addEventListener('change', this.handleFilterChange);
   }
+
+  setCheckboxFilterChangeHandler(callback) {
+    super.setCheckboxFilterChangeHandler(callback);
+    this.getElement().querySelector('#estate-type').addEventListener('change', this.handleCheckboxFilterChange);
+  }
+
 
   getTemplate() {
     return createEstateFilterTemplate();

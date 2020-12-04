@@ -89,12 +89,18 @@ const createLaptopFilterTemplate = () => `<div class="filter__laptop">
 
 export class FilterLaptopView extends AbstractFilterView {
   setFilterChangeHandler(callback) {
-    this.callbacks.filterChange = callback;
-    this.getElement().querySelector('#range').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#laptop-type').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#ram-size').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#diagonal').addEventListener('change', this.handleFilterChange);
-    this.getElement().querySelector('#laptop-processor').addEventListener('change', this.handleFilterChange);
+    super.setFilterChangeHandler(callback);
+    const element = this.getElement();
+    element.querySelector('#range').addEventListener('change', this.handleFilterChange);
+    element.querySelector('#ram-size').addEventListener('change', this.handleFilterChange);
+    element.querySelector('#diagonal').addEventListener('change', this.handleFilterChange);
+  }
+
+  setCheckboxFilterChangeHandler(callback) {
+    super.setCheckboxFilterChangeHandler(callback);
+    const element = this.getElement();
+    element.querySelector('#laptop-type').addEventListener('change', this.handleCheckboxFilterChange);
+    element.querySelector('#laptop-processor').addEventListener('change', this.handleCheckboxFilterChange);
   }
 
   getTemplate() {

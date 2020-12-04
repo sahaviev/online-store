@@ -36,6 +36,7 @@ export class FilterPresenter {
     this.handleCategoryChange = this.handleCategoryChange.bind(this);
     this.handleModelEvent = this.handleModelEvent.bind(this);
     this.handleFilterButtonClick = this.handleFilterButtonClick.bind(this);
+    this.handlerCheckboxFilterChange = this.handlerCheckboxFilterChange.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
   }
 
@@ -60,6 +61,7 @@ export class FilterPresenter {
 
     const previous = this.categoryFiltersComponent;
     this.categoryFiltersComponent = getCategoryFilterView(this.currentCategory);
+    this.categoryFiltersComponent.setCheckboxFilterChangeHandler(this.handlerCheckboxFilterChange);
     this.categoryFiltersComponent.setFilterChangeHandler(this.handleFilterChange);
 
     this.filters = {};
@@ -76,28 +78,22 @@ export class FilterPresenter {
     this.categoryModel.setCategory(UpdateType.MAJOR, category);
   }
 
-  handleFilterChange(filter) {
-    // ToDo: порефачить. нужно написать декларативно и более просто
-    // ToDo: порефачить. checkbox нужно проверять из const, как минимум
-    switch (filter.type) {
-      case 'checkbox': {
-        if (!this.filters[filter.name]) {
-          this.filters[filter.name] = [];
-        }
-        if (filter.checked) {
-          this.filters[filter.name].push(filter.value);
-        }
-        if (!filter.checked) {
-          this.filters[filter.name] = this.filters[filter.name].filter(
-            (item) => item !== filter.value,
-          );
-        }
-        break;
-      }
-      default: {
-        this.filters[filter.name] = filter.value;
-      }
+  handlerCheckboxFilterChange(name, value, checked) {
+    if (!this.filters[name]) {
+      this.filters[name] = [];
     }
+    if (checked) {
+      this.filters[name].push(value);
+    }
+    if (!checked) {
+      this.filters[name] = this.filters[name].filter(
+        (item) => item !== value,
+      );
+    }
+  }
+
+  handleFilterChange(name, value) {
+    this.filters[name] = value;
   }
 
   handleFilterButtonClick() {
