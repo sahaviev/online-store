@@ -20,6 +20,6 @@ export class AbstractFilterView extends AbstractView {
   }
 
   handleCheckboxFilterChange(evt) {
-    this.callbacks.checkboxFilterChange(evt.target.name, evt.target.value, evt.target.checkbox);
+    this.callbacks.checkboxFilterChange(evt.target.name, evt.target.value, evt.target.checked);
   }
 }

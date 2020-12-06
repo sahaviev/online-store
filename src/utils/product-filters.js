@@ -11,23 +11,21 @@ function filterEstates(products, filters) {
 
     const additional = product['additional-information'];
 
-    if (!additional || !additional.immovables) {
+    if (!additional) {
       return false;
     }
 
-    const { immovables } = additional;
-
-    if (filters['estate-type'] && filters['estate-type'].length > 0 && !filters['estate-type'].includes(adaptEstateType(immovables.type))) {
+    if (filters['estate-type'] && filters['estate-type'].length > 0 && !filters['estate-type'].includes(adaptEstateType(additional.type))) {
       return false;
     }
 
-    if (filters['min-square'] && Number(filters['min-square']) > immovables.area) {
+    if (filters['min-square'] && Number(filters['min-square']) > additional.area) {
       return false;
     }
 
     if (filters.rooms && filters.rooms !== 'any') {
-      const exactCount = Number(filters.rooms) !== immovables['number-of-rooms'];
-      const fiveAndMore = filters.rooms === 'five_and_more' && immovables['number-of-rooms'] < 5;
+      const exactCount = Number(filters.rooms) !== additional['number-of-rooms'];
+      const fiveAndMore = filters.rooms === 'five_and_more' && additional['number-of-rooms'] < 5;
       if (exactCount || fiveAndMore) {
         return false;
       }
@@ -45,30 +43,28 @@ function filterLaptops(products, filters) {
 
     const additional = product['additional-information'];
 
-    if (!additional || !additional.notebook) {
+    if (!additional) {
       return false;
     }
 
-    const { notebook } = additional;
-
     const laptopType = filters['laptop-type'];
     // eslint-disable-next-line max-len
-    if (laptopType && laptopType.length > 0 && !laptopType.includes(adaptNotebookType(notebook.type))) {
+    if (laptopType && laptopType.length > 0 && !laptopType.includes(adaptNotebookType(additional.type))) {
       return false;
     }
 
     const { ram } = filters;
-    if (ram && ram !== 'any' && Number(ram) !== notebook['amount-of-RAM']) {
+    if (ram && ram !== 'any' && Number(ram) !== additional['amount-of-RAM']) {
       return false;
     }
 
     const screenDiagonal = filters.diagonal;
-    if (screenDiagonal && screenDiagonal !== 'any' && Number(screenDiagonal) !== Math.floor(notebook['screen-diagonal'])) {
+    if (screenDiagonal && screenDiagonal !== 'any' && Number(screenDiagonal) !== Math.floor(additional['screen-diagonal'])) {
       return false;
     }
 
     const laptopProcessor = filters['laptop-processor'];
-    if (laptopProcessor && laptopProcessor.length > 0 && !laptopProcessor.includes(notebook['processor-type'])) {
+    if (laptopProcessor && laptopProcessor.length > 0 && !laptopProcessor.includes(additional['processor-type'])) {
       return false;
     }
 
@@ -84,25 +80,22 @@ function filterCameras(products, filters) {
 
     const additional = product['additional-information'];
 
-    if (!additional || !additional.notebook) {
+    if (!additional) {
       return false;
     }
 
-    // ToDo: переделать сервер на нормальную структуру
-    const camera = additional.notebook;
-
     const cameraType = filters['camera-type'];
-    if (cameraType && cameraType.length > 0 && !cameraType.includes(adaptCameraType(camera.type))) {
+    if (cameraType && cameraType.length > 0 && !cameraType.includes(adaptCameraType(additional.type))) {
       return false;
     }
 
     const matrixResolution = filters['resolution-matrix'];
-    if (matrixResolution && matrixResolution !== 'any' && Number(matrixResolution) < Math.floor(camera['matrix-resolution'])) {
+    if (matrixResolution && matrixResolution !== 'any' && Number(matrixResolution) < Math.floor(additional['matrix-resolution'])) {
       return false;
     }
 
     const videoResolution = filters['resolution-video'];
-    if (videoResolution && videoResolution !== 'any' && videoResolution !== camera.supported) {
+    if (videoResolution && videoResolution !== 'any' && videoResolution !== additional.supported) {
       return false;
     }
 
@@ -118,24 +111,22 @@ function filterCars(products, filters) {
 
     const additional = product['additional-information'];
 
-    if (!additional || !additional.car) {
+    if (!additional) {
       return false;
     }
 
-    const { car } = additional;
-
     const carYear = filters['car-year'];
-    if (carYear && carYear !== 'any' && Number(carYear) > Number(car['production-year'])) {
+    if (carYear && carYear !== 'any' && Number(carYear) > Number(additional['production-year'])) {
       return false;
     }
 
     const gearboxType = filters.gearbox;
-    if (gearboxType && gearboxType !== 'any' && gearboxType !== adaptGearboxType(car.gearbox)) {
+    if (gearboxType && gearboxType !== 'any' && gearboxType !== adaptGearboxType(additional.gearbox)) {
       return false;
     }
 
     const carcass = filters['body-type'];
-    if (carcass && carcass.length > 0 && !carcass.includes(adaptCarcassType(car.carcass))) {
+    if (carcass && carcass.length > 0 && !carcass.includes(adaptCarcassType(additional.carcass))) {
       return false;
     }
 

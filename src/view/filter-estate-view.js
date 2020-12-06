@@ -71,7 +71,6 @@ export class FilterEstateView extends AbstractFilterView {
     this.getElement().querySelector('#estate-type').addEventListener('change', this.handleCheckboxFilterChange);
   }
 
-
   getTemplate() {
     return createEstateFilterTemplate();
   }
