@@ -10,6 +10,7 @@ import { ProductLayoutView } from '../view/product-layout-view';
 import { SortingOrderView } from '../view/sorting-order-view';
 import { SortingFavoritesView } from '../view/sorting-favorites-view';
 import { NoProductsView } from '../view/no-products-view';
+import { NoFavouritesView } from '../view/no-favourites-view';
 
 export class ProductLayoutPresenter {
   constructor(appContainer, categoryModel, filterModel, productsModel) {
@@ -33,6 +34,7 @@ export class ProductLayoutPresenter {
     this.sortingOrderComponent = new SortingOrderView();
     this.sortingFavoritesComponent = new SortingFavoritesView();
     this.noProductsComponent = new NoProductsView();
+    this.noFavouritesComponent = new NoFavouritesView();
 
     const sortingContainer = this.productsContainer.getSortingContainer();
 
@@ -93,6 +95,7 @@ export class ProductLayoutPresenter {
     this.productPresenters = {};
 
     remove(this.noProductsComponent);
+    remove(this.noFavouritesComponent);
   }
 
   renderProducts(products) {
@@ -114,12 +117,25 @@ export class ProductLayoutPresenter {
     );
   }
 
+  renderNoFavourites() {
+    render(
+      this.productsContainer.getProductListContainer(),
+      this.noFavouritesComponent,
+      RenderPosition.AFTERBEGIN,
+    );
+  }
+
   renderLayout() {
     this.clearProducts();
     const products = this.getProducts();
 
-    if (products.length === 0) {
+    if (!this.showFavorites && products.length === 0) {
       this.renderNoProducts();
+      return;
+    }
+
+    if (this.showFavorites && products.length === 0) {
+      this.renderNoFavourites();
       return;
     }
 
