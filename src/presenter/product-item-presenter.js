@@ -4,34 +4,48 @@ import {
 import { UpdateType } from '../const';
 
 import { ProductItemView } from '../view/product-item-view';
+import { ProductModalView } from '../view/product-modal-view';
 
 export class ProductItemPresenter {
-  constructor(productsListContainer, productModel) {
+  constructor(appContainer, productsListContainer, productModel) {
+    this.appContainer = appContainer;
     this.productsListContainer = productsListContainer;
     this.productModel = productModel;
-    this.productComponent = null;
+    this.productItemComponent = null;
+    this.productModalComponent = null;
 
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
+    this.handleProductOpenClick = this.handleProductOpenClick.bind(this);
+    this.handleCloseModalClick = this.handleCloseModalClick.bind(this);
   }
 
   init(product) {
     this.product = product;
 
-    const previous = this.productComponent;
-    this.productComponent = new ProductItemView(product);
-    this.productComponent.setFavoriteClickHandler(this.handleFavoriteClick);
+    const previous = this.productItemComponent;
+    this.productItemComponent = new ProductItemView(product);
+    this.productItemComponent.setFavoriteClickHandler(this.handleFavoriteClick);
+    this.productItemComponent.setProductOpenClickHandler(this.handleProductOpenClick);
 
     if (previous === null) {
-      render(this.productsListContainer, this.productComponent, RenderPosition.BEFOREEND);
+      render(this.productsListContainer, this.productItemComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    replace(this.productComponent, previous);
+    replace(this.productItemComponent, previous);
     remove(previous);
   }
 
   destroy() {
-    remove(this.productComponent);
+    this.closeModal();
+    remove(this.productItemComponent);
+  }
+
+  closeModal() {
+    if (this.productModalComponent !== null) {
+      remove(this.productModalComponent);
+      this.productModalComponent = null;
+    }
   }
 
   handleFavoriteClick() {
@@ -42,5 +56,24 @@ export class ProductItemPresenter {
         is_favorite: !this.product.is_favorite,
       },
     );
+  }
+
+  handleCloseModalClick() {
+    this.closeModal();
+  }
+
+  handleProductOpenClick() {
+    const previous = this.productModalComponent;
+
+    this.productModalComponent = new ProductModalView(this.product);
+    this.productModalComponent.setCloseModalClickHandler(this.handleCloseModalClick);
+
+    if (previous === null) {
+      render(this.appContainer.parentNode, this.productModalComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    replace(this.productModalComponent, previous);
+    remove(previous);
   }
 }

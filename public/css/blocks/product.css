@@ -12,6 +12,7 @@
 }
 
 .product__image {
+  cursor: pointer;
   position: relative;
 }
 

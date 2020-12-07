@@ -125,8 +125,8 @@ function filterCars(products, filters) {
       return false;
     }
 
-    const carcass = filters['body-type'];
-    if (carcass && carcass.length > 0 && !carcass.includes(adaptCarcassType(additional.carcass))) {
+    const bodyType = filters['body-type'];
+    if (bodyType && bodyType.length > 0 && !bodyType.includes(adaptCarcassType(additional.carcass))) {
       return false;
     }
 

@@ -12,7 +12,7 @@ import { SortingFavoritesView } from '../view/sorting-favorites-view';
 import { NoProductsView } from '../view/no-products-view';
 import { NoFavouritesView } from '../view/no-favourites-view';
 
-export class ProductLayoutPresenter {
+export class ProductListPresenter {
   constructor(appContainer, categoryModel, filterModel, productsModel) {
     this.appContainer = appContainer;
     this.categoryModel = categoryModel;
@@ -30,20 +30,20 @@ export class ProductLayoutPresenter {
   }
 
   init() {
-    this.productsContainer = new ProductLayoutView();
+    this.productsLayoutComponent = new ProductLayoutView();
     this.sortingOrderComponent = new SortingOrderView();
     this.sortingFavoritesComponent = new SortingFavoritesView();
     this.noProductsComponent = new NoProductsView();
     this.noFavouritesComponent = new NoFavouritesView();
 
-    const sortingContainer = this.productsContainer.getSortingContainer();
+    const sortingContainer = this.productsLayoutComponent.getSortingContainer();
 
     this.sortingOrderComponent.setSortingOrderChangeHandler(this.handleSortingOrderChange);
     this.sortingFavoritesComponent.setShowFavoriteClickHandler(this.handleShowFavorites);
 
     render(sortingContainer, this.sortingOrderComponent, RenderPosition.BEFOREEND);
     render(sortingContainer, this.sortingFavoritesComponent, RenderPosition.BEFOREEND);
-    render(this.appContainer, this.productsContainer);
+    render(this.appContainer, this.productsLayoutComponent);
 
     this.categoryModel.addSubscriber(this.handleModelEvent);
     this.filterModel.addSubscriber(this.handleModelEvent);
@@ -52,12 +52,12 @@ export class ProductLayoutPresenter {
 
   handleSortingOrderChange(sortingOrder) {
     this.currentSortingOrder = sortingOrder;
-    this.renderLayout();
+    this.renderProductList();
   }
 
   handleShowFavorites(show) {
     this.showFavorites = show;
-    this.renderLayout();
+    this.renderProductList();
   }
 
   handleModelEvent(updateType, data) {
@@ -67,7 +67,7 @@ export class ProductLayoutPresenter {
         break;
       }
       default: {
-        this.renderLayout();
+        this.renderProductList();
       }
     }
   }
@@ -104,14 +104,14 @@ export class ProductLayoutPresenter {
 
   renderProduct(product) {
     // eslint-disable-next-line max-len
-    const productPresenter = new ProductItemPresenter(this.productsContainer.getProductListContainer(), this.productsModel);
+    const productPresenter = new ProductItemPresenter(this.appContainer, this.productsLayoutComponent.getProductListContainer(), this.productsModel);
     productPresenter.init(product);
     this.productPresenters[product.id] = productPresenter;
   }
 
   renderNoProducts() {
     render(
-      this.productsContainer.getProductListContainer(),
+      this.productsLayoutComponent.getProductListContainer(),
       this.noProductsComponent,
       RenderPosition.AFTERBEGIN,
     );
@@ -119,13 +119,13 @@ export class ProductLayoutPresenter {
 
   renderNoFavourites() {
     render(
-      this.productsContainer.getProductListContainer(),
+      this.productsLayoutComponent.getProductListContainer(),
       this.noFavouritesComponent,
       RenderPosition.AFTERBEGIN,
     );
   }
 
-  renderLayout() {
+  renderProductList() {
     this.clearProducts();
     const products = this.getProducts();
 

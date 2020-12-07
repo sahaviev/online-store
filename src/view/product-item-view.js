@@ -19,7 +19,7 @@ const createProductItemTemplate = (product) => `<li class="results__item product
     </div>
     <div class="product__content">
       <h3 class="product__title">
-        <a href="#">${product.name}</a>
+        <a href="#" class="product__name">${product.name}</a>
       </h3>
       <div class="product__price">${product.price} ₽</div>
       <div class="product__address">Приозёрск, улица Прибрежная</div>
@@ -33,6 +33,7 @@ export class ProductItemView extends AbstractView {
     this.product = product;
 
     this.favoriteClickHandler = this.favoriteClickHandler.bind(this);
+    this.productOpenClickHandler = this.productOpenClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -44,8 +45,19 @@ export class ProductItemView extends AbstractView {
     this.callbacks.favoriteClick();
   }
 
+  productOpenClickHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.productOpenClick();
+  }
+
   setFavoriteClickHandler(callback) {
     this.callbacks.favoriteClick = callback;
     this.getElement().querySelector('#add-to-favorite').addEventListener('click', this.favoriteClickHandler);
+  }
+
+  setProductOpenClickHandler(callback) {
+    this.callbacks.productOpenClick = callback;
+    this.getElement().querySelector('.product__name').addEventListener('click', this.productOpenClickHandler);
+    this.getElement().querySelector('.product__image').addEventListener('click', this.productOpenClickHandler);
   }
 }
