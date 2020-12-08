@@ -1,8 +1,10 @@
 import { AbstractView } from './abstract-view.js';
 
 export class SortingOrderView extends AbstractView {
-  constructor() {
+  constructor(disabled) {
     super();
+    this.disabled = disabled;
+
     this.sortingOrderChangeHandler = this.sortingOrderChangeHandler.bind(this);
   }
 
@@ -11,15 +13,15 @@ export class SortingOrderView extends AbstractView {
         <legend>Показать сначала:</legend>
         <ul class="sorting__order-list">
           <li class="sorting__order-tab">
-            <input class="visually-hidden" type="radio" name="sorting-order" value="popular" id="sort-popular" checked>
+            <input class="visually-hidden" type="radio" name="sorting-order" value="popular" ${this.disabled && 'disabled'} id="sort-popular" checked>
             <label for="sort-popular">Популярные</label>
           </li>
           <li class="sorting__order-tab">
-            <input class="visually-hidden" type="radio" name="sorting-order" value="cheap" id="sort-cheap">
+            <input class="visually-hidden" type="radio" name="sorting-order" value="cheap" ${this.disabled && 'disabled'} id="sort-cheap">
             <label for="sort-cheap">Дешёвые</label>
           </li>
           <li class="sorting__order-tab">
-            <input class="visually-hidden" type="radio" name="sorting-order" value="new" id="sort-new">
+            <input class="visually-hidden" type="radio" name="sorting-order" value="new" ${this.disabled && 'disabled'} id="sort-new">
             <label for="sort-new">Новые</label>
           </li>
         </ul>

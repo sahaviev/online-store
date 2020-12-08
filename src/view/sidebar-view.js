@@ -1,6 +1,6 @@
 import { AbstractView } from './abstract-view.js';
 
-export class FilterView extends AbstractView {
+export class SidebarView extends AbstractView {
   constructor() {
     super();
     this.filterButtonClickHandler = this.filterButtonClickHandler.bind(this);

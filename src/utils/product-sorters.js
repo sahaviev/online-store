@@ -1,6 +1,6 @@
 import { SortingOrder } from '../const';
 
-const sortByPrice = (product1, product2) => product1.price - product2.price;
+const sortByPrice = (product1, product2) => product1.filters.price - product2.filters.price;
 
 const sortByDate = (product1, product2) => product2.date - product1.date;
 

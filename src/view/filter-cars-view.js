@@ -1,13 +1,13 @@
 import { AbstractFilterView } from './abstract-filter-view.js';
 
-const createCarFilterTemplate = () => `<div class="filter__car">
+const createCarFilterTemplate = (disabled = false) => `<div class="filter__car">
     <div class="filter__range">
       <label for="range">Цена, ₽</label>
-      <input name="range" type="range" min="0" max="6000000" id="range">
+      <input name="range" type="range" min="0" max="6000000" id="range" ${disabled && 'disabled'}>
     </div>
     <div class="filter__select-wrapper">
       <label for="resolution-video">Минимальный год выпуска</label>
-      <select id="car-year" name="car-year">
+      <select id="car-year" name="car-year" ${disabled && 'disabled'}>
         <option value="any" selected>Любой</option>
         <option value="1950">1950</option>
         <option value="2000">2000</option>
@@ -27,15 +27,15 @@ const createCarFilterTemplate = () => `<div class="filter__car">
       <legend>Коробка передач</legend>
       <ul class="filter__radiobuttons-list" id="gearbox-type">
         <li class="filter__radiobuttons-item">
-          <input class="visually-hidden" type="radio" name="gearbox" value="any" id="any_gearbox" checked>
+          <input class="visually-hidden" type="radio" name="gearbox" value="any" id="any_gearbox"  ${disabled && 'disabled'} checked>
           <label for="any_gearbox">Любая</label>
         </li>
         <li class="filter__radiobuttons-item">
-          <input class="visually-hidden" type="radio" name="gearbox" value="mechanic" id="mechanic_gearbox">
+          <input class="visually-hidden" type="radio" name="gearbox" value="mechanic"  ${disabled && 'disabled'} id="mechanic_gearbox">
           <label for="mechanic_gearbox">Механика</label>
         </li>
         <li class="filter__radiobuttons-item">
-          <input class="visually-hidden" type="radio" name="gearbox" value="auto" id="auto_gearbox">
+          <input class="visually-hidden" type="radio" name="gearbox" value="auto"  ${disabled && 'disabled'} id="auto_gearbox">
           <label for="auto_gearbox">Автомат</label>
         </li>
       </ul>
@@ -44,23 +44,23 @@ const createCarFilterTemplate = () => `<div class="filter__car">
       <legend>Тип кузова</legend>
       <ul class="filter__checkboxes-list filter__checkboxes-list--car-body" id="body-type">
         <li class="filter__checkboxes-item">
-          <input class="visually-hidden" type="checkbox" name="body-type" value="sedan" id="sedan">
+          <input class="visually-hidden" type="checkbox" name="body-type" value="sedan"  ${disabled && 'disabled'} id="sedan">
           <label for="sedan">Седан</label>
         </li>
         <li class="filter__checkboxes-item">
-          <input class="visually-hidden" type="checkbox" name="body-type" value="universal" id="universal">
+          <input class="visually-hidden" type="checkbox" name="body-type" value="universal"  ${disabled && 'disabled'} id="universal">
           <label for="universal">Универсал</label>
         </li>
         <li class="filter__checkboxes-item">
-          <input class="visually-hidden" type="checkbox" name="body-type" value="hatchback" id="hatchback">
+          <input class="visually-hidden" type="checkbox" name="body-type" value="hatchback"  ${disabled && 'disabled'} id="hatchback">
           <label for="hatchback">Хэтчбэк</label>
         </li>
         <li class="filter__checkboxes-item">
-          <input class="visually-hidden" type="checkbox" name="body-type" value="suv" id="suv">
+          <input class="visually-hidden" type="checkbox" name="body-type" value="suv" ${disabled && 'disabled'} id="suv">
           <label for="suv">Внедорожник</label>
         </li>
         <li class="filter__checkboxes-item">
-          <input class="visually-hidden" type="checkbox" name="body-type" value="coupe" id="coupe">
+          <input class="visually-hidden" type="checkbox" name="body-type" value="coupe"  ${disabled && 'disabled'} id="coupe">
           <label for="coupe">Купэ</label>
         </li>
       </ul>
@@ -68,6 +68,11 @@ const createCarFilterTemplate = () => `<div class="filter__car">
   </div>`;
 
 export class FilterCarsView extends AbstractFilterView {
+  constructor(disabled) {
+    super();
+    this.disabled = disabled;
+  }
+
   setFilterChangeHandler(callback) {
     super.setFilterChangeHandler(callback);
     const element = this.getElement();
@@ -82,6 +87,6 @@ export class FilterCarsView extends AbstractFilterView {
   }
 
   getTemplate() {
-    return createCarFilterTemplate();
+    return createCarFilterTemplate(this.disabled);
   }
 }

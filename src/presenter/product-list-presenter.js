@@ -1,4 +1,6 @@
-import { render, remove, RenderPosition } from '../utils/render';
+import {
+  render, remove, RenderPosition, replace,
+} from '../utils/render';
 import { UpdateType } from '../const';
 
 import { sortProducts, sortFavoriteProducts } from '../utils/product-sorters';
@@ -13,25 +15,27 @@ import { NoProductsView } from '../view/no-products-view';
 import { NoFavouritesView } from '../view/no-favourites-view';
 
 export class ProductListPresenter {
-  constructor(appContainer, categoryModel, filterModel, productsModel) {
+  constructor(appContainer, categoryModel, favoritesModel, filterModel, productsModel) {
     this.appContainer = appContainer;
     this.categoryModel = categoryModel;
+    this.favoritesModel = favoritesModel;
     this.filterModel = filterModel;
     this.productsModel = productsModel;
 
     this.productPresenters = {};
 
     this.currentSortingOrder = null;
-    this.showFavorites = false;
 
     this.handleModelEvent = this.handleModelEvent.bind(this);
+    this.handleFavoritesModelEvent = this.handleFavoritesModelEvent.bind(this);
     this.handleSortingOrderChange = this.handleSortingOrderChange.bind(this);
     this.handleShowFavorites = this.handleShowFavorites.bind(this);
   }
 
   init() {
+    const disabled = this.favoritesModel.getShowFavorites() === true;
     this.productsLayoutComponent = new ProductLayoutView();
-    this.sortingOrderComponent = new SortingOrderView();
+    this.sortingOrderComponent = new SortingOrderView(disabled);
     this.sortingFavoritesComponent = new SortingFavoritesView();
     this.noProductsComponent = new NoProductsView();
     this.noFavouritesComponent = new NoFavouritesView();
@@ -48,6 +52,7 @@ export class ProductListPresenter {
     this.categoryModel.addSubscriber(this.handleModelEvent);
     this.filterModel.addSubscriber(this.handleModelEvent);
     this.productsModel.addSubscriber(this.handleModelEvent);
+    this.favoritesModel.addSubscriber(this.handleFavoritesModelEvent);
   }
 
   handleSortingOrderChange(sortingOrder) {
@@ -56,8 +61,18 @@ export class ProductListPresenter {
   }
 
   handleShowFavorites(show) {
-    this.showFavorites = show;
-    this.renderProductList();
+    this.favoritesModel.setShowFavorites(UpdateType.MAJOR, show);
+  }
+
+  handleFavoritesModelEvent() {
+    const disabled = this.favoritesModel.getShowFavorites() === true;
+
+    const previous = this.sortingOrderComponent;
+    this.sortingOrderComponent = new SortingOrderView(disabled);
+    this.sortingOrderComponent.setSortingOrderChangeHandler(this.handleSortingOrderChange);
+
+    replace(this.sortingOrderComponent, previous);
+    remove(previous);
   }
 
   handleModelEvent(updateType, data) {
@@ -75,7 +90,7 @@ export class ProductListPresenter {
   getProducts() {
     const products = this.productsModel.getProducts();
 
-    if (this.showFavorites) {
+    if (this.favoritesModel.getShowFavorites()) {
       const favoriteProducts = sortFavoriteProducts(products);
       return sortProducts(favoriteProducts, this.currentSortingOrder);
     }
@@ -127,14 +142,15 @@ export class ProductListPresenter {
 
   renderProductList() {
     this.clearProducts();
+    const showFavorites = this.favoritesModel.getShowFavorites();
     const products = this.getProducts();
 
-    if (!this.showFavorites && products.length === 0) {
+    if (!showFavorites && products.length === 0) {
       this.renderNoProducts();
       return;
     }
 
-    if (this.showFavorites && products.length === 0) {
+    if (showFavorites && products.length === 0) {
       this.renderNoFavourites();
       return;
     }

@@ -1,26 +1,24 @@
 import { AbstractView } from './abstract-view.js';
 
-// ToDo: selected
-const createCategoryItemTemplate = (category) => (
-  `<option value="${category.name}" >${category.title}</option>`
-);
-
 export class CategoriesView extends AbstractView {
-  constructor(categories) {
+  constructor(categories, disabled) {
     super();
     this.categories = categories;
+    this.disabled = disabled;
 
     this.categoryChangeHandler = this.categoryChangeHandler.bind(this);
   }
 
   getTemplate() {
     const categoryOptions = this.categories
-      .map((category) => createCategoryItemTemplate(category))
+      .map((category) => (
+        `<option value="${category.name}" >${category.title}</option>`
+      ))
       .join('');
 
     return `<div class="filter__select-wrapper">
         <label for="categories">Категория товаров</label>
-        <select id="categories" name="categories">
+        <select id="categories" name="categories" ${this.disabled && 'disabled'}>
           ${categoryOptions}
         </select>
         <svg width="14" height="8" viewBox="0 0 14 8" xmlns="http://www.w3.org/2000/svg">

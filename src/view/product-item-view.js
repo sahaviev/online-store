@@ -1,4 +1,10 @@
 import { AbstractView } from './abstract-view.js';
+import { getPublishDateDifference } from '../utils/product-adapters';
+import { preload } from '../utils/image';
+
+/**
+ * ToDo: сделать рендеринг <span></span> внутри .product__navigation-column через :content
+ */
 
 const createProductItemTemplate = (product) => `<li class="results__item product">
     <button class="product__favourite fav-add ${product.is_favorite && 'fav-add--checked'}" type="button" aria-label="Добавить в избранное" id="add-to-favorite">
@@ -8,13 +14,11 @@ const createProductItemTemplate = (product) => `<li class="results__item product
     </button>
     <div class="product__image">
       <div class="product__image-more-photo hidden">+2 фото</div>
-      <img src="${product.photos[0]}" srcset="${product.photos[0]} 2x" width="318" height="220" alt="${product.name}">
+      <img src="${product.photos[0]}" srcset="${product.photos[0]} 2x" width="318" height="220" alt="${product.name}" />
       <div class="product__image-navigation">
-        <span class="product__navigation-item product__navigation-item--active"></span>
-        <span class="product__navigation-item"></span>
-        <span class="product__navigation-item"></span>
-        <span class="product__navigation-item"></span>
-        <span class="product__navigation-item"></span>
+        ${product.photos.map((photo, index) => `<div class="product__navigation-column" data-photo-index="${index}">
+            <span></span>
+        </div>`).join('')}
       </div>
     </div>
     <div class="product__content">
@@ -23,7 +27,7 @@ const createProductItemTemplate = (product) => `<li class="results__item product
       </h3>
       <div class="product__price">${product.price} ₽</div>
       <div class="product__address">Приозёрск, улица Прибрежная</div>
-      <div class="product__date">${product['data publishing']}</div>
+      <div class="product__date">${getPublishDateDifference(product.date)}</div>
     </div>
   </li>`;
 
@@ -34,6 +38,9 @@ export class ProductItemView extends AbstractView {
 
     this.favoriteClickHandler = this.favoriteClickHandler.bind(this);
     this.productOpenClickHandler = this.productOpenClickHandler.bind(this);
+    this.changePhotoHandler = this.changePhotoHandler.bind(this);
+
+    this.getElement().querySelector('.product__image-navigation').addEventListener('mouseover', this.changePhotoHandler);
   }
 
   getTemplate() {
@@ -48,6 +55,24 @@ export class ProductItemView extends AbstractView {
   productOpenClickHandler(evt) {
     evt.preventDefault();
     this.callbacks.productOpenClick();
+  }
+
+  /**
+   *  ToDo: сделать мемоизацию уже загруженных фотографий
+   */
+  changePhotoHandler(evt) {
+    const { photoIndex } = evt.target.dataset;
+    const photo = this.product.photos[photoIndex];
+
+    if (!photo) {
+      return;
+    }
+
+    const mainImage = this.getElement().querySelector('.product__image img');
+    preload(photo, () => {
+      mainImage.setAttribute('src', photo);
+      mainImage.setAttribute('srcset', photo);
+    });
   }
 
   setFavoriteClickHandler(callback) {

@@ -1,30 +1,30 @@
 import { AbstractFilterView } from './abstract-filter-view.js';
 
-const createCameraFilterTemplate = () => `<div class="filter__camera">
+const createCameraFilterTemplate = (disabled = false) => `<div class="filter__camera">
     <div class="filter__range">
       <label for="range">Цена, ₽</label>
-      <input name="range" type="range" min="0" max="6000000" id="range">
+      <input name="range" type="range" min="0" max="6000000" ${disabled && 'disabled'} id="range">
     </div>
     <fieldset class="filter__type filter__type--camera">
       <legend>Тип фотоаппарата</legend>
       <ul class="filter__checkboxes-list filter__checkboxes-list--camera" id="camera-type">
         <li class="filter__checkboxes-item">
-          <input class="visually-hidden" type="checkbox" name="camera-type" value="mirror" id="mirror">
+          <input class="visually-hidden" type="checkbox" name="camera-type" value="mirror" ${disabled && 'disabled'} id="mirror">
           <label for="mirror">Зеркальный</label>
         </li>
         <li class="filter__checkboxes-item">
-          <input class="visually-hidden" type="checkbox" name="camera-type" value="digital" id="digital">
+          <input class="visually-hidden" type="checkbox" name="camera-type" value="digital" ${disabled && 'disabled'} id="digital">
           <label for="digital">Цифровой</label>
         </li>
         <li class="filter__checkboxes-item">
-          <input class="visually-hidden" type="checkbox" name="camera-type" value="mirrorless" id="mirrorless">
+          <input class="visually-hidden" type="checkbox" name="camera-type" value="mirrorless" ${disabled && 'disabled'} id="mirrorless">
           <label for="mirrorless">Беззеркальный</label>
         </li>
       </ul>
     </fieldset>
     <div class="filter__select-wrapper filter__select-wrapper--min-resolution">
       <label for="resolution-matrix">Минимальное разрешение матрицы</label>
-      <select id="resolution-matrix" name="resolution-matrix">
+      <select id="resolution-matrix" name="resolution-matrix" ${disabled && 'disabled'}>
         <option value="any" selected>Любое</option>
         <option value="1mp">1 МП</option>
         <option value="3mp">3 МП</option>
@@ -38,7 +38,7 @@ const createCameraFilterTemplate = () => `<div class="filter__camera">
     </div>
     <div class="filter__select-wrapper">
       <label for="resolution-video">Минимальное разрешение видео</label>
-      <select id="resolution-video" name="resolution-video">
+      <select id="resolution-video" name="resolution-video" ${disabled && 'disabled'}>
         <option value="any" selected>Любое</option>
         <option value="HD">HD</option>
         <option value="Full-HD">Full HD</option>
@@ -52,6 +52,11 @@ const createCameraFilterTemplate = () => `<div class="filter__camera">
   </div>`;
 
 export class FilterCameraView extends AbstractFilterView {
+  constructor(disabled) {
+    super();
+    this.disabled = disabled;
+  }
+
   setFilterChangeHandler(callback) {
     super.setFilterChangeHandler(callback);
     const element = this.getElement();
@@ -66,6 +71,6 @@ export class FilterCameraView extends AbstractFilterView {
   }
 
   getTemplate() {
-    return createCameraFilterTemplate();
+    return createCameraFilterTemplate(this.disabled);
   }
 }
