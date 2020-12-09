@@ -38,9 +38,9 @@ export class ProductItemView extends AbstractView {
 
     this.favoriteClickHandler = this.favoriteClickHandler.bind(this);
     this.productOpenClickHandler = this.productOpenClickHandler.bind(this);
-    this.changePhotoHandler = this.changePhotoHandler.bind(this);
+    this.changePreviewPhotoHandler = this.changePreviewPhotoHandler.bind(this);
 
-    this.getElement().querySelector('.product__image-navigation').addEventListener('mouseover', this.changePhotoHandler);
+    this.getElement().querySelector('.product__image-navigation').addEventListener('mouseover', this.changePreviewPhotoHandler);
   }
 
   getTemplate() {
@@ -60,7 +60,7 @@ export class ProductItemView extends AbstractView {
   /**
    *  ToDo: сделать мемоизацию уже загруженных фотографий
    */
-  changePhotoHandler(evt) {
+  changePreviewPhotoHandler(evt) {
     const { photoIndex } = evt.target.dataset;
     const photo = this.product.photos[photoIndex];
 

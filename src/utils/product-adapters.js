@@ -56,32 +56,32 @@ export const getPublishDateDifference = (date) => {
   return `${Math.round(differenceDays * ONE_DAY_HOURS)} часов назад`;
 };
 
-const serverCategoriesAdaptor = {
+const serverCategories = {
   Недвижимость: CategoryType.ESTATE,
   Ноутбук: CategoryType.LAPTOPS,
   Фотоаппарат: CategoryType.CAMERA,
   Автомобиль: CategoryType.CARS,
 };
 
-const serverEstateTypesAdaptor = {
+const serverEstateTypes = {
   Квартира: 'flat',
   Дом: 'house',
   Апартаменты: 'apartments',
 };
 
-const serverNotebookTypesAdaptor = {
+const serverNotebookTypes = {
   Домашний: 'home',
   Ультрабук: 'ultra',
   Игровой: 'gaming',
 };
 
-const serverCameraTypesAdaptor = {
+const serverCameraTypes = {
   Цифровой: 'digital',
   Зеркальный: 'mirror',
   Беззеркальный: 'mirrorless',
 };
 
-const serverCarcassTypesAdaptor = {
+const serverCarcassTypes = {
   Седан: 'sedan',
   Хэтчбек: 'hatchback',
   Внедорожник: 'suv',
@@ -89,15 +89,42 @@ const serverCarcassTypesAdaptor = {
   Купе: 'coupe',
 };
 
-const serverGearboxTypesAdaptor = {
+const serverGearboxTypes = {
   Автомат: 'auto',
   'Механическая коробка передач': 'mechanic',
 };
 
-export const adaptCategory = (category) => serverCategoriesAdaptor[category];
+const additionalInformationLabels = {
+  [CategoryType.ESTATE]: {
+    type: 'Тип недвижимости',
+    area: 'Площадь, м2',
+    'rooms-count': 'Количество комнат',
+  },
+  [CategoryType.LAPTOPS]: {
+    type: 'Тип ноутбука',
+    'ram-value': 'Объем оперативной памяти',
+    'screen-size': 'Диагональ экрана',
+    'cpu-type': 'Тип процессора',
+  },
+  [CategoryType.CAMERA]: {
+    type: 'Тип фотоаппарата',
+    'matrix-resolution': 'Разрешение матрицы',
+    supporting: 'Разрешение видео',
+  },
+  [CategoryType.CARS]: {
+    'body-type': 'Тип кузова',
+    transmission: 'Коробка передач',
+    'production-year': 'Год выпуска',
+  },
+};
 
-export const adaptEstateType = (type) => serverEstateTypesAdaptor[type];
-export const adaptNotebookType = (type) => serverNotebookTypesAdaptor[type];
-export const adaptCameraType = (type) => serverCameraTypesAdaptor[type];
-export const adaptCarcassType = (type) => serverCarcassTypesAdaptor[type];
-export const adaptGearboxType = (type) => serverGearboxTypesAdaptor[type];
+export const adaptCategory = (category) => serverCategories[category];
+
+export const adaptEstateType = (type) => serverEstateTypes[type];
+export const adaptNotebookType = (type) => serverNotebookTypes[type];
+export const adaptCameraType = (type) => serverCameraTypes[type];
+export const adaptCarcassType = (type) => serverCarcassTypes[type];
+export const adaptGearboxType = (type) => serverGearboxTypes[type];
+
+// eslint-disable-next-line max-len
+export const adaptAdditionalInformation = (category, type) => additionalInformationLabels[category][type];

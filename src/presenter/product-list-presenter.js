@@ -14,6 +14,8 @@ import { SortingFavoritesView } from '../view/sorting-favorites-view';
 import { NoProductsView } from '../view/no-products-view';
 import { NoFavouritesView } from '../view/no-favourites-view';
 
+const FIRST_RENDER_ITEMS_COUNT = 5;
+
 export class ProductListPresenter {
   constructor(appContainer, categoryModel, favoritesModel, filterModel, productsModel) {
     this.appContainer = appContainer;
@@ -155,6 +157,6 @@ export class ProductListPresenter {
       return;
     }
 
-    this.renderProducts(products);
+    this.renderProducts(products.slice(0, FIRST_RENDER_ITEMS_COUNT));
   }
 }

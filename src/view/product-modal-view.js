@@ -1,6 +1,8 @@
 import { AbstractView } from './abstract-view.js';
-import { getPublishDateDifference } from '../utils/product-adapters';
+import { adaptAdditionalInformation, getPublishDateDifference } from '../utils/product-adapters';
+import { preload } from '../utils/image';
 
+/* ToDo: сделать отображение активной превью фотки по умолчанию ${index === 0 && 'gallery__item--active'} */
 const createProductModalTemplate = (product) => `<section class="popup">
         <div class="popup__inner">
           <button class="popup__close" type="button" aria-label="Закрыть">
@@ -24,13 +26,13 @@ const createProductModalTemplate = (product) => `<section class="popup">
                 </div>
                 <ul class="gallery__list">
                     ${product.photos.map((photo, index) => `<li class="gallery__item">
-                      <img src="${photo}" srcset="${photo}" alt="${index}" width="124" height="80" />
+                      <img src="${photo}" srcset="${photo}" alt="${index}" width="124" height="80" data-photo-index="${index}" />
                     </li>`).join('')}
                 </ul>
               </div>
               <ul class="popup__chars chars">
                 ${Object.keys(product['additional-information']).map((key) => `<li class="chars__item">
-                  <div class="chars__name">${key}</div>
+                  <div class="chars__name">${adaptAdditionalInformation(product.category, key)}</div>
                   <div class="chars__value">${product['additional-information'][key]}</div>
                 </li>`).join('')}
               </ul>
@@ -60,8 +62,33 @@ export class ProductModalView extends AbstractView {
   constructor(product) {
     super();
     this.product = product;
+    this.currentActivePreview = null;
 
     this.closeModalClickHandler = this.closeModalClickHandler.bind(this);
+    this.changeMainPhotoHandler = this.changeMainPhotoHandler.bind(this);
+
+    this.getElement().querySelector('.gallery__list').addEventListener('click', this.changeMainPhotoHandler);
+  }
+
+  changeMainPhotoHandler(evt) {
+    if (this.currentActivePreview) {
+      this.currentActivePreview.classList.remove('gallery__item--active');
+    }
+    evt.target.parentNode.classList.add('gallery__item--active');
+    this.currentActivePreview = evt.target.parentNode;
+
+    const { photoIndex } = evt.target.dataset;
+    const photo = this.product.photos[photoIndex];
+
+    if (!photo) {
+      return;
+    }
+
+    const mainImage = this.getElement().querySelector('.gallery__main-pic img');
+    preload(photo, () => {
+      mainImage.setAttribute('src', photo);
+      mainImage.setAttribute('srcset', photo);
+    });
   }
 
   getTemplate() {
