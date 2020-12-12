@@ -119,6 +119,7 @@ export class ProductListPresenter {
     const currentFilters = this.filterModel.getFilters();
 
     const filteredProducts = filterProducts(products, currentCategory, currentFilters);
+    console.log(filteredProducts);
 
     return sortProducts(filteredProducts, this.currentSortingOrder);
   }

@@ -7,7 +7,7 @@ const createCarFilterTemplate = (disabled = false) => `<div class="filter__car">
     </div>
     <div class="filter__select-wrapper">
       <label for="resolution-video">Минимальный год выпуска</label>
-      <select id="car-year" name="car-year" ${disabled && 'disabled'}>
+      <select id="car-year" name="production-year" ${disabled && 'disabled'}>
         <option value="any" selected>Любой</option>
         <option value="1950">1950</option>
         <option value="2000">2000</option>
@@ -27,15 +27,15 @@ const createCarFilterTemplate = (disabled = false) => `<div class="filter__car">
       <legend>Коробка передач</legend>
       <ul class="filter__radiobuttons-list" id="gearbox-type">
         <li class="filter__radiobuttons-item">
-          <input class="visually-hidden" type="radio" name="gearbox" value="any" id="any_gearbox"  ${disabled && 'disabled'} checked>
+          <input class="visually-hidden" type="radio" name="transmission" value="any" id="any_gearbox"  ${disabled && 'disabled'} checked>
           <label for="any_gearbox">Любая</label>
         </li>
         <li class="filter__radiobuttons-item">
-          <input class="visually-hidden" type="radio" name="gearbox" value="mechanic"  ${disabled && 'disabled'} id="mechanic_gearbox">
+          <input class="visually-hidden" type="radio" name="transmission" value="mechanic"  ${disabled && 'disabled'} id="mechanic_gearbox">
           <label for="mechanic_gearbox">Механика</label>
         </li>
         <li class="filter__radiobuttons-item">
-          <input class="visually-hidden" type="radio" name="gearbox" value="auto"  ${disabled && 'disabled'} id="auto_gearbox">
+          <input class="visually-hidden" type="radio" name="transmission" value="auto"  ${disabled && 'disabled'} id="auto_gearbox">
           <label for="auto_gearbox">Автомат</label>
         </li>
       </ul>

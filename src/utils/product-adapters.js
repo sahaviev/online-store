@@ -53,38 +53,7 @@ const serverCategories = {
   Автомобиль: CategoryType.CARS,
 };
 
-const serverEstateTypes = {
-  Квартира: 'flat',
-  Дом: 'house',
-  Апартаменты: 'apartments',
-};
-
-const serverNotebookTypes = {
-  Домашний: 'home',
-  Ультрабук: 'ultra',
-  Игровой: 'gaming',
-};
-
-const serverCameraTypes = {
-  Цифровой: 'digital',
-  Зеркальный: 'mirror',
-  Беззеркальный: 'mirrorless',
-};
-
-const serverCarcassTypes = {
-  Седан: 'sedan',
-  Хэтчбек: 'hatchback',
-  Внедорожник: 'suv',
-  Универсал: 'universal',
-  Купе: 'coupe',
-};
-
-const serverGearboxTypes = {
-  Автомат: 'auto',
-  'Механическая коробка передач': 'mechanic',
-};
-
-const additionalInformationLabels = {
+const paramsLabels = {
   [CategoryType.ESTATE]: {
     type: 'Тип недвижимости',
     area: 'Площадь, м2',
@@ -110,11 +79,5 @@ const additionalInformationLabels = {
 
 export const adaptCategory = (category) => serverCategories[category];
 
-export const adaptEstateType = (type) => serverEstateTypes[type];
-export const adaptNotebookType = (type) => serverNotebookTypes[type];
-export const adaptCameraType = (type) => serverCameraTypes[type];
-export const adaptCarcassType = (type) => serverCarcassTypes[type];
-export const adaptGearboxType = (type) => serverGearboxTypes[type];
-
 // eslint-disable-next-line max-len
-export const adaptAdditionalInformation = (category, type) => additionalInformationLabels[category][type];
+export const adaptParamsLabels = (category, type) => paramsLabels[category][type];

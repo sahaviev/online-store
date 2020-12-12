@@ -1,6 +1,6 @@
 export const CategoryType = {
   ALL: 'all',
-  ESTATE: 'estate',
+  ESTATE: 'real-estate',
   LAPTOPS: 'laptops',
   CAMERA: 'camera',
   CARS: 'cars',

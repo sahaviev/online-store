@@ -1,7 +1,4 @@
 import { CategoryType } from '../const';
-import {
-  adaptEstateType, adaptNotebookType, adaptCameraType, adaptCarcassType, adaptGearboxType,
-} from './product-adapters';
 
 function filterEstates(products, filters) {
   return products.filter((product) => {
@@ -9,23 +6,23 @@ function filterEstates(products, filters) {
       return false;
     }
 
-    const additional = product['additional-information'];
+    const params = product.filters;
 
-    if (!additional) {
+    if (!params) {
       return false;
     }
 
-    if (filters['estate-type'] && filters['estate-type'].length > 0 && !filters['estate-type'].includes(adaptEstateType(additional.type))) {
+    if (filters['estate-type'] && filters['estate-type'].length > 0 && !filters['estate-type'].includes(params.type)) {
       return false;
     }
 
-    if (filters['min-square'] && Number(filters['min-square']) > additional.area) {
+    if (filters['min-square'] && Number(filters['min-square']) > params.area) {
       return false;
     }
 
     if (filters.rooms && filters.rooms !== 'any') {
-      const exactCount = Number(filters.rooms) !== additional['number-of-rooms'];
-      const fiveAndMore = filters.rooms === 'five_and_more' && additional['number-of-rooms'] < 5;
+      const exactCount = Number(filters.rooms) !== params['rooms-count'];
+      const fiveAndMore = filters.rooms === 'five_and_more' && params['rooms-count'] < 5;
       if (exactCount || fiveAndMore) {
         return false;
       }
@@ -41,30 +38,29 @@ function filterLaptops(products, filters) {
       return false;
     }
 
-    const additional = product['additional-information'];
+    const params = product.filters;
 
-    if (!additional) {
+    if (!params) {
       return false;
     }
 
     const laptopType = filters['laptop-type'];
     // eslint-disable-next-line max-len
-    if (laptopType && laptopType.length > 0 && !laptopType.includes(adaptNotebookType(additional.type))) {
+    if (laptopType && laptopType.length > 0 && !laptopType.includes(params.type)) {
       return false;
     }
 
-    const { ram } = filters;
-    if (ram && ram !== 'any' && Number(ram) !== additional['amount-of-RAM']) {
+    if (filters.ram && filters.ram !== 'any' && Number(filters.ram) !== params['ram-value']) {
       return false;
     }
 
-    const screenDiagonal = filters.diagonal;
-    if (screenDiagonal && screenDiagonal !== 'any' && Number(screenDiagonal) !== Math.floor(additional['screen-diagonal'])) {
+    const screenSize = filters.diagonal;
+    if (screenSize && screenSize !== 'any' && Number(screenSize) !== Math.floor(params['screen-size'])) {
       return false;
     }
 
-    const laptopProcessor = filters['laptop-processor'];
-    if (laptopProcessor && laptopProcessor.length > 0 && !laptopProcessor.includes(additional['processor-type'])) {
+    const cpuType = filters['laptop-processor'];
+    if (cpuType && cpuType.length > 0 && !cpuType.includes(params['cpu-type'])) {
       return false;
     }
 
@@ -78,24 +74,24 @@ function filterCameras(products, filters) {
       return false;
     }
 
-    const additional = product['additional-information'];
+    const params = product.filters;
 
-    if (!additional) {
+    if (!params) {
       return false;
     }
 
     const cameraType = filters['camera-type'];
-    if (cameraType && cameraType.length > 0 && !cameraType.includes(adaptCameraType(additional.type))) {
+    if (cameraType && cameraType.length > 0 && !cameraType.includes(params.type)) {
       return false;
     }
 
     const matrixResolution = filters['resolution-matrix'];
-    if (matrixResolution && matrixResolution !== 'any' && Number(matrixResolution) < Math.floor(additional['matrix-resolution'])) {
+    if (matrixResolution && matrixResolution !== 'any' && Number(matrixResolution) < Math.floor(params['matrix-resolution'])) {
       return false;
     }
 
     const videoResolution = filters['resolution-video'];
-    if (videoResolution && videoResolution !== 'any' && videoResolution !== additional.supported) {
+    if (videoResolution && videoResolution !== 'any' && videoResolution !== params.supporting.toLowerCase()) {
       return false;
     }
 
@@ -109,24 +105,24 @@ function filterCars(products, filters) {
       return false;
     }
 
-    const additional = product['additional-information'];
+    const params = product.filters;
 
-    if (!additional) {
+    if (!params) {
       return false;
     }
 
-    const carYear = filters['car-year'];
-    if (carYear && carYear !== 'any' && Number(carYear) > Number(additional['production-year'])) {
+    const productionYear = filters['production-year'];
+    if (productionYear && productionYear !== 'any' && Number(productionYear) > Number(params['production-year'])) {
       return false;
     }
 
-    const gearboxType = filters.gearbox;
-    if (gearboxType && gearboxType !== 'any' && gearboxType !== adaptGearboxType(additional.gearbox)) {
+    const { transmission } = filters;
+    if (transmission && transmission !== 'any' && transmission !== params.transmission) {
       return false;
     }
 
     const bodyType = filters['body-type'];
-    if (bodyType && bodyType.length > 0 && !bodyType.includes(adaptCarcassType(additional.carcass))) {
+    if (bodyType && bodyType.length > 0 && !bodyType.includes(params['body-type'])) {
       return false;
     }
 

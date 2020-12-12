@@ -12,6 +12,8 @@ export class ProductModel extends AbstractModel {
   setProducts(updateType, products) {
     this.products = products.slice();
 
+    console.log(products);
+
     this.observer.notify(updateType, products);
   }
 
