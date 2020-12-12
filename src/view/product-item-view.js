@@ -5,6 +5,7 @@ import { preload } from '../utils/image';
 /**
  * ToDo: сделать рендеринг <span></span> внутри .product__navigation-column через :content
  */
+const NAVIGATION_PHOTOS_COUNT = 5;
 
 const createProductItemTemplate = (product) => `<li class="results__item product">
     <button class="product__favourite fav-add ${product.is_favorite && 'fav-add--checked'}" type="button" aria-label="Добавить в избранное" id="add-to-favorite">
@@ -13,10 +14,10 @@ const createProductItemTemplate = (product) => `<li class="results__item product
       </svg>
     </button>
     <div class="product__image">
-      <div class="product__image-more-photo hidden">+2 фото</div>
-      <img src="${product.photos[0]}" srcset="${product.photos[0]} 2x" width="318" height="220" alt="${product.name}" />
+      <div class="product__image-more-photo hidden"></div>
+      <img src="${product.photos[0]}" srcset="${product.photos[0]} 2x" alt="${product.name}" />
       <div class="product__image-navigation">
-        ${product.photos.map((photo, index) => `<div class="product__navigation-column" data-photo-index="${index}">
+        ${product.photos.slice(0, NAVIGATION_PHOTOS_COUNT).map((photo, index) => `<div class="product__navigation-column" data-photo-index="${index}">
             <span></span>
         </div>`).join('')}
       </div>
@@ -38,9 +39,10 @@ export class ProductItemView extends AbstractView {
 
     this.favoriteClickHandler = this.favoriteClickHandler.bind(this);
     this.productOpenClickHandler = this.productOpenClickHandler.bind(this);
-    this.changePreviewPhotoHandler = this.changePreviewPhotoHandler.bind(this);
+    this.previewPhotoMouseOverHandler = this.previewPhotoMouseOverHandler.bind(this);
+    this.morePhotoMouseOutHandler = this.morePhotoMouseOutHandler.bind(this);
 
-    this.getElement().querySelector('.product__image-navigation').addEventListener('mouseover', this.changePreviewPhotoHandler);
+    this.getElement().querySelector('.product__image-navigation').addEventListener('mouseover', this.previewPhotoMouseOverHandler);
   }
 
   getTemplate() {
@@ -57,12 +59,32 @@ export class ProductItemView extends AbstractView {
     this.callbacks.productOpenClick();
   }
 
+  displayMorePhotosImage() {
+    const photosCount = this.product.photos.length;
+    if (photosCount > NAVIGATION_PHOTOS_COUNT) {
+      const morePhoto = this.getElement().querySelector('.product__image-more-photo');
+      morePhoto.classList.remove('hidden');
+      morePhoto.innerText = `+${photosCount - NAVIGATION_PHOTOS_COUNT} фото`;
+      morePhoto.addEventListener('mouseout', this.morePhotoMouseOutHandler);
+    }
+  }
+
+  morePhotoMouseOutHandler() {
+    const morePhoto = this.getElement().querySelector('.product__image-more-photo');
+    morePhoto.classList.add('hidden');
+    morePhoto.removeEventListener('mouseout', this.morePhotoMouseOutHandler);
+  }
+
   /**
    *  ToDo: сделать мемоизацию уже загруженных фотографий
    */
-  changePreviewPhotoHandler(evt) {
-    const { photoIndex } = evt.target.dataset;
+  previewPhotoMouseOverHandler(evt) {
+    const photoIndex = Number(evt.target.dataset.photoIndex);
     const photo = this.product.photos[photoIndex];
+
+    if (photoIndex === (NAVIGATION_PHOTOS_COUNT - 1)) {
+      this.displayMorePhotosImage();
+    }
 
     if (!photo) {
       return;

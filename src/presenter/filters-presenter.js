@@ -14,7 +14,7 @@ export class FiltersPresenter {
     this.filterModel = filterModel;
     this.favoritesModel = favoritesModel;
 
-    this.filters = {};
+    this.filtersTemp = {};
 
     this.handleModelEvent = this.handleModelEvent.bind(this);
     this.handleFilterButtonClick = this.handleFilterButtonClick.bind(this);
@@ -50,7 +50,7 @@ export class FiltersPresenter {
     this.filtersComponent.setCheckboxFilterChangeHandler(this.handlerCheckboxFilterChange);
     this.filtersComponent.setFilterChangeHandler(this.handleFilterChange);
 
-    this.filters = {};
+    this.filtersTemp = {};
 
     replace(this.filtersComponent, previous);
     remove(previous);
@@ -78,24 +78,24 @@ export class FiltersPresenter {
   }
 
   handleFilterButtonClick() {
-    this.filterModel.setFilters(UpdateType.MAJOR, this.filters);
+    this.filterModel.setFilters(UpdateType.MAJOR, this.filtersTemp);
   }
 
   handlerCheckboxFilterChange(name, value, checked) {
-    if (!this.filters[name]) {
-      this.filters[name] = [];
+    if (!this.filtersTemp[name]) {
+      this.filtersTemp[name] = [];
     }
     if (checked) {
-      this.filters[name].push(value);
+      this.filtersTemp[name].push(value);
     }
     if (!checked) {
-      this.filters[name] = this.filters[name].filter(
+      this.filtersTemp[name] = this.filtersTemp[name].filter(
         (item) => item !== value,
       );
     }
   }
 
   handleFilterChange(name, value) {
-    this.filters[name] = value;
+    this.filtersTemp[name] = value;
   }
 }
