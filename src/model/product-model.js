@@ -1,5 +1,7 @@
 import { AbstractModel } from './abstract-model';
-import { adaptCategory, adaptDate, formatPrice } from '../utils/product-adapters';
+import {
+  adaptCategory, adaptDate, formatPrice,
+} from '../utils/product-adapters';
 
 export class ProductModel extends AbstractModel {
   constructor() {
@@ -37,9 +39,9 @@ export class ProductModel extends AbstractModel {
     return {
       ...product,
       id: index + 1,
-      category: adaptCategory(product.category),
-      price: formatPrice(product.price),
       date: adaptDate(product['publish-date']),
+      category: adaptCategory(product.category),
+      'formatted-price': formatPrice(product.price),
     };
   }
 }

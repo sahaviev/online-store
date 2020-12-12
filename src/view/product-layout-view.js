@@ -1,6 +1,11 @@
 import { AbstractView } from './abstract-view.js';
 
 export class ProductLayoutView extends AbstractView {
+  constructor() {
+    super();
+    this.productsScrollHandler = this.productsScrollHandler.bind(this);
+  }
+
   getSortingContainer() {
     return this.getElement().querySelector('.sorting__form');
   }
@@ -19,5 +24,18 @@ export class ProductLayoutView extends AbstractView {
         </div>
         <div class="results__list"></div>
     </section>`;
+  }
+
+  productsScrollHandler() {
+    const listContainer = this.getProductListContainer();
+    const containerHeight = listContainer.scrollTop + listContainer.offsetHeight;
+    if (containerHeight === listContainer.scrollHeight) {
+      this.callbacks.productScrollHandler();
+    }
+  }
+
+  setProductsScrollHandler(callback) {
+    this.callbacks.productScrollHandler = callback;
+    this.getProductListContainer().addEventListener('scroll', this.productsScrollHandler);
   }
 }

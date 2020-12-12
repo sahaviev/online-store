@@ -1,11 +1,11 @@
 import { CategoryType } from '../const';
 
-const DATETIME_PARSE_REGEXP = /(\d*).(\d*).(\d*)\s(\d*):(\d*):(\d*)/is;
+const MILLISECONDS = 1000;
 const ONE_YEAR_DAYS = 365;
 const ONE_DAY = 1;
 const ONE_MONTH_DAYS = 30;
 const ONE_DAY_HOURS = 24;
-const ONE_DAY_MILLISECONDS = 86400000;
+const ONE_DAY_MILLISECONDS = 86400 * MILLISECONDS;
 
 const months = [
   'января',
@@ -22,17 +22,7 @@ const months = [
   'декабря',
 ];
 
-export const adaptDate = (datetime) => {
-  const datetimeChunks = datetime.match(DATETIME_PARSE_REGEXP);
-  const dateObject = new Date();
-  dateObject.setDate(datetimeChunks[1]);
-  dateObject.setMonth(datetimeChunks[2] - 1);
-  dateObject.setFullYear(datetimeChunks[3]);
-  dateObject.setHours(datetimeChunks[4]);
-  dateObject.setMinutes(datetimeChunks[5]);
-  dateObject.setSeconds(datetimeChunks[6]);
-  return dateObject;
-};
+export const adaptDate = (timestamp) => new Date(timestamp * MILLISECONDS);
 
 export const formatPrice = (price) => price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&thinsp;');
 

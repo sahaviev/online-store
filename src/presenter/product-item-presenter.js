@@ -15,7 +15,7 @@ export class ProductItemPresenter {
     this.productModalComponent = null;
 
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
-    this.handleProductOpenClick = this.handleProductOpenClick.bind(this);
+    this.handleProductModalOpenClick = this.handleProductModalOpenClick.bind(this);
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this);
   }
 
@@ -25,7 +25,7 @@ export class ProductItemPresenter {
     const previous = this.productItemComponent;
     this.productItemComponent = new ProductItemView(product);
     this.productItemComponent.setFavoriteClickHandler(this.handleFavoriteClick);
-    this.productItemComponent.setProductOpenClickHandler(this.handleProductOpenClick);
+    this.productItemComponent.setProductOpenClickHandler(this.handleProductModalOpenClick);
 
     if (previous === null) {
       render(this.productsListContainer, this.productItemComponent, RenderPosition.BEFOREEND);
@@ -62,10 +62,15 @@ export class ProductItemPresenter {
     this.closeModal();
   }
 
-  handleProductOpenClick() {
+  handleProductModalOpenClick() {
+    this.renderProductModal();
+  }
+
+  renderProductModal() {
     const previous = this.productModalComponent;
 
     this.productModalComponent = new ProductModalView(this.product);
+    this.productModalComponent.setFavoriteClickHandler(this.handleFavoriteClick);
     this.productModalComponent.setCloseModalClickHandler(this.handleCloseModalClick);
 
     if (previous === null) {

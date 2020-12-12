@@ -6,14 +6,27 @@ export const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
-function getElement(object) {
+const getElement = (object) => {
   if (object instanceof AbstractView) {
     return object.getElement();
   }
   return object;
-}
+};
+
+const handleBeforeRenderCallback = (object) => {
+  if (object instanceof AbstractView) {
+    object.handleBeforeRenderCallback();
+  }
+};
+
+const handleAfterRenderCallback = (object) => {
+  if (object instanceof AbstractView) {
+    object.handleAfterRenderCallback();
+  }
+};
 
 export const render = (container, child, place = RenderPosition.BEFOREEND) => {
+  handleBeforeRenderCallback(child);
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       getElement(container).prepend(getElement(child));
@@ -22,6 +35,7 @@ export const render = (container, child, place = RenderPosition.BEFOREEND) => {
     default:
       getElement(container).append(getElement(child));
   }
+  handleAfterRenderCallback(child);
 };
 
 export const replace = (newChild, oldChild) => {
@@ -31,7 +45,9 @@ export const replace = (newChild, oldChild) => {
     throw new Error('Can\'t replace non-existent elements');
   }
 
+  handleBeforeRenderCallback(newChild);
   parentElement.replaceChild(getElement(newChild), getElement(oldChild));
+  handleAfterRenderCallback(newChild);
 };
 
 export const remove = (component) => {

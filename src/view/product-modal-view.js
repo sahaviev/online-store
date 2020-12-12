@@ -1,6 +1,7 @@
 import { AbstractView } from './abstract-view.js';
 import { adaptAdditionalInformation, getPublishDateDifference } from '../utils/product-adapters';
 import { preload } from '../utils/image';
+import { initMap, addMarker } from '../utils/leaftlet';
 
 /* ToDo: сделать отображение активной превью фотки по умолчанию ${index === 0 && 'gallery__item--active'} */
 const createProductModalTemplate = (product) => `<section class="popup">
@@ -12,11 +13,11 @@ const createProductModalTemplate = (product) => `<section class="popup">
           </button>
           <div class="popup__date">${getPublishDateDifference(product.date)}</div>
           <h3 class="popup__title">${product.name}</h3>
-          <div class="popup__price">${product.price} ₽</div>
+          <div class="popup__price">${product['formatted-price']} ₽</div>
           <div class="popup__columns">
             <div class="popup__left">
               <div class="popup__gallery gallery">
-                <button class="gallery__favourite fav-add">
+                <button class="gallery__favourite fav-add ${product.is_favorite && 'fav-add--checked'}" id="add-to-favorite">
                   <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M3 7C3 13 10 16.5 11 17C12 16.5 19 13 19 7C19 4.79086 17.2091 3 15 3C12 3 11 5 11 5C11 5 10 3 7 3C4.79086 3 3 4.79086 3 7Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
                   </svg>
@@ -31,9 +32,9 @@ const createProductModalTemplate = (product) => `<section class="popup">
                 </ul>
               </div>
               <ul class="popup__chars chars">
-                ${Object.keys(product['additional-information']).map((key) => `<li class="chars__item">
+                ${Object.keys(product.filters).map((key) => `<li class="chars__item">
                   <div class="chars__name">${adaptAdditionalInformation(product.category, key)}</div>
-                  <div class="chars__value">${product['additional-information'][key]}</div>
+                  <div class="chars__value">${product.filters[key]}</div>
                 </li>`).join('')}
               </ul>
               <div class="popup__seller seller seller--good">
@@ -49,10 +50,8 @@ const createProductModalTemplate = (product) => `<section class="popup">
               </div>
             </div>
             <div class="popup__right">
-              <div class="popup__map">
-                <img src="img/map.jpg" width="268" height="180" alt="Москва, Нахимовский проспект, дом 5">
-              </div>
-              <div class="popup__address">Москва, Нахимовский проспект, дом 5</div>
+              <div class="popup__map" id="map"></div>
+              <div class="popup__address">${product.address}</div>
             </div>
           </div>
         </div>
@@ -62,12 +61,27 @@ export class ProductModalView extends AbstractView {
   constructor(product) {
     super();
     this.product = product;
+
     this.currentActivePreview = null;
 
+    this.renderMap = this.renderMap.bind(this);
+    this.favoriteClickHandler = this.favoriteClickHandler.bind(this);
+    this.modalOutsideClickHandler = this.modalOutsideClickHandler.bind(this);
+    this.documentKeypressHandler = this.documentKeypressHandler.bind(this);
     this.closeModalClickHandler = this.closeModalClickHandler.bind(this);
     this.changeMainPhotoHandler = this.changeMainPhotoHandler.bind(this);
 
+    this.setAfterRenderHandler(this.renderMap);
+
     this.getElement().querySelector('.gallery__list').addEventListener('click', this.changeMainPhotoHandler);
+  }
+
+  renderMap() {
+    initMap(
+      this.getElement().querySelector('#map'), this.product.coordinates,
+    );
+
+    addMarker(this.product.coordinates);
   }
 
   changeMainPhotoHandler(evt) {
@@ -95,13 +109,53 @@ export class ProductModalView extends AbstractView {
     return createProductModalTemplate(this.product);
   }
 
+  favoriteClickHandler(evt) {
+    evt.preventDefault();
+    const { classList } = evt.currentTarget;
+    if (classList.contains('fav-add--checked')) {
+      classList.remove('fav-add--checked');
+    } else {
+      classList.add('fav-add--checked');
+    }
+    this.callbacks.favoriteClick();
+  }
+
   closeModalClickHandler(evt) {
     evt.preventDefault();
+    this.closeModal();
+  }
+
+  documentKeypressHandler(evt) {
+    evt.preventDefault();
+    if (evt.key === 'Escape') {
+      this.closeModal();
+    }
+  }
+
+  modalOutsideClickHandler(evt) {
+    evt.preventDefault();
+    if (this.getElement() !== evt.target) {
+      return;
+    }
+    this.closeModal();
+  }
+
+  closeModal() {
+    document.removeEventListener('keyup', this.documentKeypressHandler);
+    this.getElement().removeEventListener('click', this.modalOutsideClickHandler);
+    this.getElement().querySelector('.popup__close').removeEventListener('click', this.closeModalClickHandler);
     this.callbacks.closeModalClick();
   }
 
   setCloseModalClickHandler(callback) {
     this.callbacks.closeModalClick = callback;
+    document.addEventListener('keyup', this.documentKeypressHandler);
+    this.getElement().addEventListener('click', this.modalOutsideClickHandler);
     this.getElement().querySelector('.popup__close').addEventListener('click', this.closeModalClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this.callbacks.favoriteClick = callback;
+    this.getElement().querySelector('#add-to-favorite').addEventListener('click', this.favoriteClickHandler);
   }
 }

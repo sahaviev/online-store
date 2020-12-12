@@ -14,7 +14,8 @@ import { SortingFavoritesView } from '../view/sorting-favorites-view';
 import { NoProductsView } from '../view/no-products-view';
 import { NoFavouritesView } from '../view/no-favourites-view';
 
-const FIRST_RENDER_ITEMS_COUNT = 5;
+const INITIAL_PRODUCTS_COUNT = 7;
+const UPLOAD_PRODUCTS_COUNT = 5;
 
 export class ProductListPresenter {
   constructor(appContainer, categoryModel, favoritesModel, filterModel, productsModel) {
@@ -28,10 +29,13 @@ export class ProductListPresenter {
 
     this.currentSortingOrder = null;
 
+    this.loadedProductsCount = 0;
+
     this.handleModelEvent = this.handleModelEvent.bind(this);
     this.handleFavoritesModelEvent = this.handleFavoritesModelEvent.bind(this);
     this.handleSortingOrderChange = this.handleSortingOrderChange.bind(this);
     this.handleShowFavorites = this.handleShowFavorites.bind(this);
+    this.handleProductsScroll = this.handleProductsScroll.bind(this);
   }
 
   init() {
@@ -44,6 +48,7 @@ export class ProductListPresenter {
 
     const sortingContainer = this.productsLayoutComponent.getSortingContainer();
 
+    this.productsLayoutComponent.setProductsScrollHandler(this.handleProductsScroll);
     this.sortingOrderComponent.setSortingOrderChangeHandler(this.handleSortingOrderChange);
     this.sortingFavoritesComponent.setShowFavoriteClickHandler(this.handleShowFavorites);
 
@@ -75,6 +80,8 @@ export class ProductListPresenter {
 
     replace(this.sortingOrderComponent, previous);
     remove(previous);
+
+    this.renderProductList();
   }
 
   handleModelEvent(updateType, data) {
@@ -86,6 +93,17 @@ export class ProductListPresenter {
       default: {
         this.renderProductList();
       }
+    }
+  }
+
+  handleProductsScroll() {
+    const products = this.getProducts();
+
+    if (this.loadedProductsCount < products.length) {
+      this.renderProducts(
+        products.slice(this.loadedProductsCount, this.loadedProductsCount + UPLOAD_PRODUCTS_COUNT),
+      );
+      this.loadedProductsCount += UPLOAD_PRODUCTS_COUNT;
     }
   }
 
@@ -157,6 +175,7 @@ export class ProductListPresenter {
       return;
     }
 
-    this.renderProducts(products.slice(0, FIRST_RENDER_ITEMS_COUNT));
+    this.renderProducts(products.slice(0, INITIAL_PRODUCTS_COUNT));
+    this.loadedProductsCount = INITIAL_PRODUCTS_COUNT;
   }
 }

@@ -25,8 +25,8 @@ const createProductItemTemplate = (product) => `<li class="results__item product
       <h3 class="product__title">
         <a href="#" class="product__name">${product.name}</a>
       </h3>
-      <div class="product__price">${product.price} ₽</div>
-      <div class="product__address">Приозёрск, улица Прибрежная</div>
+      <div class="product__price">${product['formatted-price']} ₽</div>
+      <div class="product__address">${product.address}</div>
       <div class="product__date">${getPublishDateDifference(product.date)}</div>
     </div>
   </li>`;
