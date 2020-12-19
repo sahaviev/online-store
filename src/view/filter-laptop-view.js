@@ -1,10 +1,6 @@
 import { AbstractFilterView } from './abstract-filter-view.js';
 
 const createLaptopFilterTemplate = (disabled = false) => `<div class="filter__laptop">
-    <div class="filter__range">
-      <label for="range">Цена, ₽</label>
-      <input name="range" type="range" min="0" max="6000000" id="range" ${disabled && 'disabled'} />
-    </div>
     <fieldset class="filter__type filter__type--laptop">
       <legend>Тип ноутбука</legend>
       <ul class="filter__checkboxes-list filter__checkboxes-list--laptop-ram" id="laptop-type">
@@ -96,7 +92,6 @@ export class FilterLaptopView extends AbstractFilterView {
   setFilterChangeHandler(callback) {
     super.setFilterChangeHandler(callback);
     const element = this.getElement();
-    element.querySelector('#range').addEventListener('change', this.handleFilterChange);
     element.querySelector('#ram-size').addEventListener('change', this.handleFilterChange);
     element.querySelector('#diagonal').addEventListener('change', this.handleFilterChange);
   }

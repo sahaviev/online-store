@@ -1,5 +1,5 @@
 import { AbstractView } from './abstract-view.js';
-import { adaptParamsLabels, getPublishDateDifference } from '../utils/product-adapters';
+import { adaptFilterName, adaptFilterValue, getPublishDateDifference } from '../utils/product-adapters';
 import { preload } from '../utils/image';
 import { initMap, addMarker } from '../utils/leaftlet';
 
@@ -13,9 +13,10 @@ const getSellerClassname = (rating) => {
   return '';
 };
 
+const filterUndefinedProductFilters = (filters) => Object.keys(filters).filter((key) => filters[key] !== '-');
+
 /* ToDo: сделать отображение активной превью фотки по умолчанию ${index === 0 && 'gallery__item--active'} */
-const createProductModalTemplate = (product) => {
-  return `<section class="popup">
+const createProductModalTemplate = (product) => `<section class="popup">
         <div class="popup__inner">
           <button class="popup__close" type="button" aria-label="Закрыть">
             <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -43,9 +44,9 @@ const createProductModalTemplate = (product) => {
                 </ul>
               </div>
               <ul class="popup__chars chars">
-                ${Object.keys(product.filters).map((key) => `<li class="chars__item">
-                  <div class="chars__name">${adaptParamsLabels(product.category, key)}</div>
-                  <div class="chars__value">${product.filters[key]}</div>
+                ${filterUndefinedProductFilters(product.filters).map((key) => `<li class="chars__item">
+                  <div class="chars__name">${adaptFilterName(product.category, key)}</div>
+                  <div class="chars__value">${adaptFilterValue(product.category, product.filters[key])}</div>
                 </li>`).join('')}
               </ul>
               <div class="popup__seller seller ${getSellerClassname(product.seller.rating)}">
@@ -67,7 +68,6 @@ const createProductModalTemplate = (product) => {
           </div>
         </div>
       </section>`;
-};
 
 export class ProductModalView extends AbstractView {
   constructor(product) {

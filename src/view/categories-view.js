@@ -1,9 +1,10 @@
 import { AbstractView } from './abstract-view.js';
 
 export class CategoriesView extends AbstractView {
-  constructor(categories, disabled) {
+  constructor(categories, selected, disabled) {
     super();
     this.categories = categories;
+    this.selected = selected;
     this.disabled = disabled;
 
     this.categoryChangeHandler = this.categoryChangeHandler.bind(this);
@@ -12,7 +13,7 @@ export class CategoriesView extends AbstractView {
   getTemplate() {
     const categoryOptions = this.categories
       .map((category) => (
-        `<option value="${category.name}" >${category.title}</option>`
+        `<option value="${category.name}" ${category.name === this.selected && 'selected'}>${category.title}</option>`
       ))
       .join('');
 

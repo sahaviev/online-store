@@ -26,6 +26,7 @@ export class FilterRangeView extends AbstractFilterView {
       scale: false,
       labels: false,
       set: [2010, 2013],
+      disabled: this.disabled,
     });
   }
 

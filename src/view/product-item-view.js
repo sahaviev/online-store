@@ -14,13 +14,12 @@ const createProductItemTemplate = (product) => `<li class="results__item product
       </svg>
     </button>
     <div class="product__image">
-      <div class="product__image-more-photo hidden"></div>
-      <img src="${product.photos[0]}" srcset="${product.photos[0]} 2x" alt="${product.name}" />
-      <div class="product__image-navigation">
+        <div class="product__image-navigation">
         ${product.photos.slice(0, NAVIGATION_PHOTOS_COUNT).map((photo, index) => `<div class="product__navigation-column" data-photo-index="${index}">
             <span></span>
         </div>`).join('')}
-      </div>
+      </div><div class="product__image-more-photo hidden"></div>
+      <img src="${product.photos[0]}" srcset="${product.photos[0]} 2x" alt="${product.name}" />
     </div>
     <div class="product__content">
       <h3 class="product__title">
@@ -37,12 +36,15 @@ export class ProductItemView extends AbstractView {
     super();
     this.product = product;
 
+    this.hideMorePhotos = this.hideMorePhotos.bind(this);
     this.favoriteClickHandler = this.favoriteClickHandler.bind(this);
     this.productOpenClickHandler = this.productOpenClickHandler.bind(this);
     this.previewPhotoMouseOverHandler = this.previewPhotoMouseOverHandler.bind(this);
-    this.morePhotoMouseOutHandler = this.morePhotoMouseOutHandler.bind(this);
 
-    this.getElement().querySelector('.product__image-navigation').addEventListener('mouseover', this.previewPhotoMouseOverHandler);
+    this.navigationElement = this.getElement().querySelector('.product__image-navigation');
+    this.morePhotoElement = this.getElement().querySelector('.product__image-more-photo');
+
+    this.navigationElement.addEventListener('mouseover', this.previewPhotoMouseOverHandler);
   }
 
   getTemplate() {
@@ -59,20 +61,16 @@ export class ProductItemView extends AbstractView {
     this.callbacks.productOpenClick();
   }
 
-  displayMorePhotosImage() {
+  showMorePhotos() {
     const photosCount = this.product.photos.length;
     if (photosCount > NAVIGATION_PHOTOS_COUNT) {
-      const morePhoto = this.getElement().querySelector('.product__image-more-photo');
-      morePhoto.classList.remove('hidden');
-      morePhoto.innerText = `+${photosCount - NAVIGATION_PHOTOS_COUNT} фото`;
-      morePhoto.addEventListener('mouseout', this.morePhotoMouseOutHandler);
+      this.morePhotoElement.classList.remove('hidden');
+      this.morePhotoElement.innerText = `+${photosCount - NAVIGATION_PHOTOS_COUNT} фото`;
     }
   }
 
-  morePhotoMouseOutHandler() {
-    const morePhoto = this.getElement().querySelector('.product__image-more-photo');
-    morePhoto.classList.add('hidden');
-    morePhoto.removeEventListener('mouseout', this.morePhotoMouseOutHandler);
+  hideMorePhotos() {
+    this.morePhotoElement.classList.add('hidden');
   }
 
   /**
@@ -83,7 +81,8 @@ export class ProductItemView extends AbstractView {
     const photo = this.product.photos[photoIndex];
 
     if (photoIndex === (NAVIGATION_PHOTOS_COUNT - 1)) {
-      this.displayMorePhotosImage();
+      this.showMorePhotos();
+      evt.target.addEventListener('mouseout', this.hideMorePhotos);
     }
 
     if (!photo) {

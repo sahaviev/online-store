@@ -1,7 +1,7 @@
 import {
   render, remove, RenderPosition, replace,
 } from '../utils/render';
-import { UpdateType } from '../const';
+import { SortingOrder, UpdateType } from '../const';
 
 import { sortProducts, sortFavoriteProducts } from '../utils/product-sorters';
 import { filterProducts } from '../utils/product-filters';
@@ -27,7 +27,9 @@ export class ProductListPresenter {
 
     this.productPresenters = {};
 
-    this.currentSortingOrder = null;
+    this.selectedSortingOrder = SortingOrder.POPULAR;
+
+    this.sortingOrderComponent = null;
 
     this.loadedProductsCount = 0;
 
@@ -39,22 +41,18 @@ export class ProductListPresenter {
   }
 
   init() {
-    const disabled = this.favoritesModel.getShowFavorites() === true;
     this.productsLayoutComponent = new ProductLayoutView();
-    this.sortingOrderComponent = new SortingOrderView(disabled);
+    this.productsLayoutComponent.setProductsScrollHandler(this.handleProductsScroll);
+    render(this.appContainer, this.productsLayoutComponent);
+
+    this.renderSortingOrder();
+
     this.sortingFavoritesComponent = new SortingFavoritesView();
+    this.sortingFavoritesComponent.setShowFavoriteClickHandler(this.handleShowFavorites);
+    render(this.productsLayoutComponent.getSortingContainer(), this.sortingFavoritesComponent, RenderPosition.BEFOREEND);
+
     this.noProductsComponent = new NoProductsView();
     this.noFavouritesComponent = new NoFavouritesView();
-
-    const sortingContainer = this.productsLayoutComponent.getSortingContainer();
-
-    this.productsLayoutComponent.setProductsScrollHandler(this.handleProductsScroll);
-    this.sortingOrderComponent.setSortingOrderChangeHandler(this.handleSortingOrderChange);
-    this.sortingFavoritesComponent.setShowFavoriteClickHandler(this.handleShowFavorites);
-
-    render(sortingContainer, this.sortingOrderComponent, RenderPosition.BEFOREEND);
-    render(sortingContainer, this.sortingFavoritesComponent, RenderPosition.BEFOREEND);
-    render(this.appContainer, this.productsLayoutComponent);
 
     this.categoryModel.addSubscriber(this.handleModelEvent);
     this.filterModel.addSubscriber(this.handleModelEvent);
@@ -62,8 +60,27 @@ export class ProductListPresenter {
     this.favoritesModel.addSubscriber(this.handleFavoritesModelEvent);
   }
 
+  renderSortingOrder() {
+    const disabled = this.favoritesModel.getShowFavorites() === true;
+    const previous = this.sortingOrderComponent;
+    this.sortingOrderComponent = new SortingOrderView(disabled, this.selectedSortingOrder);
+    this.sortingOrderComponent.setSortingOrderChangeHandler(this.handleSortingOrderChange);
+
+    if (previous === null) {
+      render(
+        this.productsLayoutComponent.getSortingContainer(),
+        this.sortingOrderComponent,
+        RenderPosition.BEFOREEND,
+      );
+      return;
+    }
+
+    replace(this.sortingOrderComponent, previous);
+    remove(previous);
+  }
+
   handleSortingOrderChange(sortingOrder) {
-    this.currentSortingOrder = sortingOrder;
+    this.selectedSortingOrder = sortingOrder;
     this.renderProductList();
   }
 
@@ -72,15 +89,7 @@ export class ProductListPresenter {
   }
 
   handleFavoritesModelEvent() {
-    const disabled = this.favoritesModel.getShowFavorites() === true;
-
-    const previous = this.sortingOrderComponent;
-    this.sortingOrderComponent = new SortingOrderView(disabled);
-    this.sortingOrderComponent.setSortingOrderChangeHandler(this.handleSortingOrderChange);
-
-    replace(this.sortingOrderComponent, previous);
-    remove(previous);
-
+    this.renderSortingOrder();
     this.renderProductList();
   }
 
@@ -112,16 +121,15 @@ export class ProductListPresenter {
 
     if (this.favoritesModel.getShowFavorites()) {
       const favoriteProducts = sortFavoriteProducts(products);
-      return sortProducts(favoriteProducts, this.currentSortingOrder);
+      return sortProducts(favoriteProducts, this.selectedSortingOrder);
     }
 
     const currentCategory = this.categoryModel.getCategory();
     const currentFilters = this.filterModel.getFilters();
 
     const filteredProducts = filterProducts(products, currentCategory, currentFilters);
-    console.log(filteredProducts);
 
-    return sortProducts(filteredProducts, this.currentSortingOrder);
+    return sortProducts(filteredProducts, this.selectedSortingOrder);
   }
 
   clearProducts() {

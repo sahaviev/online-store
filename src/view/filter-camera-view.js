@@ -1,10 +1,6 @@
 import { AbstractFilterView } from './abstract-filter-view.js';
 
 const createCameraFilterTemplate = (disabled = false) => `<div class="filter__camera">
-    <div class="filter__range">
-      <label for="range">Цена, ₽</label>
-      <input name="range" type="range" min="0" max="6000000" ${disabled && 'disabled'} id="range">
-    </div>
     <fieldset class="filter__type filter__type--camera">
       <legend>Тип фотоаппарата</legend>
       <ul class="filter__checkboxes-list filter__checkboxes-list--camera" id="camera-type">
@@ -60,7 +56,6 @@ export class FilterCameraView extends AbstractFilterView {
   setFilterChangeHandler(callback) {
     super.setFilterChangeHandler(callback);
     const element = this.getElement();
-    element.querySelector('#range').addEventListener('change', this.handleFilterChange);
     element.querySelector('#resolution-matrix').addEventListener('change', this.handleFilterChange);
     element.querySelector('#resolution-video').addEventListener('change', this.handleFilterChange);
   }

@@ -1,11 +1,12 @@
 import { AbstractView } from './abstract-view.js';
 
-export class SidebarView extends AbstractView {
-  constructor() {
-    super();
-    this.filterButtonClickHandler = this.filterButtonClickHandler.bind(this);
-  }
+const createSidebarTemplate = () => `<section class="onlineshop-app__filter filter">
+    <h2 class="title filter__title">Фильтр</h2>
+    <div class="filter__categories"></div>
+    <div class="filter__category-filters"></div>
+</section>`;
 
+export class SidebarView extends AbstractView {
   getCategoriesContainer() {
     return this.getElement().querySelector('.filter__categories');
   }
@@ -15,23 +16,6 @@ export class SidebarView extends AbstractView {
   }
 
   getTemplate() {
-    return `<section class="onlineshop-app__filter filter">
-      <h2 class="title filter__title">Фильтр</h2>
-      <div class="filter__categories"></div>
-      <div class="filter__category-filters"></div>
-      <form class="filter__form" action="#" method="post">
-          <button class="button filter__button" type="submit" id="filter-button">Показать</button>
-        </form>
-      </section>`;
-  }
-
-  filterButtonClickHandler(evt) {
-    evt.preventDefault();
-    this.callbacks.filterButtonClick();
-  }
-
-  setFilterButtonClickHandler(callback) {
-    this.callbacks.filterButtonClick = callback;
-    this.getElement().querySelector('.filter__form').addEventListener('submit', this.filterButtonClickHandler);
+    return createSidebarTemplate();
   }
 }

@@ -1,52 +1,58 @@
-import {remove, render, replace} from '../utils/render';
+import { remove, render, replace } from '../utils/render';
 import { categories, UpdateType } from '../const';
 
 import { CategoriesView } from '../view/categories-view';
 
 export class CategoriesPresenter {
-  constructor(sidebarComponent, categoryModel, favoritesModel) {
-    this.sidebarComponent = sidebarComponent;
+  constructor(categoriesContainer, categoryModel, favoritesModel) {
+    this.categoriesContainer = categoriesContainer;
     this.categoryModel = categoryModel;
     this.favoritesModel = favoritesModel;
 
-    this.handleCategoryChange = this.handleCategoryChange.bind(this);
-    this.handleModelEvent = this.handleModelEvent.bind(this);
+    this.categoriesComponent = null;
 
-    this.favoritesModel.addSubscriber(this.handleModelEvent);
+    this.handleCategoryModelEvent = this.handleCategoryModelEvent.bind(this);
+    this.handleFavoritesModelEvent = this.handleFavoritesModelEvent.bind(this);
+    this.handleCategoryChange = this.handleCategoryChange.bind(this);
   }
 
   init() {
-    this.currentCategory = this.categoryModel.getCategory();
-    const disabled = this.favoritesModel.getShowFavorites() === true;
+    this.selectedCategory = this.categoryModel.getCategory();
+    this.disabled = this.favoritesModel.getShowFavorites() === true;
 
-    this.categoriesComponent = new CategoriesView(categories, disabled);
+    this.categoryModel.addSubscriber(this.handleCategoryModelEvent);
+    this.favoritesModel.addSubscriber(this.handleFavoritesModelEvent);
 
-    render(this.sidebarComponent.getCategoriesContainer(), this.categoriesComponent);
-
-    this.categoriesComponent.setCategoryChangeHandler(this.handleCategoryChange);
+    this.renderCategories();
   }
 
   renderCategories() {
-    const disabled = this.favoritesModel.getShowFavorites() === true;
-
     const previous = this.categoriesComponent;
-    this.categoriesComponent = new CategoriesView(categories, disabled);
+
+    this.categoriesComponent = new CategoriesView(categories, this.selectedCategory, this.disabled);
     this.categoriesComponent.setCategoryChangeHandler(this.handleCategoryChange);
+
+    if (previous === null) {
+      render(this.categoriesContainer, this.categoriesComponent);
+      return;
+    }
 
     replace(this.categoriesComponent, previous);
     remove(previous);
   }
 
-  handleModelEvent() {
+  handleFavoritesModelEvent() {
+    this.disabled = this.favoritesModel.getShowFavorites() === true;
     this.renderCategories();
   }
 
-  handleCategoryChange(category) {
-    if (this.currentCategory === category) {
-      return;
-    }
+  handleCategoryModelEvent() {
+    this.selectedCategory = this.categoryModel.getCategory();
+  }
 
-    this.currentCategory = category;
-    this.categoryModel.setCategory(UpdateType.MAJOR, category);
+  handleCategoryChange(category) {
+    if (this.selectedCategory !== category) {
+      this.categoryModel.setCategory(UpdateType.MAJOR, category);
+    }
   }
 }

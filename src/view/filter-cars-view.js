@@ -1,10 +1,6 @@
 import { AbstractFilterView } from './abstract-filter-view.js';
 
 const createCarFilterTemplate = (disabled = false) => `<div class="filter__car">
-    <div class="filter__range">
-      <label for="range">Цена, ₽</label>
-      <input name="range" type="range" min="0" max="6000000" id="range" ${disabled && 'disabled'}>
-    </div>
     <div class="filter__select-wrapper">
       <label for="resolution-video">Минимальный год выпуска</label>
       <select id="car-year" name="production-year" ${disabled && 'disabled'}>
@@ -76,7 +72,6 @@ export class FilterCarsView extends AbstractFilterView {
   setFilterChangeHandler(callback) {
     super.setFilterChangeHandler(callback);
     const element = this.getElement();
-    element.querySelector('#range').addEventListener('change', this.handleFilterChange);
     element.querySelector('#car-year').addEventListener('change', this.handleFilterChange);
     element.querySelector('#gearbox-type').addEventListener('change', this.handleFilterChange);
   }

@@ -1,31 +1,58 @@
 import { AbstractView } from './abstract-view.js';
 
+const createSortingOrderTemplate = (disabled = false, selectedSortingOrder) => `<fieldset class="sorting__order">
+        <legend>Показать сначала:</legend>
+        <ul class="sorting__order-list">
+          <li class="sorting__order-tab">
+            <input
+                class="visually-hidden"
+                type="radio"
+                name="sorting-order"
+                value="popular"
+                ${disabled ? 'disabled' : ''}
+                ${selectedSortingOrder === 'popular' ? 'checked' : ''}
+                id="sort-popular"
+            />
+            <label for="sort-popular">Популярные</label>
+          </li>
+          <li class="sorting__order-tab">
+            <input
+                class="visually-hidden"
+                type="radio"
+                name="sorting-order"
+                value="cheap"
+                ${disabled ? 'disabled' : ''}
+                ${selectedSortingOrder === 'cheap' ? 'checked' : ''}
+                id="sort-cheap"
+            />
+            <label for="sort-cheap">Дешёвые</label>
+          </li>
+          <li class="sorting__order-tab">
+            <input
+                class="visually-hidden"
+                type="radio"
+                name="sorting-order"
+                value="new"
+                ${disabled ? 'disabled' : ''}
+                ${selectedSortingOrder === 'new' ? 'checked' : ''}
+                id="sort-new"
+            />
+            <label for="sort-new">Новые</label>
+          </li>
+        </ul>
+      </fieldset>`;
+
 export class SortingOrderView extends AbstractView {
-  constructor(disabled) {
+  constructor(disabled, selectedSortingOrder) {
     super();
     this.disabled = disabled;
+    this.selectedSortingOrder = selectedSortingOrder;
 
     this.sortingOrderChangeHandler = this.sortingOrderChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return `<fieldset class="sorting__order">
-        <legend>Показать сначала:</legend>
-        <ul class="sorting__order-list">
-          <li class="sorting__order-tab">
-            <input class="visually-hidden" type="radio" name="sorting-order" value="popular" ${this.disabled && 'disabled'} id="sort-popular" checked>
-            <label for="sort-popular">Популярные</label>
-          </li>
-          <li class="sorting__order-tab">
-            <input class="visually-hidden" type="radio" name="sorting-order" value="cheap" ${this.disabled && 'disabled'} id="sort-cheap">
-            <label for="sort-cheap">Дешёвые</label>
-          </li>
-          <li class="sorting__order-tab">
-            <input class="visually-hidden" type="radio" name="sorting-order" value="new" ${this.disabled && 'disabled'} id="sort-new">
-            <label for="sort-new">Новые</label>
-          </li>
-        </ul>
-      </fieldset>`;
+    return createSortingOrderTemplate(this.disabled, this.selectedSortingOrder);
   }
 
   sortingOrderChangeHandler(evt) {

@@ -1,5 +1,14 @@
 import { CategoryType } from '../const';
 
+function getCategoryProducts(products, category) {
+  return products.filter((product) => product.category === category);
+}
+
+export function getCategoryPriceRanges(products, category) {
+  const prices = getCategoryProducts(products, category).map((product) => product.price);
+  console.log(prices);
+}
+
 function filterEstates(products, filters) {
   return products.filter((product) => {
     if (product.category !== CategoryType.ESTATE) {

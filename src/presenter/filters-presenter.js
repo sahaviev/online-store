@@ -1,65 +1,101 @@
 import { CategoryType, UpdateType } from '../const';
 import { remove, render, replace } from '../utils/render';
 
-import { FilterRangeView } from '../view/filter-range-view';
-import { FilterEstateView } from '../view/filter-estate-view';
-import { FilterLaptopView } from '../view/filter-laptop-view';
+import { FilterAllView } from '../view/filter-all-view';
 import { FilterCameraView } from '../view/filter-camera-view';
 import { FilterCarsView } from '../view/filter-cars-view';
+import { FilterEstateView } from '../view/filter-estate-view';
+import { FilterLaptopView } from '../view/filter-laptop-view';
+import { FilterRangeView } from '../view/filter-range-view';
+import { FiltersShowButtonView } from '../view/filters-show-button-view';
 
 export class FiltersPresenter {
-  constructor(sidebarComponent, categoryModel, favoritesModel, filterModel) {
-    this.sidebarComponent = sidebarComponent;
+  constructor(filtersContainer, categoryModel, favoritesModel, filterModel) {
+    this.filtersContainer = filtersContainer;
+
     this.categoryModel = categoryModel;
-    this.filterModel = filterModel;
     this.favoritesModel = favoritesModel;
+    this.filterModel = filterModel;
 
-    this.filtersTemp = {};
+    this.rangeFilterComponent = null;
+    this.filtersComponent = null;
+    this.filterShowButtonComponent = null;
 
-    this.handleModelEvent = this.handleModelEvent.bind(this);
-    this.handleFilterButtonClick = this.handleFilterButtonClick.bind(this);
+    this.selectedFilters = {};
+
+    this.handleCategoryModelEvent = this.handleCategoryModelEvent.bind(this);
+    this.handleFavoritesModelEvent = this.handleFavoritesModelEvent.bind(this);
+
     this.handlerCheckboxFilterChange = this.handlerCheckboxFilterChange.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
+    this.handleShowButtonClick = this.handleShowButtonClick.bind(this);
   }
 
   init() {
-    this.currentCategory = this.categoryModel.getCategory();
-    const disabled = this.favoritesModel.getShowFavorites() === true;
+    this.selectedCategory = this.categoryModel.getCategory();
+    this.disabled = this.favoritesModel.getShowFavorites() === true;
 
-    const FilterView = this.getFilterView();
+    this.categoryModel.addSubscriber(this.handleCategoryModelEvent);
+    this.favoritesModel.addSubscriber(this.handleFavoritesModelEvent);
 
-    this.filtersComponent = new FilterView(disabled);
-    this.filtersComponent.setCheckboxFilterChangeHandler(this.handlerCheckboxFilterChange);
-    this.filtersComponent.setFilterChangeHandler(this.handleFilterChange);
-
-    render(this.sidebarComponent.getCategoryFiltersContainer(), this.filtersComponent);
-
-    this.sidebarComponent.setFilterButtonClickHandler(this.handleFilterButtonClick);
-    this.categoryModel.addSubscriber(this.handleModelEvent);
-    this.favoritesModel.addSubscriber(this.handleModelEvent);
+    this.renderFilters();
   }
 
-  renderFilters() {
-    this.currentCategory = this.categoryModel.getCategory();
-    const disabled = this.favoritesModel.getShowFavorites() === true;
+  renderRangeFilter() {
+    const previous = this.rangeFilterComponent;
+    this.rangeFilterComponent = new FilterRangeView(this.disabled);
 
-    const FilterView = this.getFilterView();
+    if (previous === null) {
+      render(this.filtersContainer, this.rangeFilterComponent);
+      return;
+    }
 
+    replace(this.rangeFilterComponent, previous);
+    remove(previous);
+  }
+
+  renderCategoryFilters() {
     const previous = this.filtersComponent;
-    this.filtersComponent = new FilterView(disabled);
+
+    const CategoryFiltersView = this.getCategoryFiltersView();
+    this.filtersComponent = new CategoryFiltersView(this.disabled, this.selectedFilters);
     this.filtersComponent.setCheckboxFilterChangeHandler(this.handlerCheckboxFilterChange);
     this.filtersComponent.setFilterChangeHandler(this.handleFilterChange);
 
-    this.filtersTemp = {};
+    if (previous === null) {
+      render(this.filtersContainer, this.filtersComponent);
+      return;
+    }
 
     replace(this.filtersComponent, previous);
     remove(previous);
   }
 
-  getFilterView() {
-    switch (this.currentCategory) {
+  renderFilterShowButton() {
+    const previous = this.filterShowButtonComponent;
+
+    this.filterShowButtonComponent = new FiltersShowButtonView(this.disabled);
+    this.filterShowButtonComponent.setShowButtonClickHandler(this.handleShowButtonClick);
+
+    if (previous === null) {
+      render(this.filtersContainer, this.filterShowButtonComponent);
+      return;
+    }
+
+    replace(this.filterShowButtonComponent, previous);
+    remove(previous);
+  }
+
+  renderFilters() {
+    this.renderRangeFilter();
+    this.renderCategoryFilters();
+    this.renderFilterShowButton();
+  }
+
+  getCategoryFiltersView() {
+    switch (this.selectedCategory) {
       case CategoryType.ALL:
-        return FilterRangeView;
+        return FilterAllView;
       case CategoryType.ESTATE:
         return FilterEstateView;
       case CategoryType.LAPTOPS:
@@ -69,33 +105,41 @@ export class FiltersPresenter {
       case CategoryType.CARS:
         return FilterCarsView;
       default:
-        return FilterRangeView;
+        return FilterAllView;
     }
   }
 
-  handleModelEvent() {
+  handleFavoritesModelEvent() {
+    this.disabled = this.favoritesModel.getShowFavorites() === true;
     this.renderFilters();
   }
 
-  handleFilterButtonClick() {
-    this.filterModel.setFilters(UpdateType.MAJOR, this.filtersTemp);
+  handleCategoryModelEvent() {
+    this.selectedCategory = this.categoryModel.getCategory();
+    this.selectedFilters = {};
+    this.renderRangeFilter();
+    this.renderCategoryFilters();
   }
 
   handlerCheckboxFilterChange(name, value, checked) {
-    if (!this.filtersTemp[name]) {
-      this.filtersTemp[name] = [];
+    if (!this.selectedFilters[name]) {
+      this.selectedFilters[name] = [];
     }
     if (checked) {
-      this.filtersTemp[name].push(value);
+      this.selectedFilters[name].push(value);
     }
     if (!checked) {
-      this.filtersTemp[name] = this.filtersTemp[name].filter(
+      this.selectedFilters[name] = this.selectedFilters[name].filter(
         (item) => item !== value,
       );
     }
   }
 
   handleFilterChange(name, value) {
-    this.filtersTemp[name] = value;
+    this.selectedFilters[name] = value;
+  }
+
+  handleShowButtonClick() {
+    this.filterModel.setFilters(UpdateType.MAJOR, this.selectedFilters);
   }
 }
