@@ -96,6 +96,19 @@ const filtersValues = {
     slr: 'Зеркальный',
     digital: 'Цифровой',
     mirrorless: 'Беззеркальный',
+    hd: 'HD',
+    'full-hd': 'Full HD',
+    '4k': '4K',
+    '5k': '5K',
+  },
+  [CategoryType.CARS]: {
+    auto: 'Автомат',
+    mechanic: 'Механическая',
+    sedan: 'Седан',
+    universal: 'Универсал',
+    hatchback: 'Хэтчбэк',
+    suv: 'Внедорожник',
+    coupe: 'Купэ',
   },
 };
 

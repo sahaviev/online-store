@@ -1,12 +1,16 @@
-import { AbstractModel } from './abstract-model';
+import { LocalStorageWrapper } from '../utils/localstorage-wrapper';
 import {
   adaptCategory, adaptDate, formatPrice,
 } from '../utils/product-adapters';
+import { UpdateType } from '../const';
+
+import { AbstractModel } from './abstract-model';
 
 export class ProductModel extends AbstractModel {
   constructor() {
     super();
     this.products = [];
+    this.favoritesStorage = new LocalStorageWrapper('favorites');
   }
 
   setProducts(updateType, products) {
@@ -17,6 +21,16 @@ export class ProductModel extends AbstractModel {
 
   getProducts() {
     return this.products;
+  }
+
+  setFavorite(product, favorite) {
+    this.favoritesStorage.save(product.id, favorite);
+
+    this.updateProduct(UpdateType.MINOR,
+      {
+        ...product,
+        is_favorite: favorite,
+      });
   }
 
   updateProduct(updateType, newProduct) {
@@ -35,13 +49,15 @@ export class ProductModel extends AbstractModel {
     this.observer.notify(updateType, newProduct);
   }
 
-  static adaptToClient(product, index) {
-    return {
+  // ToDo: запросить возврат id со стороны сервера
+  adaptToClient(products) {
+    return products.map((product, index) => ({
       ...product,
       id: index + 1,
+      is_favorite: this.favoritesStorage.fetch(index + 1),
       date: adaptDate(product['publish-date']),
       category: adaptCategory(product.category),
       'formatted-price': formatPrice(product.price),
-    };
+    }));
   }
 }

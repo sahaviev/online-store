@@ -15,7 +15,6 @@ const getSellerClassname = (rating) => {
 
 const filterUndefinedProductFilters = (filters) => Object.keys(filters).filter((key) => filters[key] !== '-');
 
-/* ToDo: сделать отображение активной превью фотки по умолчанию ${index === 0 && 'gallery__item--active'} */
 const createProductModalTemplate = (product) => `<section class="popup">
         <div class="popup__inner">
           <button class="popup__close" type="button" aria-label="Закрыть">

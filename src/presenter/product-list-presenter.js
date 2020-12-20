@@ -12,7 +12,7 @@ import { ProductLayoutView } from '../view/product-layout-view';
 import { SortingOrderView } from '../view/sorting-order-view';
 import { SortingFavoritesView } from '../view/sorting-favorites-view';
 import { NoProductsView } from '../view/no-products-view';
-import { NoFavouritesView } from '../view/no-favourites-view';
+import { NoFavoritesView } from '../view/no-favorites-view';
 
 const INITIAL_PRODUCTS_COUNT = 7;
 const UPLOAD_PRODUCTS_COUNT = 5;
@@ -49,10 +49,11 @@ export class ProductListPresenter {
 
     this.sortingFavoritesComponent = new SortingFavoritesView();
     this.sortingFavoritesComponent.setShowFavoriteClickHandler(this.handleShowFavorites);
+    // eslint-disable-next-line max-len
     render(this.productsLayoutComponent.getSortingContainer(), this.sortingFavoritesComponent, RenderPosition.BEFOREEND);
 
     this.noProductsComponent = new NoProductsView();
-    this.noFavouritesComponent = new NoFavouritesView();
+    this.noFavoritesComponent = new NoFavoritesView();
 
     this.categoryModel.addSubscriber(this.handleModelEvent);
     this.filterModel.addSubscriber(this.handleModelEvent);
@@ -139,7 +140,7 @@ export class ProductListPresenter {
     this.productPresenters = {};
 
     remove(this.noProductsComponent);
-    remove(this.noFavouritesComponent);
+    remove(this.noFavoritesComponent);
   }
 
   renderProducts(products) {
@@ -161,10 +162,10 @@ export class ProductListPresenter {
     );
   }
 
-  renderNoFavourites() {
+  renderNoFavorites() {
     render(
       this.productsLayoutComponent.getProductListContainer(),
-      this.noFavouritesComponent,
+      this.noFavoritesComponent,
       RenderPosition.AFTERBEGIN,
     );
   }
@@ -180,7 +181,7 @@ export class ProductListPresenter {
     }
 
     if (showFavorites && products.length === 0) {
-      this.renderNoFavourites();
+      this.renderNoFavorites();
       return;
     }
 

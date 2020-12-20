@@ -45,6 +45,7 @@ export class AppPresenter {
       this.categoryModel,
       this.favoritesModel,
       this.filterModel,
+      this.productsModel,
     );
 
     this.productPresenter = new ProductListPresenter(
@@ -61,10 +62,8 @@ export class AppPresenter {
 
     this.api.getProducts()
       .then((data) => {
-        this.productsModel.setProducts(
-          UpdateType.INIT,
-          data.products.map(ProductModel.adaptToClient),
-        );
+        const products = this.productsModel.adaptToClient(data.products);
+        this.productsModel.setProducts(UpdateType.INIT, products);
       });
   }
 }

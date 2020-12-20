@@ -1,7 +1,6 @@
 import {
   render, remove, replace, RenderPosition,
 } from '../utils/render';
-import { UpdateType } from '../const';
 
 import { ProductItemView } from '../view/product-item-view';
 import { ProductModalView } from '../view/product-modal-view';
@@ -49,13 +48,7 @@ export class ProductItemPresenter {
   }
 
   handleFavoriteClick() {
-    this.productModel.updateProduct(
-      UpdateType.MINOR,
-      {
-        ...this.product,
-        is_favorite: !this.product.is_favorite,
-      },
-    );
+    this.productModel.setFavorite(this.product, !this.product.is_favorite);
   }
 
   handleCloseModalClick() {

@@ -1,6 +1,6 @@
 import { AbstractView } from './abstract-view.js';
 
-export class NoFavouritesView extends AbstractView {
+export class NoFavoritesView extends AbstractView {
   getTemplate() {
     return `<div class="results__info results__info--empty-block">
       <p class="favourites__empty-message">У вас пока нет избранных товаров. Чтобы отметить товар, кликните на сердечко в карточке объявления.</p>

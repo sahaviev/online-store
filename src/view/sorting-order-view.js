@@ -1,6 +1,6 @@
 import { AbstractView } from './abstract-view.js';
 
-const createSortingOrderTemplate = (disabled = false, selectedSortingOrder) => `<fieldset class="sorting__order">
+const createSortingOrderTemplate = (disabled = '', selectedSortingOrder) => `<fieldset class="sorting__order">
         <legend>Показать сначала:</legend>
         <ul class="sorting__order-list">
           <li class="sorting__order-tab">
@@ -9,7 +9,7 @@ const createSortingOrderTemplate = (disabled = false, selectedSortingOrder) => `
                 type="radio"
                 name="sorting-order"
                 value="popular"
-                ${disabled ? 'disabled' : ''}
+                ${disabled}
                 ${selectedSortingOrder === 'popular' ? 'checked' : ''}
                 id="sort-popular"
             />
@@ -21,7 +21,7 @@ const createSortingOrderTemplate = (disabled = false, selectedSortingOrder) => `
                 type="radio"
                 name="sorting-order"
                 value="cheap"
-                ${disabled ? 'disabled' : ''}
+                ${disabled}
                 ${selectedSortingOrder === 'cheap' ? 'checked' : ''}
                 id="sort-cheap"
             />
@@ -33,7 +33,7 @@ const createSortingOrderTemplate = (disabled = false, selectedSortingOrder) => `
                 type="radio"
                 name="sorting-order"
                 value="new"
-                ${disabled ? 'disabled' : ''}
+                ${disabled}
                 ${selectedSortingOrder === 'new' ? 'checked' : ''}
                 id="sort-new"
             />
@@ -45,7 +45,7 @@ const createSortingOrderTemplate = (disabled = false, selectedSortingOrder) => `
 export class SortingOrderView extends AbstractView {
   constructor(disabled, selectedSortingOrder) {
     super();
-    this.disabled = disabled;
+    this.disabled = disabled ? 'disabled' : '';
     this.selectedSortingOrder = selectedSortingOrder;
 
     this.sortingOrderChangeHandler = this.sortingOrderChangeHandler.bind(this);

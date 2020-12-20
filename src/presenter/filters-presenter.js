@@ -1,5 +1,6 @@
 import { CategoryType, UpdateType } from '../const';
 import { remove, render, replace } from '../utils/render';
+import { getCategoryProducts, getProductsPriceRanges } from '../utils/product-filters';
 
 import { FilterAllView } from '../view/filter-all-view';
 import { FilterCameraView } from '../view/filter-camera-view';
@@ -9,13 +10,20 @@ import { FilterLaptopView } from '../view/filter-laptop-view';
 import { FilterRangeView } from '../view/filter-range-view';
 import { FiltersShowButtonView } from '../view/filters-show-button-view';
 
+const getSelectedRange = (selectedFilters) => {
+  if (selectedFilters.minPrice && selectedFilters.maxPrice) {
+    return [selectedFilters.minPrice, selectedFilters.maxPrice];
+  }
+};
+
 export class FiltersPresenter {
-  constructor(filtersContainer, categoryModel, favoritesModel, filterModel) {
+  constructor(filtersContainer, categoryModel, favoritesModel, filterModel, productsModel) {
     this.filtersContainer = filtersContainer;
 
     this.categoryModel = categoryModel;
     this.favoritesModel = favoritesModel;
     this.filterModel = filterModel;
+    this.productsModel = productsModel;
 
     this.rangeFilterComponent = null;
     this.filtersComponent = null;
@@ -23,10 +31,12 @@ export class FiltersPresenter {
 
     this.selectedFilters = {};
 
+    this.handleProductsModelEvent = this.handleProductsModelEvent.bind(this);
     this.handleCategoryModelEvent = this.handleCategoryModelEvent.bind(this);
     this.handleFavoritesModelEvent = this.handleFavoritesModelEvent.bind(this);
 
-    this.handlerCheckboxFilterChange = this.handlerCheckboxFilterChange.bind(this);
+    this.handleCheckboxFilterChange = this.handleCheckboxFilterChange.bind(this);
+    this.handleRangeFilterChange = this.handleRangeFilterChange.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.handleShowButtonClick = this.handleShowButtonClick.bind(this);
   }
@@ -37,13 +47,24 @@ export class FiltersPresenter {
 
     this.categoryModel.addSubscriber(this.handleCategoryModelEvent);
     this.favoritesModel.addSubscriber(this.handleFavoritesModelEvent);
+    this.productsModel.addSubscriber(this.handleProductsModelEvent);
 
     this.renderFilters();
   }
 
   renderRangeFilter() {
     const previous = this.rangeFilterComponent;
-    this.rangeFilterComponent = new FilterRangeView(this.disabled);
+
+    const products = this.selectedCategory !== CategoryType.ALL
+      ? getCategoryProducts(this.productsModel.getProducts(), this.selectedCategory)
+      : this.productsModel.getProducts();
+
+    const priceRanges = products.length > 0 ? getProductsPriceRanges(products) : { min: 0, max: 0 };
+
+    this.rangeFilterComponent = new FilterRangeView(
+      this.disabled, priceRanges, getSelectedRange(this.selectedFilters),
+    );
+    this.rangeFilterComponent.setFilterChangeHandler(this.handleRangeFilterChange);
 
     if (previous === null) {
       render(this.filtersContainer, this.rangeFilterComponent);
@@ -59,7 +80,7 @@ export class FiltersPresenter {
 
     const CategoryFiltersView = this.getCategoryFiltersView();
     this.filtersComponent = new CategoryFiltersView(this.disabled, this.selectedFilters);
-    this.filtersComponent.setCheckboxFilterChangeHandler(this.handlerCheckboxFilterChange);
+    this.filtersComponent.setCheckboxFilterChangeHandler(this.handleCheckboxFilterChange);
     this.filtersComponent.setFilterChangeHandler(this.handleFilterChange);
 
     if (previous === null) {
@@ -109,6 +130,10 @@ export class FiltersPresenter {
     }
   }
 
+  handleProductsModelEvent() {
+    this.renderRangeFilter();
+  }
+
   handleFavoritesModelEvent() {
     this.disabled = this.favoritesModel.getShowFavorites() === true;
     this.renderFilters();
@@ -116,12 +141,17 @@ export class FiltersPresenter {
 
   handleCategoryModelEvent() {
     this.selectedCategory = this.categoryModel.getCategory();
-    this.selectedFilters = {};
+    this.resetFilters();
     this.renderRangeFilter();
     this.renderCategoryFilters();
   }
 
-  handlerCheckboxFilterChange(name, value, checked) {
+  resetFilters() {
+    this.selectedFilters = {};
+    this.filterModel.setFilters(UpdateType.MAJOR, this.selectedFilters);
+  }
+
+  handleCheckboxFilterChange(name, value, checked) {
     if (!this.selectedFilters[name]) {
       this.selectedFilters[name] = [];
     }
@@ -133,6 +163,12 @@ export class FiltersPresenter {
         (item) => item !== value,
       );
     }
+  }
+
+  handleRangeFilterChange(values) {
+    const [minPrice, maxPrice] = values.split(',');
+    this.selectedFilters.minPrice = Number(minPrice);
+    this.selectedFilters.maxPrice = Number(maxPrice);
   }
 
   handleFilterChange(name, value) {
