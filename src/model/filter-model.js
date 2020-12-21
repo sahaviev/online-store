@@ -8,10 +8,11 @@ export class FilterModel extends AbstractModel {
 
   setFilters(updateType, filters) {
     this.filters = filters;
-    // this.observer.notify(updateType, filters);
+    this.observer.notify(updateType, filters);
   }
 
   getFilters() {
+    this.observer.notify();
     return this.filters;
   }
 }
