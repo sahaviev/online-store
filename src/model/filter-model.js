@@ -12,7 +12,6 @@ export class FilterModel extends AbstractModel {
   }
 
   getFilters() {
-    this.observer.notify();
     return this.filters;
   }
 }
