@@ -4,7 +4,8 @@ const MILLISECONDS = 1000;
 const ONE_DAY = 1;
 const ONE_WEEK_DAYS = 7;
 const ONE_DAY_HOURS = 24;
-const ONE_DAY_MILLISECONDS = 86400 * MILLISECONDS;
+const ONE_DAY_SECONDS = 86400;
+const ONE_DAY_MILLISECONDS = ONE_DAY_SECONDS * MILLISECONDS;
 
 const months = [
   'января',
@@ -20,6 +21,16 @@ const months = [
   'ноября',
   'декабря',
 ];
+
+const days = {
+  1: 'день',
+  2: 'дня',
+  3: 'дня',
+  4: 'дня',
+  5: 'дней',
+  6: 'дней',
+  7: 'дней',
+};
 
 export const adaptDate = (timestamp) => new Date(Number(timestamp));
 
@@ -38,11 +49,13 @@ export const getPublishDateDifference = (date) => {
   }
 
   if (differenceDays > ONE_DAY && differenceDays <= ONE_WEEK_DAYS) {
-    return `${Math.floor(differenceDays)} дней назад `;
+    return `${Math.floor(differenceDays)} ${days[Math.round(differenceDays)]} назад `;
   }
 
   return `${Math.round(differenceDays * ONE_DAY_HOURS)} час(ов) назад`;
 };
+
+export const getPublishDateString = (date) => `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
 
 const serverCategories = {
   Недвижимость: CategoryType.ESTATE,
@@ -79,7 +92,7 @@ const filtersValues = {
   [CategoryType.ESTATE]: {
     flat: 'Квартира',
     house: 'Дом',
-    apartments: 'Аппартаменты',
+    apartment: 'Апартаменты',
   },
   [CategoryType.LAPTOPS]: {
     i3: 'Intel Core i3',
@@ -88,7 +101,7 @@ const filtersValues = {
     4: '4 Гб',
     8: '8 Гб',
     16: '16 Гб',
-    ultra: 'Ультрабук',
+    ultrabook: 'Ультрабук',
     home: 'Домашний ноутбук',
     gaming: 'Игровой ноутбук',
   },

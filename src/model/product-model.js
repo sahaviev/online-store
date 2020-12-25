@@ -1,6 +1,6 @@
 import { LocalStorageWrapper } from '../utils/localstorage-wrapper';
 import {
-  adaptCategory, adaptDate, formatPrice,
+  adaptCategory, adaptDate, formatPrice, getPublishDateDifference, getPublishDateString,
 } from '../utils/product-adapters';
 import { UpdateType } from '../const';
 
@@ -51,13 +51,18 @@ export class ProductModel extends AbstractModel {
 
   // ToDo: запросить возврат id со стороны сервера
   adaptToClient(products) {
-    return products.map((product, index) => ({
-      ...product,
-      id: index + 1,
-      is_favorite: this.favoritesStorage.fetch(index + 1),
-      date: adaptDate(product['publish-date']),
-      category: adaptCategory(product.category),
-      'formatted-price': formatPrice(product.price),
-    }));
+    return products.map((product, index) => {
+      const date = adaptDate(product['publish-date']);
+      return {
+        ...product,
+        id: index + 1,
+        is_favorite: this.favoritesStorage.fetch(index + 1),
+        date,
+        category: adaptCategory(product.category),
+        'formatted-price': formatPrice(product.price),
+        dateString: getPublishDateString(date),
+        dateDifference: getPublishDateDifference(date),
+      };
+    });
   }
 }

@@ -130,13 +130,17 @@ export class FiltersPresenter {
     }
   }
 
-  handleProductsModelEvent() {
-    this.renderRangeFilter();
+  handleProductsModelEvent(updateType) {
+    if (updateType === UpdateType.INIT) {
+      this.renderRangeFilter();
+    }
   }
 
   handleFavoritesModelEvent() {
     this.disabled = this.favoritesModel.getShowFavorites() === true;
-    this.renderFilters();
+    this.rangeFilterComponent.setDisabled(this.disabled);
+    this.renderCategoryFilters();
+    this.renderFilterShowButton();
   }
 
   handleCategoryModelEvent() {

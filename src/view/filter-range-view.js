@@ -28,7 +28,7 @@ export class FilterRangeView extends AbstractFilterView {
       target: this.getElement().querySelector('#range'),
       values: this.priceRange,
       set: this.selectedRange,
-      step: 1000,
+      step: 10000,
       range: true,
       tooltip: true,
       scale: false,
@@ -42,5 +42,9 @@ export class FilterRangeView extends AbstractFilterView {
 
   getTemplate() {
     return createRangeFilterTemplate(this.disabled);
+  }
+
+  setDisabled(disabled) {
+    this.slider.disabled(disabled);
   }
 }

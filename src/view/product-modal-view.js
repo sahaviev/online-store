@@ -1,5 +1,5 @@
 import { AbstractView } from './abstract-view.js';
-import { adaptFilterName, adaptFilterValue, getPublishDateDifference } from '../utils/product-adapters';
+import { adaptFilterName, adaptFilterValue } from '../utils/product-adapters';
 import { preload } from '../utils/image';
 import { initMap, addMarker } from '../utils/leaftlet';
 
@@ -22,7 +22,7 @@ const createProductModalTemplate = (product) => `<section class="popup">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M0.292893 0.292893C0.683418 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L8 6.58579L14.2929 0.292893C14.6834 -0.0976311 15.3166 -0.0976311 15.7071 0.292893C16.0976 0.683418 16.0976 1.31658 15.7071 1.70711L9.41421 8L15.7071 14.2929C16.0976 14.6834 16.0976 15.3166 15.7071 15.7071C15.3166 16.0976 14.6834 16.0976 14.2929 15.7071L8 9.41421L1.70711 15.7071C1.31658 16.0976 0.683418 16.0976 0.292893 15.7071C-0.0976311 15.3166 -0.0976311 14.6834 0.292893 14.2929L6.58579 8L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683418 0.292893 0.292893Z"/>
             </svg>
           </button>
-          <div class="popup__date">${getPublishDateDifference(product.date)}</div>
+          <span class="popup__date" title="${product.dateString}">${product.dateDifference}</span>
           <h3 class="popup__title">${product.name}</h3>
           <div class="popup__price">${product['formatted-price']} ₽</div>
           <div class="popup__columns">
@@ -62,7 +62,7 @@ const createProductModalTemplate = (product) => `<section class="popup">
             </div>
             <div class="popup__right">
               <div class="popup__map" id="map"></div>
-              <div class="popup__address">${product.address}</div>
+              <div class="popup__address">${product.address.city}, ${product.address.street}, ${product.address.building}</div>
             </div>
           </div>
         </div>

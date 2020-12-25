@@ -1,10 +1,6 @@
 import { AbstractView } from './abstract-view.js';
-import { getPublishDateDifference } from '../utils/product-adapters';
 import { preload } from '../utils/image';
 
-/**
- * ToDo: сделать рендеринг <span></span> внутри .product__navigation-column через :content
- */
 const NAVIGATION_PHOTOS_COUNT = 5;
 
 const createProductItemTemplate = (product) => `<li class="results__item product">
@@ -26,8 +22,8 @@ const createProductItemTemplate = (product) => `<li class="results__item product
         <a href="#" class="product__name">${product.name}</a>
       </h3>
       <div class="product__price">${product['formatted-price']} ₽</div>
-      <div class="product__address">${product.address}</div>
-      <div class="product__date">${getPublishDateDifference(product.date)}</div>
+      <div class="product__address">${product.address.city}, ${product.address.street}</div>
+      <span class="product__date" title="${product.dateString}">${product.dateDifference}</span>
     </div>
   </li>`;
 
