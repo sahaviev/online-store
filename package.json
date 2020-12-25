@@ -1,6 +1,6 @@
 {
   "name": "online-store",
-  "version": "0.0.1",
+  "version": "1.0.25",
   "private": true,
   "description": "Сервис для размещения объявлений",
   "scripts": {
@@ -26,7 +26,7 @@
   "homepage": "https://github.com/sahaviev/online-store#readme",
   "devDependencies": {
     "eslint": "7.13.0",
-    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-config-htmlacademy": "0.6.0",
     "eslint-plugin-import": "2.22.1",
     "webpack": "5.4.0",
     "webpack-cli": "3.3.12",

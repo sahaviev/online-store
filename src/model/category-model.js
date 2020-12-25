@@ -1,5 +1,5 @@
-import { AbstractModel } from './abstract-model';
-import { CategoryType } from '../const';
+import {AbstractModel} from './abstract-model.js';
+import {CategoryType} from '../const.js';
 
 export class CategoryModel extends AbstractModel {
   constructor() {

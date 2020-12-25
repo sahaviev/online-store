@@ -1,9 +1,9 @@
 import {
   render, remove, replace, RenderPosition,
-} from '../utils/render';
+} from '../utils/render.js';
 
-import { ProductItemView } from '../view/product-item-view';
-import { ProductModalView } from '../view/product-modal-view';
+import {ProductItemView} from '../view/product-item-view.js';
+import {ProductModalView} from '../view/product-modal-view.js';
 
 export class ProductItemPresenter {
   constructor(appContainer, productsListContainer, productModel) {
@@ -48,7 +48,7 @@ export class ProductItemPresenter {
   }
 
   handleFavoriteClick() {
-    this.productModel.setFavorite(this.product, !this.product.is_favorite);
+    this.productModel.setFavorite(this.product, !this.product.isFavorite);
   }
 
   handleCloseModalClick() {

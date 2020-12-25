@@ -1,8 +1,8 @@
-import { AbstractView } from './abstract-view';
+import {AbstractView} from './abstract-view.js';
 
 export class AppView extends AbstractView {
   getAppContainer() {
-    return this.getElement().querySelector('.onlineshop-app__wrapper');
+    return this.getElement().querySelector(`.onlineshop-app__wrapper`);
   }
 
   getTemplate() {

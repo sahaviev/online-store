@@ -1,19 +1,19 @@
-import { AbstractView } from './abstract-view.js';
-import { adaptFilterName, adaptFilterValue } from '../utils/product-adapters';
-import { preload } from '../utils/image';
-import { initMap, addMarker } from '../utils/leaftlet';
+import {AbstractView} from './abstract-view.js';
+import {adaptFilterName, adaptFilterValue} from '../utils/product-adapters.js';
+import {preload} from '../utils/image.js';
+import {initMap, addMarker} from '../utils/leaftlet.js';
 
 const getSellerClassname = (rating) => {
   if (rating >= 4.8) {
-    return 'seller--good';
+    return `seller--good`;
   }
   if (rating < 4) {
-    return 'seller--bad';
+    return `seller--bad`;
   }
-  return '';
+  return ``;
 };
 
-const filterUndefinedProductFilters = (filters) => Object.keys(filters).filter((key) => filters[key] !== '-');
+const filterUndefinedProductFilters = (filters) => Object.keys(filters).filter((key) => filters[key] !== `-`);
 
 const createProductModalTemplate = (product) => `<section class="popup">
         <div class="popup__inner">
@@ -24,11 +24,11 @@ const createProductModalTemplate = (product) => `<section class="popup">
           </button>
           <span class="popup__date" title="${product.dateString}">${product.dateDifference}</span>
           <h3 class="popup__title">${product.name}</h3>
-          <div class="popup__price">${product['formatted-price']} ₽</div>
+          <div class="popup__price">${product[`formatted-price`]} ₽</div>
           <div class="popup__columns">
             <div class="popup__left">
               <div class="popup__gallery gallery">
-                <button class="gallery__favourite fav-add ${product.is_favorite && 'fav-add--checked'}" id="add-to-favorite">
+                <button class="gallery__favourite fav-add ${product.isFavorite && `fav-add--checked`}" id="add-to-favorite">
                   <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M3 7C3 13 10 16.5 11 17C12 16.5 19 13 19 7C19 4.79086 17.2091 3 15 3C12 3 11 5 11 5C11 5 10 3 7 3C4.79086 3 3 4.79086 3 7Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
                   </svg>
@@ -39,14 +39,14 @@ const createProductModalTemplate = (product) => `<section class="popup">
                 <ul class="gallery__list">
                     ${product.photos.map((photo, index) => `<li class="gallery__item">
                       <img src="${photo}" srcset="${photo}" alt="${index}" width="124" height="80" data-photo-index="${index}" />
-                    </li>`).join('')}
+                    </li>`).join(``)}
                 </ul>
               </div>
               <ul class="popup__chars chars">
                 ${filterUndefinedProductFilters(product.filters).map((key) => `<li class="chars__item">
                   <div class="chars__name">${adaptFilterName(product.category, key)}</div>
                   <div class="chars__value">${adaptFilterValue(product.category, product.filters[key])}</div>
-                </li>`).join('')}
+                </li>`).join(``)}
               </ul>
               <div class="popup__seller seller ${getSellerClassname(product.seller.rating)}">
                 <h3>Продавец</h3>
@@ -84,12 +84,12 @@ export class ProductModalView extends AbstractView {
 
     this.setAfterRenderHandler(this.renderMap);
 
-    this.getElement().querySelector('.gallery__list').addEventListener('click', this.changeMainPhotoHandler);
+    this.getElement().querySelector(`.gallery__list`).addEventListener(`click`, this.changeMainPhotoHandler);
   }
 
   renderMap() {
     initMap(
-      this.getElement().querySelector('#map'), this.product.coordinates,
+        this.getElement().querySelector(`#map`), this.product.coordinates,
     );
 
     addMarker(this.product.coordinates);
@@ -97,22 +97,22 @@ export class ProductModalView extends AbstractView {
 
   changeMainPhotoHandler(evt) {
     if (this.currentActivePreview) {
-      this.currentActivePreview.classList.remove('gallery__item--active');
+      this.currentActivePreview.classList.remove(`gallery__item--active`);
     }
-    evt.target.parentNode.classList.add('gallery__item--active');
+    evt.target.parentNode.classList.add(`gallery__item--active`);
     this.currentActivePreview = evt.target.parentNode;
 
-    const { photoIndex } = evt.target.dataset;
+    const {photoIndex} = evt.target.dataset;
     const photo = this.product.photos[photoIndex];
 
     if (!photo) {
       return;
     }
 
-    const mainImage = this.getElement().querySelector('.gallery__main-pic img');
+    const mainImage = this.getElement().querySelector(`.gallery__main-pic img`);
     preload(photo, () => {
-      mainImage.setAttribute('src', photo);
-      mainImage.setAttribute('srcset', photo);
+      mainImage.setAttribute(`src`, photo);
+      mainImage.setAttribute(`srcset`, photo);
     });
   }
 
@@ -122,11 +122,11 @@ export class ProductModalView extends AbstractView {
 
   favoriteClickHandler(evt) {
     evt.preventDefault();
-    const { classList } = evt.currentTarget;
-    if (classList.contains('fav-add--checked')) {
-      classList.remove('fav-add--checked');
+    const {classList} = evt.currentTarget;
+    if (classList.contains(`fav-add--checked`)) {
+      classList.remove(`fav-add--checked`);
     } else {
-      classList.add('fav-add--checked');
+      classList.add(`fav-add--checked`);
     }
     this.callbacks.favoriteClick();
   }
@@ -138,7 +138,7 @@ export class ProductModalView extends AbstractView {
 
   documentKeypressHandler(evt) {
     evt.preventDefault();
-    if (evt.key === 'Escape') {
+    if (evt.key === `Escape`) {
       this.closeModal();
     }
   }
@@ -152,21 +152,21 @@ export class ProductModalView extends AbstractView {
   }
 
   closeModal() {
-    document.removeEventListener('keyup', this.documentKeypressHandler);
-    this.getElement().removeEventListener('click', this.modalOutsideClickHandler);
-    this.getElement().querySelector('.popup__close').removeEventListener('click', this.closeModalClickHandler);
+    document.removeEventListener(`keyup`, this.documentKeypressHandler);
+    this.getElement().removeEventListener(`click`, this.modalOutsideClickHandler);
+    this.getElement().querySelector(`.popup__close`).removeEventListener(`click`, this.closeModalClickHandler);
     this.callbacks.closeModalClick();
   }
 
   setCloseModalClickHandler(callback) {
     this.callbacks.closeModalClick = callback;
-    document.addEventListener('keyup', this.documentKeypressHandler);
-    this.getElement().addEventListener('click', this.modalOutsideClickHandler);
-    this.getElement().querySelector('.popup__close').addEventListener('click', this.closeModalClickHandler);
+    document.addEventListener(`keyup`, this.documentKeypressHandler);
+    this.getElement().addEventListener(`click`, this.modalOutsideClickHandler);
+    this.getElement().querySelector(`.popup__close`).addEventListener(`click`, this.closeModalClickHandler);
   }
 
   setFavoriteClickHandler(callback) {
     this.callbacks.favoriteClick = callback;
-    this.getElement().querySelector('#add-to-favorite').addEventListener('click', this.favoriteClickHandler);
+    this.getElement().querySelector(`#add-to-favorite`).addEventListener(`click`, this.favoriteClickHandler);
   }
 }

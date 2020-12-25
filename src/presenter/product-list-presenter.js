@@ -1,18 +1,18 @@
 import {
   render, remove, RenderPosition, replace,
-} from '../utils/render';
-import { SortingOrder, UpdateType } from '../const';
+} from '../utils/render.js';
+import {SortingOrder, UpdateType} from '../const.js';
 
-import { sortProducts, sortFavoriteProducts } from '../utils/product-sorters';
-import { filterProducts } from '../utils/product-filters';
+import {sortProducts, sortFavoriteProducts} from '../utils/product-sorters.js';
+import {filterProducts} from '../utils/product-filters.js';
 
-import { ProductItemPresenter } from './product-item-presenter';
+import {ProductItemPresenter} from './product-item-presenter.js';
 
-import { ProductLayoutView } from '../view/product-layout-view';
-import { SortingOrderView } from '../view/sorting-order-view';
-import { SortingFavoritesView } from '../view/sorting-favorites-view';
-import { NoProductsView } from '../view/no-products-view';
-import { NoFavoritesView } from '../view/no-favorites-view';
+import {ProductLayoutView} from '../view/product-layout-view.js';
+import {SortingOrderView} from '../view/sorting-order-view.js';
+import {SortingFavoritesView} from '../view/sorting-favorites-view.js';
+import {NoProductsView} from '../view/no-products-view.js';
+import {NoFavoritesView} from '../view/no-favorites-view.js';
 
 const INITIAL_PRODUCTS_COUNT = 7;
 const UPLOAD_PRODUCTS_COUNT = 5;
@@ -69,9 +69,9 @@ export class ProductListPresenter {
 
     if (previous === null) {
       render(
-        this.productsLayoutComponent.getSortingContainer(),
-        this.sortingOrderComponent,
-        RenderPosition.BEFOREEND,
+          this.productsLayoutComponent.getSortingContainer(),
+          this.sortingOrderComponent,
+          RenderPosition.BEFOREEND,
       );
       return;
     }
@@ -111,7 +111,7 @@ export class ProductListPresenter {
 
     if (this.loadedProductsCount < products.length) {
       this.renderProducts(
-        products.slice(this.loadedProductsCount, this.loadedProductsCount + UPLOAD_PRODUCTS_COUNT),
+          products.slice(this.loadedProductsCount, this.loadedProductsCount + UPLOAD_PRODUCTS_COUNT),
       );
       this.loadedProductsCount += UPLOAD_PRODUCTS_COUNT;
     }
@@ -156,17 +156,17 @@ export class ProductListPresenter {
 
   renderNoProducts() {
     render(
-      this.productsLayoutComponent.getProductListContainer(),
-      this.noProductsComponent,
-      RenderPosition.AFTERBEGIN,
+        this.productsLayoutComponent.getProductListContainer(),
+        this.noProductsComponent,
+        RenderPosition.AFTERBEGIN,
     );
   }
 
   renderNoFavorites() {
     render(
-      this.productsLayoutComponent.getProductListContainer(),
-      this.noFavoritesComponent,
-      RenderPosition.AFTERBEGIN,
+        this.productsLayoutComponent.getProductListContainer(),
+        this.noFavoritesComponent,
+        RenderPosition.AFTERBEGIN,
     );
   }
 

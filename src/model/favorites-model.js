@@ -1,4 +1,4 @@
-import { AbstractModel } from './abstract-model';
+import {AbstractModel} from './abstract-model.js';
 
 export class FavoritesModel extends AbstractModel {
   constructor() {

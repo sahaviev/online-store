@@ -1,6 +1,6 @@
-import { AbstractView } from './abstract-view.js';
+import {AbstractView} from './abstract-view.js';
 
-const createSortingOrderTemplate = (disabled = '', selectedSortingOrder) => `<fieldset class="sorting__order">
+const createSortingOrderTemplate = (disabled = ``, selectedSortingOrder) => `<fieldset class="sorting__order">
         <legend>Показать сначала:</legend>
         <ul class="sorting__order-list">
           <li class="sorting__order-tab">
@@ -10,7 +10,7 @@ const createSortingOrderTemplate = (disabled = '', selectedSortingOrder) => `<fi
                 name="sorting-order"
                 value="popular"
                 ${disabled}
-                ${selectedSortingOrder === 'popular' ? 'checked' : ''}
+                ${selectedSortingOrder === `popular` ? `checked` : ``}
                 id="sort-popular"
             />
             <label for="sort-popular">Популярные</label>
@@ -22,7 +22,7 @@ const createSortingOrderTemplate = (disabled = '', selectedSortingOrder) => `<fi
                 name="sorting-order"
                 value="cheap"
                 ${disabled}
-                ${selectedSortingOrder === 'cheap' ? 'checked' : ''}
+                ${selectedSortingOrder === `cheap` ? `checked` : ``}
                 id="sort-cheap"
             />
             <label for="sort-cheap">Дешёвые</label>
@@ -34,7 +34,7 @@ const createSortingOrderTemplate = (disabled = '', selectedSortingOrder) => `<fi
                 name="sorting-order"
                 value="new"
                 ${disabled}
-                ${selectedSortingOrder === 'new' ? 'checked' : ''}
+                ${selectedSortingOrder === `new` ? `checked` : ``}
                 id="sort-new"
             />
             <label for="sort-new">Новые</label>
@@ -45,7 +45,7 @@ const createSortingOrderTemplate = (disabled = '', selectedSortingOrder) => `<fi
 export class SortingOrderView extends AbstractView {
   constructor(disabled, selectedSortingOrder) {
     super();
-    this.disabled = disabled ? 'disabled' : '';
+    this.disabled = disabled ? `disabled` : ``;
     this.selectedSortingOrder = selectedSortingOrder;
 
     this.sortingOrderChangeHandler = this.sortingOrderChangeHandler.bind(this);
@@ -62,6 +62,6 @@ export class SortingOrderView extends AbstractView {
 
   setSortingOrderChangeHandler(callback) {
     this.callbacks.sortingOrderChange = callback;
-    this.getElement().querySelector('.sorting__order-list').addEventListener('change', this.sortingOrderChangeHandler);
+    this.getElement().querySelector(`.sorting__order-list`).addEventListener(`change`, this.sortingOrderChangeHandler);
   }
 }

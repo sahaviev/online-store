@@ -1,17 +1,17 @@
-import { UpdateType } from '../const';
-import { render } from '../utils/render';
+import {UpdateType} from '../const.js';
+import {render} from '../utils/render.js';
 
-import { CategoriesPresenter } from './categories-presenter';
-import { FiltersPresenter } from './filters-presenter';
-import { ProductListPresenter } from './product-list-presenter';
+import {CategoriesPresenter} from './categories-presenter.js';
+import {FiltersPresenter} from './filters-presenter.js';
+import {ProductListPresenter} from './product-list-presenter.js';
 
-import { CategoryModel } from '../model/category-model';
-import { FilterModel } from '../model/filter-model';
-import { ProductModel } from '../model/product-model';
-import { FavoritesModel } from '../model/favorites-model';
+import {CategoryModel} from '../model/category-model.js';
+import {FilterModel} from '../model/filter-model.js';
+import {ProductModel} from '../model/product-model.js';
+import {FavoritesModel} from '../model/favorites-model.js';
 
-import { AppView } from '../view/app-view';
-import { SidebarView } from '../view/sidebar-view';
+import {AppView} from '../view/app-view.js';
+import {SidebarView} from '../view/sidebar-view.js';
 
 export class AppPresenter {
   constructor(mainContainer, api) {
@@ -35,25 +35,25 @@ export class AppPresenter {
     render(this.appComponent.getAppContainer(), this.sidebarComponent);
 
     this.categoryPresenter = new CategoriesPresenter(
-      this.sidebarComponent.getCategoriesContainer(),
-      this.categoryModel,
-      this.favoritesModel,
+        this.sidebarComponent.getCategoriesContainer(),
+        this.categoryModel,
+        this.favoritesModel,
     );
 
     this.filterPresenter = new FiltersPresenter(
-      this.sidebarComponent.getCategoryFiltersContainer(),
-      this.categoryModel,
-      this.favoritesModel,
-      this.filterModel,
-      this.productsModel,
+        this.sidebarComponent.getCategoryFiltersContainer(),
+        this.categoryModel,
+        this.favoritesModel,
+        this.filterModel,
+        this.productsModel,
     );
 
     this.productPresenter = new ProductListPresenter(
-      this.appComponent.getAppContainer(),
-      this.categoryModel,
-      this.favoritesModel,
-      this.filterModel,
-      this.productsModel,
+        this.appComponent.getAppContainer(),
+        this.categoryModel,
+        this.favoritesModel,
+        this.filterModel,
+        this.productsModel,
     );
 
     this.categoryPresenter.init();

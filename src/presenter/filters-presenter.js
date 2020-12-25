@@ -1,20 +1,16 @@
-import { CategoryType, UpdateType } from '../const';
-import { remove, render, replace } from '../utils/render';
-import { getCategoryProducts, getProductsPriceRanges } from '../utils/product-filters';
+import {CategoryType, UpdateType} from '../const.js';
+import {remove, render, replace} from '../utils/render.js';
+import {getCategoryProducts, getProductsPriceRanges} from '../utils/product-filters.js';
 
-import { FilterAllView } from '../view/filter-all-view';
-import { FilterCameraView } from '../view/filter-camera-view';
-import { FilterCarsView } from '../view/filter-cars-view';
-import { FilterEstateView } from '../view/filter-estate-view';
-import { FilterLaptopView } from '../view/filter-laptop-view';
-import { FilterRangeView } from '../view/filter-range-view';
-import { FiltersShowButtonView } from '../view/filters-show-button-view';
+import {FilterAllView} from '../view/filter-all-view.js';
+import {FilterCameraView} from '../view/filter-camera-view.js';
+import {FilterCarsView} from '../view/filter-cars-view.js';
+import {FilterEstateView} from '../view/filter-estate-view.js';
+import {FilterLaptopView} from '../view/filter-laptop-view.js';
+import {FilterRangeView} from '../view/filter-range-view.js';
+import {FiltersShowButtonView} from '../view/filters-show-button-view.js';
 
-const getSelectedRange = (selectedFilters) => {
-  if (selectedFilters.minPrice && selectedFilters.maxPrice) {
-    return [selectedFilters.minPrice, selectedFilters.maxPrice];
-  }
-};
+const getSelectedRange = ({minPrice, maxPrice}) => minPrice && maxPrice ? [minPrice, maxPrice] : [0, 0];
 
 export class FiltersPresenter {
   constructor(filtersContainer, categoryModel, favoritesModel, filterModel, productsModel) {
@@ -59,10 +55,10 @@ export class FiltersPresenter {
       ? getCategoryProducts(this.productsModel.getProducts(), this.selectedCategory)
       : this.productsModel.getProducts();
 
-    const priceRanges = products.length > 0 ? getProductsPriceRanges(products) : { min: 0, max: 0 };
+    const priceRanges = products.length > 0 ? getProductsPriceRanges(products) : {min: 0, max: 0};
 
     this.rangeFilterComponent = new FilterRangeView(
-      this.disabled, priceRanges, getSelectedRange(this.selectedFilters),
+        this.disabled, priceRanges, getSelectedRange(this.selectedFilters),
     );
     this.rangeFilterComponent.setFilterChangeHandler(this.handleRangeFilterChange);
 
@@ -164,13 +160,13 @@ export class FiltersPresenter {
     }
     if (!checked) {
       this.selectedFilters[name] = this.selectedFilters[name].filter(
-        (item) => item !== value,
+          (item) => item !== value,
       );
     }
   }
 
   handleRangeFilterChange(values) {
-    const [minPrice, maxPrice] = values.split(',');
+    const [minPrice, maxPrice] = values.split(`,`);
     this.selectedFilters.minPrice = Number(minPrice);
     this.selectedFilters.maxPrice = Number(maxPrice);
   }

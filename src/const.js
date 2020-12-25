@@ -1,43 +1,43 @@
 export const CategoryType = {
-  ALL: 'all',
-  ESTATE: 'real-estate',
-  LAPTOPS: 'laptops',
-  CAMERA: 'camera',
-  CARS: 'cars',
+  ALL: `all`,
+  ESTATE: `real-estate`,
+  LAPTOPS: `laptops`,
+  CAMERA: `camera`,
+  CARS: `cars`,
 };
 
 export const SortingOrder = {
-  POPULAR: 'popular',
-  CHEAP: 'cheap',
-  NEW: 'new',
+  POPULAR: `popular`,
+  CHEAP: `cheap`,
+  NEW: `new`,
 };
 
 export const categories = [
   {
     name: CategoryType.ALL,
-    title: 'Все',
+    title: `Все`,
   },
   {
     name: CategoryType.ESTATE,
-    title: 'Недвижимость',
+    title: `Недвижимость`,
   },
   {
     name: CategoryType.LAPTOPS,
-    title: 'Ноутбуки',
+    title: `Ноутбуки`,
   },
   {
     name: CategoryType.CAMERA,
-    title: 'Фотоаппараты',
+    title: `Фотоаппараты`,
   },
   {
     name: CategoryType.CARS,
-    title: 'Автомобили',
+    title: `Автомобили`,
   },
 ];
 
 export const UpdateType = {
-  PATCH: 'PATCH',
-  MINOR: 'MINOR',
-  MAJOR: 'MAJOR',
-  INIT: 'INIT',
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`,
+  INIT: `INIT`,
 };

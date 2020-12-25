@@ -1,4 +1,4 @@
-import { CategoryType } from '../const';
+import {CategoryType} from '../const.js';
 
 export function getCategoryProducts(products, category) {
   return products.filter((product) => product.category === category);
@@ -14,17 +14,17 @@ export function getProductsPriceRanges(products) {
 }
 
 function filterEstates(params, filters) {
-  if (filters['estate-type'] && filters['estate-type'].length > 0 && !filters['estate-type'].includes(params.type)) {
+  if (filters[`estate-type`] && filters[`estate-type`].length > 0 && !filters[`estate-type`].includes(params.type)) {
     return false;
   }
 
-  if (filters['min-square'] && Number(filters['min-square']) > params.area) {
+  if (filters[`min-square`] && Number(filters[`min-square`]) > params.area) {
     return false;
   }
 
-  if (filters.rooms && filters.rooms !== 'any') {
-    const exactCount = Number(filters.rooms) !== params['rooms-count'];
-    const fiveAndMore = filters.rooms === 'five_and_more' && params['rooms-count'] < 5;
+  if (filters.rooms && filters.rooms !== `any`) {
+    const exactCount = Number(filters.rooms) !== params[`rooms-count`];
+    const fiveAndMore = filters.rooms === `five_and_more` && params[`rooms-count`] < 5;
     if (exactCount || fiveAndMore) {
       return false;
     }
@@ -34,22 +34,22 @@ function filterEstates(params, filters) {
 }
 
 function filterLaptops(params, filters) {
-  const laptopType = filters['laptop-type'];
+  const laptopType = filters[`laptop-type`];
   if (laptopType && laptopType.length > 0 && !laptopType.includes(params.type)) {
     return false;
   }
 
-  if (filters.ram && filters.ram !== 'any' && Number(filters.ram) !== params['ram-value']) {
+  if (filters.ram && filters.ram !== `any` && Number(filters.ram) !== params[`ram-value`]) {
     return false;
   }
 
   const screenSize = filters.diagonal;
-  if (screenSize && screenSize !== 'any' && Number(screenSize) !== Math.floor(params['screen-size'])) {
+  if (screenSize && screenSize !== `any` && Number(screenSize) !== Math.floor(params[`screen-size`])) {
     return false;
   }
 
-  const cpuType = filters['laptop-processor'];
-  if (cpuType && cpuType.length > 0 && !cpuType.includes(params['cpu-type'])) {
+  const cpuType = filters[`laptop-processor`];
+  if (cpuType && cpuType.length > 0 && !cpuType.includes(params[`cpu-type`])) {
     return false;
   }
 
@@ -57,18 +57,18 @@ function filterLaptops(params, filters) {
 }
 
 function filterCameras(params, filters) {
-  const cameraType = filters['camera-type'];
+  const cameraType = filters[`camera-type`];
   if (cameraType && cameraType.length > 0 && !cameraType.includes(params.type)) {
     return false;
   }
 
-  const matrixResolution = filters['resolution-matrix'];
-  if (matrixResolution && matrixResolution !== 'any' && Number(matrixResolution) < Math.floor(params['matrix-resolution'])) {
+  const matrixResolution = filters[`resolution-matrix`];
+  if (matrixResolution && matrixResolution !== `any` && Number(matrixResolution) < Math.floor(params[`matrix-resolution`])) {
     return false;
   }
 
-  const videoResolution = filters['resolution-video'];
-  if (videoResolution && videoResolution !== 'any' && videoResolution !== params.supporting.toLowerCase()) {
+  const videoResolution = filters[`resolution-video`];
+  if (videoResolution && videoResolution !== `any` && videoResolution !== params.supporting.toLowerCase()) {
     return false;
   }
 
@@ -76,18 +76,18 @@ function filterCameras(params, filters) {
 }
 
 function filterCars(params, filters) {
-  const productionYear = filters['production-year'];
-  if (productionYear && productionYear !== 'any' && Number(productionYear) > Number(params['production-year'])) {
+  const productionYear = filters[`production-year`];
+  if (productionYear && productionYear !== `any` && Number(productionYear) > Number(params[`production-year`])) {
     return false;
   }
 
-  const { transmission } = filters;
-  if (transmission && transmission !== 'any' && transmission !== params.transmission) {
+  const {transmission} = filters;
+  if (transmission && transmission !== `any` && transmission !== params.transmission) {
     return false;
   }
 
-  const bodyType = filters['body-type'];
-  if (bodyType && bodyType.length > 0 && !bodyType.includes(params['body-type'])) {
+  const bodyType = filters[`body-type`];
+  if (bodyType && bodyType.length > 0 && !bodyType.includes(params[`body-type`])) {
     return false;
   }
 

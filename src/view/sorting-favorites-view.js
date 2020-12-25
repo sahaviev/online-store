@@ -1,4 +1,4 @@
-import { AbstractView } from './abstract-view.js';
+import {AbstractView} from './abstract-view.js';
 
 export class SortingFavoritesView extends AbstractView {
   constructor() {
@@ -25,6 +25,6 @@ export class SortingFavoritesView extends AbstractView {
 
   setShowFavoriteClickHandler(callback) {
     this.callbacks.showFavoriteClick = callback;
-    this.getElement().querySelector('#favourites').addEventListener('change', this.showFavoriteClickHandler);
+    this.getElement().querySelector(`#favourites`).addEventListener(`change`, this.showFavoriteClickHandler);
   }
 }

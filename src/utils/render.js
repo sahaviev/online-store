@@ -1,9 +1,9 @@
 // eslint-disable-next-line import/no-cycle
-import { AbstractView } from '../view/abstract-view.js';
+import {AbstractView} from '../view/abstract-view.js';
 
 export const RenderPosition = {
-  AFTERBEGIN: 'afterbegin',
-  BEFOREEND: 'beforeend',
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
 };
 
 const getElement = (object) => {
@@ -39,10 +39,10 @@ export const render = (container, child, place = RenderPosition.BEFOREEND) => {
 };
 
 export const replace = (newChild, oldChild) => {
-  const { parentElement } = getElement(oldChild);
+  const {parentElement} = getElement(oldChild);
 
   if (parentElement === null || newChild === null) {
-    throw new Error('Can\'t replace non-existent elements');
+    throw new Error(`Can't replace non-existent elements`);
   }
 
   handleBeforeRenderCallback(newChild);
@@ -56,7 +56,7 @@ export const remove = (component) => {
   }
 
   if (!(component instanceof AbstractView)) {
-    throw new Error('Possible to remove only components');
+    throw new Error(`Possible to remove only components`);
   }
 
   component.getElement().remove();
@@ -64,7 +64,7 @@ export const remove = (component) => {
 };
 
 export const createElement = (template) => {
-  const newElement = document.createElement('div');
+  const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
 
   return newElement.firstChild;

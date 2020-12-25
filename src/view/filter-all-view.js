@@ -1,6 +1,6 @@
-import { AbstractFilterView } from './abstract-filter-view.js';
+import {AbstractFilterView} from './abstract-filter-view.js';
 
-const createRangeFilterTemplate = () => '<div></div>';
+const createRangeFilterTemplate = () => `<div></div>`;
 
 export class FilterAllView extends AbstractFilterView {
   getTemplate() {

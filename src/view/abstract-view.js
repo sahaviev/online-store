@@ -1,10 +1,10 @@
 // eslint-disable-next-line import/no-cycle
-import { createElement } from '../utils/render.js';
+import {createElement} from '../utils/render.js';
 
 export class AbstractView {
   constructor() {
     if (new.target === AbstractView) {
-      throw new Error('Can\'t instantiate AbstractView, only concrete one.');
+      throw new Error(`Can't instantiate AbstractView, only concrete one.`);
     }
 
     this.element = null;
@@ -12,13 +12,13 @@ export class AbstractView {
   }
 
   handleBeforeRenderCallback() {
-    if (typeof this.callbacks.beforeRender === 'function') {
+    if (typeof this.callbacks.beforeRender === `function`) {
       this.callbacks.beforeRender();
     }
   }
 
   handleAfterRenderCallback() {
-    if (typeof this.callbacks.afterRender === 'function') {
+    if (typeof this.callbacks.afterRender === `function`) {
       this.callbacks.afterRender();
     }
   }
@@ -33,7 +33,7 @@ export class AbstractView {
 
   // eslint-disable-next-line class-methods-use-this
   getTemplate() {
-    throw new Error('AbstractView method not implemented: getTemplate');
+    throw new Error(`AbstractView method not implemented: getTemplate`);
   }
 
   getElement() {

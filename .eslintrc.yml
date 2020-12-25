@@ -7,7 +7,7 @@ env:
   browser: true
 
 extends:
-  - 'airbnb-base'
+  - 'htmlacademy/es6'
 
 plugins:
   - import

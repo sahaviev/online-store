@@ -1,4 +1,4 @@
-import { CategoryType } from '../const';
+import {CategoryType} from '../const.js';
 
 const MILLISECONDS = 1000;
 const ONE_DAY = 1;
@@ -8,33 +8,33 @@ const ONE_DAY_SECONDS = 86400;
 const ONE_DAY_MILLISECONDS = ONE_DAY_SECONDS * MILLISECONDS;
 
 const months = [
-  'января',
-  'февраля',
-  'марта',
-  'апреля',
-  'мая',
-  'июня',
-  'июля',
-  'августа',
-  'сентября',
-  'октября',
-  'ноября',
-  'декабря',
+  `января`,
+  `февраля`,
+  `марта`,
+  `апреля`,
+  `мая`,
+  `июня`,
+  `июля`,
+  `августа`,
+  `сентября`,
+  `октября`,
+  `ноября`,
+  `декабря`,
 ];
 
 const days = {
-  1: 'день',
-  2: 'дня',
-  3: 'дня',
-  4: 'дня',
-  5: 'дней',
-  6: 'дней',
-  7: 'дней',
+  1: `день`,
+  2: `дня`,
+  3: `дня`,
+  4: `дня`,
+  5: `дней`,
+  6: `дней`,
+  7: `дней`,
 };
 
 export const adaptDate = (timestamp) => new Date(Number(timestamp));
 
-export const formatPrice = (price) => price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '&thinsp;');
+export const formatPrice = (price) => price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, `&thinsp;`);
 
 export const getPublishDateDifference = (date) => {
   const currentDate = new Date();
@@ -66,62 +66,62 @@ const serverCategories = {
 
 const filtersNames = {
   [CategoryType.ESTATE]: {
-    type: 'Тип недвижимости',
-    area: 'Площадь, м2',
-    'rooms-count': 'Количество комнат',
+    "type": `Тип недвижимости`,
+    "area": `Площадь, м2`,
+    'rooms-count': `Количество комнат`,
   },
   [CategoryType.LAPTOPS]: {
-    type: 'Тип ноутбука',
-    'ram-value': 'Объем оперативной памяти',
-    'screen-size': 'Диагональ экрана',
-    'cpu-type': 'Тип процессора',
+    "type": `Тип ноутбука`,
+    'ram-value': `Объем оперативной памяти`,
+    'screen-size': `Диагональ экрана`,
+    'cpu-type': `Тип процессора`,
   },
   [CategoryType.CAMERA]: {
-    type: 'Тип фотоаппарата',
-    'matrix-resolution': 'Разрешение матрицы',
-    supporting: 'Разрешение видео',
+    "type": `Тип фотоаппарата`,
+    'matrix-resolution': `Разрешение матрицы`,
+    "supporting": `Разрешение видео`,
   },
   [CategoryType.CARS]: {
-    'body-type': 'Тип кузова',
-    transmission: 'Коробка передач',
-    'production-year': 'Год выпуска',
+    'body-type': `Тип кузова`,
+    "transmission": `Коробка передач`,
+    'production-year': `Год выпуска`,
   },
 };
 
 const filtersValues = {
   [CategoryType.ESTATE]: {
-    flat: 'Квартира',
-    house: 'Дом',
-    apartment: 'Апартаменты',
+    flat: `Квартира`,
+    house: `Дом`,
+    apartment: `Апартаменты`,
   },
   [CategoryType.LAPTOPS]: {
-    i3: 'Intel Core i3',
-    i5: 'Intel Core i5',
-    i7: 'Intel Core i7',
-    4: '4 Гб',
-    8: '8 Гб',
-    16: '16 Гб',
-    ultrabook: 'Ультрабук',
-    home: 'Домашний ноутбук',
-    gaming: 'Игровой ноутбук',
+    i3: `Intel Core i3`,
+    i5: `Intel Core i5`,
+    i7: `Intel Core i7`,
+    4: `4 Гб`,
+    8: `8 Гб`,
+    16: `16 Гб`,
+    ultrabook: `Ультрабук`,
+    home: `Домашний ноутбук`,
+    gaming: `Игровой ноутбук`,
   },
   [CategoryType.CAMERA]: {
-    slr: 'Зеркальный',
-    digital: 'Цифровой',
-    mirrorless: 'Беззеркальный',
-    hd: 'HD',
-    'full-hd': 'Full HD',
-    '4k': '4K',
-    '5k': '5K',
+    "slr": `Зеркальный`,
+    "digital": `Цифровой`,
+    "mirrorless": `Беззеркальный`,
+    "hd": `HD`,
+    'full-hd': `Full HD`,
+    '4k': `4K`,
+    '5k': `5K`,
   },
   [CategoryType.CARS]: {
-    auto: 'Автомат',
-    mechanic: 'Механическая',
-    sedan: 'Седан',
-    universal: 'Универсал',
-    hatchback: 'Хэтчбэк',
-    suv: 'Внедорожник',
-    coupe: 'Купэ',
+    auto: `Автомат`,
+    mechanic: `Механическая`,
+    sedan: `Седан`,
+    universal: `Универсал`,
+    hatchback: `Хэтчбэк`,
+    suv: `Внедорожник`,
+    coupe: `Купэ`,
   },
 };
 

@@ -1,4 +1,4 @@
-import { AbstractView } from './abstract-view.js';
+import {AbstractView} from './abstract-view.js';
 
 export class FiltersShowButtonView extends AbstractView {
   constructor(disabled) {
@@ -10,7 +10,7 @@ export class FiltersShowButtonView extends AbstractView {
 
   getTemplate() {
     return `<form class="filter__form" action="#" method="post">
-  <button class="button filter__button" type="submit" id="filter-button" ${this.disabled ? 'disabled' : ''}>Показать</button>
+  <button class="button filter__button" type="submit" id="filter-button" ${this.disabled ? `disabled` : ``}>Показать</button>
 </form>`;
   }
 
@@ -21,6 +21,6 @@ export class FiltersShowButtonView extends AbstractView {
 
   setShowButtonClickHandler(callback) {
     this.callbacks.showButtonClick = callback;
-    this.getElement().addEventListener('submit', this.showButtonClickHandler);
+    this.getElement().addEventListener(`submit`, this.showButtonClickHandler);
   }
 }
