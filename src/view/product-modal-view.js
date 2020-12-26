@@ -3,11 +3,14 @@ import {adaptFilterName, adaptFilterValue} from '../utils/product-adapters.js';
 import {preload} from '../utils/image.js';
 import {initMap, addMarker} from '../utils/leaftlet.js';
 
+const GOOD_RATING = 4.8;
+const BAD_RATING = 4;
+
 const getSellerClassname = (rating) => {
-  if (rating >= 4.8) {
+  if (rating >= GOOD_RATING) {
     return `seller--good`;
   }
-  if (rating < 4) {
+  if (rating < BAD_RATING) {
     return `seller--bad`;
   }
   return ``;
@@ -78,13 +81,13 @@ export class ProductModalView extends AbstractView {
     this.renderMap = this.renderMap.bind(this);
     this.favoriteClickHandler = this.favoriteClickHandler.bind(this);
     this.modalOutsideClickHandler = this.modalOutsideClickHandler.bind(this);
-    this.documentKeypressHandler = this.documentKeypressHandler.bind(this);
+    this.documentKeyupHandler = this.documentKeyupHandler.bind(this);
     this.closeModalClickHandler = this.closeModalClickHandler.bind(this);
-    this.changeMainPhotoHandler = this.changeMainPhotoHandler.bind(this);
+    this.mainPhotoClickHandler = this.mainPhotoClickHandler.bind(this);
 
     this.setAfterRenderHandler(this.renderMap);
 
-    this.getElement().querySelector(`.gallery__list`).addEventListener(`click`, this.changeMainPhotoHandler);
+    this.getElement().querySelector(`.gallery__list`).addEventListener(`click`, this.mainPhotoClickHandler);
   }
 
   renderMap() {
@@ -95,7 +98,30 @@ export class ProductModalView extends AbstractView {
     addMarker(this.product.coordinates);
   }
 
-  changeMainPhotoHandler(evt) {
+  getTemplate() {
+    return createProductModalTemplate(this.product);
+  }
+
+  closeModal() {
+    document.removeEventListener(`keyup`, this.documentKeyupHandler);
+    this.getElement().removeEventListener(`click`, this.modalOutsideClickHandler);
+    this.getElement().querySelector(`.popup__close`).removeEventListener(`click`, this.closeModalClickHandler);
+    this.callbacks.closeModalClick();
+  }
+
+  setCloseModalClickHandler(callback) {
+    this.callbacks.closeModalClick = callback;
+    document.addEventListener(`keyup`, this.documentKeyupHandler);
+    this.getElement().addEventListener(`click`, this.modalOutsideClickHandler);
+    this.getElement().querySelector(`.popup__close`).addEventListener(`click`, this.closeModalClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this.callbacks.favoriteClick = callback;
+    this.getElement().querySelector(`#add-to-favorite`).addEventListener(`click`, this.favoriteClickHandler);
+  }
+
+  mainPhotoClickHandler(evt) {
     if (this.currentActivePreview) {
       this.currentActivePreview.classList.remove(`gallery__item--active`);
     }
@@ -116,18 +142,9 @@ export class ProductModalView extends AbstractView {
     });
   }
 
-  getTemplate() {
-    return createProductModalTemplate(this.product);
-  }
-
   favoriteClickHandler(evt) {
     evt.preventDefault();
-    const {classList} = evt.currentTarget;
-    if (classList.contains(`fav-add--checked`)) {
-      classList.remove(`fav-add--checked`);
-    } else {
-      classList.add(`fav-add--checked`);
-    }
+    evt.currentTarget.classList.toggle(`fav-add--checked`);
     this.callbacks.favoriteClick();
   }
 
@@ -136,7 +153,7 @@ export class ProductModalView extends AbstractView {
     this.closeModal();
   }
 
-  documentKeypressHandler(evt) {
+  documentKeyupHandler(evt) {
     evt.preventDefault();
     if (evt.key === `Escape`) {
       this.closeModal();
@@ -149,24 +166,5 @@ export class ProductModalView extends AbstractView {
       return;
     }
     this.closeModal();
-  }
-
-  closeModal() {
-    document.removeEventListener(`keyup`, this.documentKeypressHandler);
-    this.getElement().removeEventListener(`click`, this.modalOutsideClickHandler);
-    this.getElement().querySelector(`.popup__close`).removeEventListener(`click`, this.closeModalClickHandler);
-    this.callbacks.closeModalClick();
-  }
-
-  setCloseModalClickHandler(callback) {
-    this.callbacks.closeModalClick = callback;
-    document.addEventListener(`keyup`, this.documentKeypressHandler);
-    this.getElement().addEventListener(`click`, this.modalOutsideClickHandler);
-    this.getElement().querySelector(`.popup__close`).addEventListener(`click`, this.closeModalClickHandler);
-  }
-
-  setFavoriteClickHandler(callback) {
-    this.callbacks.favoriteClick = callback;
-    this.getElement().querySelector(`#add-to-favorite`).addEventListener(`click`, this.favoriteClickHandler);
   }
 }

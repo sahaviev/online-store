@@ -48,7 +48,7 @@ export class ProductListPresenter {
     this.renderSortingOrder();
 
     this.sortingFavoritesComponent = new SortingFavoritesView();
-    this.sortingFavoritesComponent.setShowFavoriteClickHandler(this.handleShowFavorites);
+    this.sortingFavoritesComponent.setShowFavoriteChangeHandler(this.handleShowFavorites);
     // eslint-disable-next-line max-len
     render(this.productsLayoutComponent.getSortingContainer(), this.sortingFavoritesComponent, RenderPosition.BEFOREEND);
 

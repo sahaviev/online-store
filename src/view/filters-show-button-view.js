@@ -5,7 +5,7 @@ export class FiltersShowButtonView extends AbstractView {
     super();
     this.disabled = disabled;
 
-    this.showButtonClickHandler = this.showButtonClickHandler.bind(this);
+    this.showButtonSubmitHandler = this.showButtonSubmitHandler.bind(this);
   }
 
   getTemplate() {
@@ -14,13 +14,13 @@ export class FiltersShowButtonView extends AbstractView {
 </form>`;
   }
 
-  showButtonClickHandler(evt) {
+  showButtonSubmitHandler(evt) {
     evt.preventDefault();
-    this.callbacks.showButtonClick();
+    this.callbacks.showButtonSubmit();
   }
 
   setShowButtonClickHandler(callback) {
-    this.callbacks.showButtonClick = callback;
-    this.getElement().addEventListener(`submit`, this.showButtonClickHandler);
+    this.callbacks.showButtonSubmit = callback;
+    this.getElement().addEventListener(`submit`, this.showButtonSubmitHandler);
   }
 }

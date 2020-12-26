@@ -47,16 +47,6 @@ export class ProductItemView extends AbstractView {
     return createProductItemTemplate(this.product);
   }
 
-  favoriteClickHandler(evt) {
-    evt.preventDefault();
-    this.callbacks.favoriteClick();
-  }
-
-  productOpenClickHandler(evt) {
-    evt.preventDefault();
-    this.callbacks.productOpenClick();
-  }
-
   showMorePhotos() {
     const photosCount = this.product.photos.length;
     if (photosCount > NAVIGATION_PHOTOS_COUNT) {
@@ -98,5 +88,15 @@ export class ProductItemView extends AbstractView {
     this.callbacks.productOpenClick = callback;
     this.getElement().querySelector(`.product__name`).addEventListener(`click`, this.productOpenClickHandler);
     this.getElement().querySelector(`.product__image`).addEventListener(`click`, this.productOpenClickHandler);
+  }
+
+  favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.favoriteClick();
+  }
+
+  productOpenClickHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.productOpenClick();
   }
 }

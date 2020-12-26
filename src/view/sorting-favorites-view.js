@@ -3,7 +3,7 @@ import {AbstractView} from './abstract-view.js';
 export class SortingFavoritesView extends AbstractView {
   constructor() {
     super();
-    this.showFavoriteClickHandler = this.showFavoriteClickHandler.bind(this);
+    this.showFavoriteChangeHandler = this.showFavoriteChangeHandler.bind(this);
   }
 
   getTemplate() {
@@ -18,13 +18,13 @@ export class SortingFavoritesView extends AbstractView {
       </div>`;
   }
 
-  showFavoriteClickHandler(evt) {
+  showFavoriteChangeHandler(evt) {
     evt.preventDefault();
-    this.callbacks.showFavoriteClick(evt.target.checked);
+    this.callbacks.showFavoriteChange(evt.target.checked);
   }
 
-  setShowFavoriteClickHandler(callback) {
-    this.callbacks.showFavoriteClick = callback;
-    this.getElement().querySelector(`#favourites`).addEventListener(`change`, this.showFavoriteClickHandler);
+  setShowFavoriteChangeHandler(callback) {
+    this.callbacks.showFavoriteChange = callback;
+    this.getElement().querySelector(`#favourites`).addEventListener(`change`, this.showFavoriteChangeHandler);
   }
 }

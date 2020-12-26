@@ -54,13 +54,13 @@ export class ProductModel extends AbstractModel {
       const date = adaptDate(product[`publish-date`]);
       return {
         ...product,
-        "id": index + 1,
-        "isFavorite": this.favoritesStorage.fetch(index + 1),
-        date,
+        'id': index + 1,
+        'isFavorite': this.favoritesStorage.fetch(index + 1),
         "category": adaptCategory(product.category),
         'formatted-price': formatPrice(product.price),
-        "dateString": getPublishDateString(date),
-        "dateDifference": getPublishDateDifference(date),
+        'dateString': getPublishDateString(date),
+        'dateDifference': getPublishDateDifference(date),
+        date,
       };
     });
   }
