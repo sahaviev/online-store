@@ -1,7 +1,7 @@
 import {LocalStorageWrapper} from '../utils/localstorage-wrapper.js';
-import {
-  adaptCategory, adaptDate, formatPrice, getPublishDateDifference, getPublishDateString,
-} from '../utils/product-adapters.js';
+import {adaptCategory, formatPrice} from '../utils/product-adapters.js';
+import {convertStringTimestampToDate, getPublishDateDifference, getPublishDateString} from '../utils/date.js';
+
 import {UpdateType} from '../const.js';
 
 import {AbstractModel} from './abstract-model.js';
@@ -51,7 +51,7 @@ export class ProductModel extends AbstractModel {
 
   adaptToClient(products) {
     return products.map((product, index) => {
-      const date = adaptDate(product[`publish-date`]);
+      const date = convertStringTimestampToDate(product[`publish-date`]);
       return {
         ...product,
         'id': index + 1,
