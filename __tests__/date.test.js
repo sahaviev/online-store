@@ -1,4 +1,4 @@
-import {convertStringTimestampToDate, getPublishDateDifference, getPublishDateString} from '../utils/date.js';
+import {convertStringTimestampToDate, getPublishDateDifference, getPublishDateString} from '../src/utils/date.js';
 
 describe(`Check convertStringTimestampToDate working`, () => {
   test(`convertStringTimestampToDate("1576773899132") has toBe javascript date`, () => {
