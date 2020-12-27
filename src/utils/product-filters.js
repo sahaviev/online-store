@@ -1,19 +1,19 @@
 import {CategoryType} from '../const.js';
 
-export function getCategoryProducts(products, category) {
+export const getCategoryProducts = (products, category) => {
   return products.filter((product) => product.category === category);
-}
+};
 
-export function getProductsPriceRanges(products) {
+export const getProductsPriceRanges = (products) => {
   const prices = products.map((product) => product.price);
 
   return {
     min: Math.min.apply(null, prices),
     max: Math.max.apply(null, prices),
   };
-}
+};
 
-function filterEstates(params, filters) {
+const filterEstates = (params, filters) => {
   if (filters[`estate-type`] && filters[`estate-type`].length > 0 && !filters[`estate-type`].includes(params.type)) {
     return false;
   }
@@ -31,9 +31,9 @@ function filterEstates(params, filters) {
   }
 
   return true;
-}
+};
 
-function filterLaptops(params, filters) {
+const filterLaptops = (params, filters) => {
   const laptopType = filters[`laptop-type`];
   if (laptopType && laptopType.length > 0 && !laptopType.includes(params.type)) {
     return false;
@@ -54,9 +54,9 @@ function filterLaptops(params, filters) {
   }
 
   return true;
-}
+};
 
-function filterCameras(params, filters) {
+const filterCameras = (params, filters) => {
   const cameraType = filters[`camera-type`];
   if (cameraType && cameraType.length > 0 && !cameraType.includes(params.type)) {
     return false;
@@ -73,9 +73,9 @@ function filterCameras(params, filters) {
   }
 
   return true;
-}
+};
 
-function filterCars(params, filters) {
+const filterCars = (params, filters) => {
   const productionYear = filters[`production-year`];
   if (productionYear && productionYear !== `any` && Number(productionYear) > Number(params[`production-year`])) {
     return false;
@@ -92,7 +92,7 @@ function filterCars(params, filters) {
   }
 
   return true;
-}
+};
 
 export const filterProducts = (products, category, filters) => products.filter((product) => {
   if (category !== CategoryType.ALL && product.category !== category) {

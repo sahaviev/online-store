@@ -27,5 +27,4 @@ export const initMap = (element, center) => {
   });
 };
 
-// eslint-disable-next-line max-len
 export const addMarker = (coordinates) => L.marker(coordinates, {icon: activeIcon}).addTo(map);
