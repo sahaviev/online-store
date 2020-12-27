@@ -28,13 +28,13 @@ export class CategoriesView extends AbstractView {
       </div>`;
   }
 
-  categoryChangeHandler(evt) {
-    evt.preventDefault();
-    this.callbacks.categoryChange(evt.target.value);
-  }
-
   setCategoryChangeHandler(callback) {
     this.callbacks.categoryChange = callback;
     this.getElement().querySelector(`#categories`).addEventListener(`change`, this.categoryChangeHandler);
+  }
+
+  categoryChangeHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.categoryChange(evt.target.value);
   }
 }

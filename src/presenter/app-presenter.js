@@ -40,21 +40,21 @@ export class AppPresenter {
         this.favoritesModel,
     );
 
-    this.filterPresenter = new FiltersPresenter(
-        this.sidebarComponent.getCategoryFiltersContainer(),
-        this.categoryModel,
-        this.favoritesModel,
-        this.filterModel,
-        this.productsModel,
-    );
+    this.filterPresenter = new FiltersPresenter({
+      filtersContainer: this.sidebarComponent.getCategoryFiltersContainer(),
+      categoryModel: this.categoryModel,
+      favoritesModel: this.favoritesModel,
+      filterModel: this.filterModel,
+      productsModel: this.productsModel,
+    });
 
-    this.productPresenter = new ProductListPresenter(
-        this.appComponent.getAppContainer(),
-        this.categoryModel,
-        this.favoritesModel,
-        this.filterModel,
-        this.productsModel,
-    );
+    this.productPresenter = new ProductListPresenter({
+      appContainer: this.appComponent.getAppContainer(),
+      categoryModel: this.categoryModel,
+      favoritesModel: this.favoritesModel,
+      filterModel: this.filterModel,
+      productsModel: this.productsModel,
+    });
 
     this.categoryPresenter.init();
     this.filterPresenter.init();

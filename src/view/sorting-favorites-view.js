@@ -18,13 +18,13 @@ export class SortingFavoritesView extends AbstractView {
       </div>`;
   }
 
-  showFavoriteChangeHandler(evt) {
-    evt.preventDefault();
-    this.callbacks.showFavoriteChange(evt.target.checked);
-  }
-
   setShowFavoriteChangeHandler(callback) {
     this.callbacks.showFavoriteChange = callback;
     this.getElement().querySelector(`#favourites`).addEventListener(`change`, this.showFavoriteChangeHandler);
+  }
+
+  showFavoriteChangeHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.showFavoriteChange(evt.target.checked);
   }
 }

@@ -14,17 +14,17 @@ const tileLayer = L.tileLayer(
 
 let map;
 
-export const initMap = (element, center) => {
+export const initMap = (element, coordinates) => {
   if (map) {
     map.remove();
   }
 
   map = L.map(element, {
-    center,
+    center: coordinates,
     zoom: 14,
     layers: [tileLayer],
     marker: true,
   });
-};
 
-export const addMarker = (coordinates) => L.marker(coordinates, {icon: activeIcon}).addTo(map);
+  L.marker(coordinates, {icon: activeIcon}).addTo(map);
+};

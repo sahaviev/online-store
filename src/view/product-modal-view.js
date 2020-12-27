@@ -1,7 +1,7 @@
 import {AbstractView} from './abstract-view.js';
 import {adaptFilterName, adaptFilterValue} from '../utils/product-adapters.js';
 import {preload} from '../utils/image.js';
-import {initMap, addMarker} from '../utils/leaftlet.js';
+import {initMap} from '../utils/leaftlet.js';
 
 const GOOD_RATING = 4.8;
 const BAD_RATING = 4;
@@ -90,16 +90,15 @@ export class ProductModalView extends AbstractView {
     this.getElement().querySelector(`.gallery__list`).addEventListener(`click`, this.mainPhotoClickHandler);
   }
 
-  renderMap() {
-    initMap(
-        this.getElement().querySelector(`#map`), this.product.coordinates,
-    );
-
-    addMarker(this.product.coordinates);
-  }
-
   getTemplate() {
     return createProductModalTemplate(this.product);
+  }
+
+  renderMap() {
+    initMap(
+        this.getElement().querySelector(`#map`),
+        this.product.coordinates,
+    );
   }
 
   closeModal() {

@@ -97,6 +97,10 @@ export class FilterCameraView extends AbstractFilterView {
     this.selectedFilters = selectedFilters;
   }
 
+  getTemplate() {
+    return createCameraFilterTemplate(this.disabled, this.selectedFilters);
+  }
+
   setFilterChangeHandler(callback) {
     super.setFilterChangeHandler(callback);
     const element = this.getElement();
@@ -107,9 +111,5 @@ export class FilterCameraView extends AbstractFilterView {
   setCheckboxFilterChangeHandler(callback) {
     super.setCheckboxFilterChangeHandler(callback);
     this.getElement().querySelector(`#camera-type`).addEventListener(`change`, this.handleCheckboxFilterChange);
-  }
-
-  getTemplate() {
-    return createCameraFilterTemplate(this.disabled, this.selectedFilters);
   }
 }

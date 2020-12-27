@@ -55,13 +55,13 @@ export class SortingOrderView extends AbstractView {
     return createSortingOrderTemplate(this.disabled, this.selectedSortingOrder);
   }
 
-  sortingOrderChangeHandler(evt) {
-    evt.preventDefault();
-    this.callbacks.sortingOrderChange(evt.target.value);
-  }
-
   setSortingOrderChangeHandler(callback) {
     this.callbacks.sortingOrderChange = callback;
     this.getElement().querySelector(`.sorting__order-list`).addEventListener(`change`, this.sortingOrderChangeHandler);
+  }
+
+  sortingOrderChangeHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.sortingOrderChange(evt.target.value);
   }
 }

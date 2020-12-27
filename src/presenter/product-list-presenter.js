@@ -18,7 +18,13 @@ const INITIAL_PRODUCTS_COUNT = 7;
 const UPLOAD_PRODUCTS_COUNT = 5;
 
 export class ProductListPresenter {
-  constructor(appContainer, categoryModel, favoritesModel, filterModel, productsModel) {
+  constructor({
+    appContainer,
+    categoryModel,
+    favoritesModel,
+    filterModel,
+    productsModel
+  }) {
     this.appContainer = appContainer;
     this.categoryModel = categoryModel;
     this.favoritesModel = favoritesModel;

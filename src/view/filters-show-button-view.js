@@ -14,13 +14,13 @@ export class FiltersShowButtonView extends AbstractView {
 </form>`;
   }
 
-  showButtonSubmitHandler(evt) {
-    evt.preventDefault();
-    this.callbacks.showButtonSubmit();
-  }
-
   setShowButtonClickHandler(callback) {
     this.callbacks.showButtonSubmit = callback;
     this.getElement().addEventListener(`submit`, this.showButtonSubmitHandler);
+  }
+
+  showButtonSubmitHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.showButtonSubmit();
   }
 }

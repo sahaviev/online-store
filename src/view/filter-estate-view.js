@@ -90,6 +90,10 @@ export class FilterEstateView extends AbstractFilterView {
     this.selectedFilters = selectedFilters;
   }
 
+  getTemplate() {
+    return createEstateFilterTemplate(this.disabled, this.selectedFilters);
+  }
+
   setFilterChangeHandler(callback) {
     super.setFilterChangeHandler(callback);
     const element = this.getElement();
@@ -100,9 +104,5 @@ export class FilterEstateView extends AbstractFilterView {
   setCheckboxFilterChangeHandler(callback) {
     super.setCheckboxFilterChangeHandler(callback);
     this.getElement().querySelector(`#estate-type`).addEventListener(`change`, this.handleCheckboxFilterChange);
-  }
-
-  getTemplate() {
-    return createEstateFilterTemplate(this.disabled, this.selectedFilters);
   }
 }

@@ -135,6 +135,10 @@ export class FilterLaptopView extends AbstractFilterView {
     this.selectedFilters = selectedFilters;
   }
 
+  getTemplate() {
+    return createLaptopFilterTemplate(this.disabled, this.selectedFilters);
+  }
+
   setFilterChangeHandler(callback) {
     super.setFilterChangeHandler(callback);
     const element = this.getElement();
@@ -147,9 +151,5 @@ export class FilterLaptopView extends AbstractFilterView {
     const element = this.getElement();
     element.querySelector(`#laptop-type`).addEventListener(`change`, this.handleCheckboxFilterChange);
     element.querySelector(`#laptop-processor`).addEventListener(`change`, this.handleCheckboxFilterChange);
-  }
-
-  getTemplate() {
-    return createLaptopFilterTemplate(this.disabled, this.selectedFilters);
   }
 }

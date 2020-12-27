@@ -26,16 +26,16 @@ export class ProductLayoutView extends AbstractView {
     </section>`;
   }
 
+  setProductsScrollHandler(callback) {
+    this.callbacks.productScrollHandler = callback;
+    this.getProductListContainer().addEventListener(`scroll`, this.productsScrollHandler);
+  }
+
   productsScrollHandler() {
     const listContainer = this.getProductListContainer();
     const containerHeight = listContainer.scrollTop + listContainer.offsetHeight;
     if (containerHeight === listContainer.scrollHeight) {
       this.callbacks.productScrollHandler();
     }
-  }
-
-  setProductsScrollHandler(callback) {
-    this.callbacks.productScrollHandler = callback;
-    this.getProductListContainer().addEventListener(`scroll`, this.productsScrollHandler);
   }
 }

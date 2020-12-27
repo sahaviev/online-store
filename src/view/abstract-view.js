@@ -11,26 +11,6 @@ export class AbstractView {
     this.callbacks = {};
   }
 
-  handleBeforeRenderCallback() {
-    if (typeof this.callbacks.beforeRender === `function`) {
-      this.callbacks.beforeRender();
-    }
-  }
-
-  handleAfterRenderCallback() {
-    if (typeof this.callbacks.afterRender === `function`) {
-      this.callbacks.afterRender();
-    }
-  }
-
-  setBeforeRenderHandler(callback) {
-    this.callbacks.beforeRender = callback;
-  }
-
-  setAfterRenderHandler(callback) {
-    this.callbacks.afterRender = callback;
-  }
-
   // eslint-disable-next-line class-methods-use-this
   getTemplate() {
     throw new Error(`AbstractView method not implemented: getTemplate`);
@@ -46,5 +26,25 @@ export class AbstractView {
 
   removeElement() {
     this.element = null;
+  }
+
+  setBeforeRenderHandler(callback) {
+    this.callbacks.beforeRender = callback;
+  }
+
+  setAfterRenderHandler(callback) {
+    this.callbacks.afterRender = callback;
+  }
+
+  handleBeforeRenderCallback() {
+    if (typeof this.callbacks.beforeRender === `function`) {
+      this.callbacks.beforeRender();
+    }
+  }
+
+  handleAfterRenderCallback() {
+    if (typeof this.callbacks.afterRender === `function`) {
+      this.callbacks.afterRender();
+    }
   }
 }

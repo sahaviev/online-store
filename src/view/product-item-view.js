@@ -59,6 +59,17 @@ export class ProductItemView extends AbstractView {
     this.morePhotoElement.classList.add(`hidden`);
   }
 
+  setFavoriteClickHandler(callback) {
+    this.callbacks.favoriteClick = callback;
+    this.getElement().querySelector(`#add-to-favorite`).addEventListener(`click`, this.favoriteClickHandler);
+  }
+
+  setProductOpenClickHandler(callback) {
+    this.callbacks.productOpenClick = callback;
+    this.getElement().querySelector(`.product__name`).addEventListener(`click`, this.productOpenClickHandler);
+    this.getElement().querySelector(`.product__image`).addEventListener(`click`, this.productOpenClickHandler);
+  }
+
   previewPhotoMouseOverHandler(evt) {
     const photoIndex = Number(evt.target.dataset.photoIndex);
     const photo = this.product.photos[photoIndex];
@@ -77,17 +88,6 @@ export class ProductItemView extends AbstractView {
       mainImage.setAttribute(`src`, photo);
       mainImage.setAttribute(`srcset`, photo);
     });
-  }
-
-  setFavoriteClickHandler(callback) {
-    this.callbacks.favoriteClick = callback;
-    this.getElement().querySelector(`#add-to-favorite`).addEventListener(`click`, this.favoriteClickHandler);
-  }
-
-  setProductOpenClickHandler(callback) {
-    this.callbacks.productOpenClick = callback;
-    this.getElement().querySelector(`.product__name`).addEventListener(`click`, this.productOpenClickHandler);
-    this.getElement().querySelector(`.product__image`).addEventListener(`click`, this.productOpenClickHandler);
   }
 
   favoriteClickHandler(evt) {

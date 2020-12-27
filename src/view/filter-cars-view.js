@@ -104,6 +104,10 @@ export class FilterCarsView extends AbstractFilterView {
     this.selectedFilters = selectedFilters;
   }
 
+  getTemplate() {
+    return createCarFilterTemplate(this.disabled, this.selectedFilters);
+  }
+
   setFilterChangeHandler(callback) {
     super.setFilterChangeHandler(callback);
     const element = this.getElement();
@@ -114,9 +118,5 @@ export class FilterCarsView extends AbstractFilterView {
   setCheckboxFilterChangeHandler(callback) {
     super.setCheckboxFilterChangeHandler(callback);
     this.getElement().querySelector(`#body-type`).addEventListener(`change`, this.handleCheckboxFilterChange);
-  }
-
-  getTemplate() {
-    return createCarFilterTemplate(this.disabled, this.selectedFilters);
   }
 }

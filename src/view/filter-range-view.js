@@ -17,6 +17,10 @@ export class FilterRangeView extends AbstractFilterView {
     this.setAfterRenderHandler(this.renderSlider);
   }
 
+  getTemplate() {
+    return createRangeFilterTemplate(this.disabled);
+  }
+
   removeElement() {
     this.slider.destroy();
     super.removeElement();
@@ -38,10 +42,6 @@ export class FilterRangeView extends AbstractFilterView {
         this.callbacks.valueFilterChange(values);
       },
     });
-  }
-
-  getTemplate() {
-    return createRangeFilterTemplate(this.disabled);
   }
 
   setDisabled(disabled) {

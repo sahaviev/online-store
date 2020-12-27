@@ -13,7 +13,13 @@ import {FiltersShowButtonView} from '../view/filters-show-button-view.js';
 const getSelectedRange = ({minPrice, maxPrice}) => minPrice && maxPrice ? [minPrice, maxPrice] : [0, 0];
 
 export class FiltersPresenter {
-  constructor(filtersContainer, categoryModel, favoritesModel, filterModel, productsModel) {
+  constructor({
+    filtersContainer,
+    categoryModel,
+    favoritesModel,
+    filterModel,
+    productsModel,
+  }) {
     this.filtersContainer = filtersContainer;
 
     this.categoryModel = categoryModel;
