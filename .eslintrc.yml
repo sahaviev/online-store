@@ -7,6 +7,10 @@ env:
   browser: true
   jest: true
 
+globals:
+  L: true
+  rSlider: true
+
 extends:
   - 'htmlacademy/es6'
 

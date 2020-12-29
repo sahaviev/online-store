@@ -27,7 +27,7 @@ export class FilterRangeView extends AbstractFilterView {
   }
 
   renderSlider() {
-    // eslint-disable-next-line new-cap,no-undef
+    // eslint-disable-next-line new-cap
     this.slider = new rSlider({
       target: this.getElement().querySelector(`#range`),
       values: this.priceRange,

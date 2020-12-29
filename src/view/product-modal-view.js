@@ -1,7 +1,17 @@
 import {AbstractView} from './abstract-view.js';
 import {adaptFilterName, adaptFilterValue} from '../utils/product-adapters.js';
 import {preload} from '../utils/image.js';
-import {initMap} from '../utils/leaftlet.js';
+
+const OSM_ATTRIBUTION = `&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>`;
+const activeIcon = L.icon({
+  iconUrl: `/img/pin-active.svg`,
+  iconSize: [20, 30],
+});
+const tileLayer = L.tileLayer(
+    `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
+      attribution: OSM_ATTRIBUTION,
+    },
+);
 
 const GOOD_RATING = 4.8;
 const BAD_RATING = 4;
@@ -77,6 +87,7 @@ export class ProductModalView extends AbstractView {
     this.product = product;
 
     this.currentActivePreview = null;
+    this.map = null;
 
     this.renderMap = this.renderMap.bind(this);
     this.favoriteClickHandler = this.favoriteClickHandler.bind(this);
@@ -95,13 +106,21 @@ export class ProductModalView extends AbstractView {
   }
 
   renderMap() {
-    initMap(
-        this.getElement().querySelector(`#map`),
-        this.product.coordinates,
-    );
+    const element = this.getElement().querySelector(`#map`);
+    const {coordinates} = this.product;
+
+    this.map = L.map(element, {
+      center: coordinates,
+      zoom: 14,
+      layers: [tileLayer],
+      marker: true,
+    });
+
+    L.marker(coordinates, {icon: activeIcon}).addTo(this.map);
   }
 
   closeModal() {
+    this.map.remove();
     document.removeEventListener(`keyup`, this.documentKeyupHandler);
     this.getElement().removeEventListener(`click`, this.modalOutsideClickHandler);
     this.getElement().querySelector(`.popup__close`).removeEventListener(`click`, this.closeModalClickHandler);

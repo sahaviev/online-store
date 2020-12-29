@@ -13,114 +13,112 @@ export const getProductsPriceRanges = (products) => {
   };
 };
 
-const filterEstates = (params, filters) => {
-  if (filters[`estate-type`] && filters[`estate-type`].length > 0 && !filters[`estate-type`].includes(params.type)) {
-    return false;
-  }
-
-  if (filters[`min-square`] && Number(filters[`min-square`]) > params.area) {
-    return false;
-  }
-
-  if (filters.rooms && filters.rooms !== `any`) {
-    const exactCount = Number(filters.rooms) !== params[`rooms-count`];
-    const fiveAndMore = filters.rooms === `five_and_more` && params[`rooms-count`] < 5;
-    if (exactCount || fiveAndMore) {
-      return false;
-    }
-  }
-
-  return true;
+const checkEstateType = (filters, product) => {
+  const estateType = filters[`estate-type`];
+  return !estateType || estateType.length === 0 || estateType.length > 0 && estateType.includes(product.filters.type);
 };
 
-const filterLaptops = (params, filters) => {
+const checkEstateSquare = (filters, product) => {
+  const minSquare = filters[`min-square`];
+  return !minSquare || product.filters.area > Number(minSquare);
+};
+
+const checkEstateRoomsCount = (filters, product) => {
+  const exactCount = Number(filters.rooms) === product.filters[`rooms-count`];
+  const fiveAndMore = filters.rooms === `five_and_more` && product.filters[`rooms-count`] >= 5;
+  return !filters.rooms || filters.rooms === `any` || exactCount || fiveAndMore;
+};
+
+const checkLaptopType = (filters, product) => {
   const laptopType = filters[`laptop-type`];
-  if (laptopType && laptopType.length > 0 && !laptopType.includes(params.type)) {
-    return false;
-  }
-
-  if (filters.ram && filters.ram !== `any` && Number(filters.ram) !== params[`ram-value`]) {
-    return false;
-  }
-
-  const screenSize = filters.diagonal;
-  if (screenSize && screenSize !== `any` && Number(screenSize) !== Math.floor(params[`screen-size`])) {
-    return false;
-  }
-
-  const cpuType = filters[`laptop-processor`];
-  if (cpuType && cpuType.length > 0 && !cpuType.includes(params[`cpu-type`])) {
-    return false;
-  }
-
-  return true;
+  return !laptopType || laptopType.length === 0 || laptopType.length > 0 && laptopType.includes(product.filters.type);
 };
 
-const filterCameras = (params, filters) => {
+const checkLaptopRam = (filters, product) => {
+  return !filters.ram || filters.ram === `any` || Number(filters.ram) === product.filters[`ram-value`];
+};
+
+const checkLaptopScreenSize = (filters, product) => {
+  const {diagonal} = filters;
+  return !diagonal || diagonal === `any` || Number(diagonal) === Math.floor(product.filters[`screen-size`]);
+};
+
+const checkLaptopCpu = (filters, product) => {
+  const processor = filters[`laptop-processor`];
+  return !processor || processor.length === 0 || processor.length > 0 && processor.includes(product.filters[`cpu-type`]);
+};
+
+const checkCameraType = (filters, product) => {
   const cameraType = filters[`camera-type`];
-  if (cameraType && cameraType.length > 0 && !cameraType.includes(params.type)) {
-    return false;
-  }
+  return !cameraType || cameraType.length === 0 || cameraType.length > 0 && cameraType.includes(product.filters.type);
+};
 
+const checkCameraMatrix = (filters, product) => {
   const matrixResolution = filters[`resolution-matrix`];
-  if (matrixResolution && matrixResolution !== `any` && Number(matrixResolution) < Math.floor(params[`matrix-resolution`])) {
-    return false;
-  }
+  return !matrixResolution || matrixResolution === `any` || Math.floor(product.filters[`matrix-resolution`]) >= Number(matrixResolution);
+};
 
+const checkCameraVideo = (filters, product) => {
   const videoResolution = filters[`resolution-video`];
-  if (videoResolution && videoResolution !== `any` && videoResolution !== params.supporting.toLowerCase()) {
-    return false;
-  }
-
-  return true;
+  return !videoResolution || videoResolution === `any` || videoResolution === product.filters.supporting.toLowerCase();
 };
 
-const filterCars = (params, filters) => {
+const checkCarProductionYear = (filters, product) => {
   const productionYear = filters[`production-year`];
-  if (productionYear && productionYear !== `any` && Number(productionYear) > Number(params[`production-year`])) {
-    return false;
-  }
-
-  const {transmission} = filters;
-  if (transmission && transmission !== `any` && transmission !== params.transmission) {
-    return false;
-  }
-
-  const bodyType = filters[`body-type`];
-  if (bodyType && bodyType.length > 0 && !bodyType.includes(params[`body-type`])) {
-    return false;
-  }
-
-  return true;
+  return !productionYear || productionYear === `any` || Number(product.filters[`production-year`]) >= Number(productionYear);
 };
+
+const checkCarTransmission = (filters, product) => {
+  const {transmission} = filters;
+  return !transmission || transmission === `any` || transmission === product.filters.transmission;
+};
+
+const checkCarBodyType = (filters, product) => {
+  const bodyType = filters[`body-type`];
+  return !bodyType || bodyType.length > 0 && bodyType.includes(product.filters[`body-type`]);
+};
+
+
+const checkCategory = (category, product) => {
+  return category === CategoryType.ALL || product.category === category;
+};
+
+const checkPrice = (filters, product) => (
+  (!filters.minPrice || product.price >= filters.minPrice) &&
+  (!filters.maxPrice || product.price <= filters.maxPrice)
+);
 
 export const filterProducts = (products, category, filters) => products.filter((product) => {
-  if (category !== CategoryType.ALL && product.category !== category) {
-    return false;
-  }
-
-  const params = product.filters;
-  if (!params) {
-    return false;
-  }
-
-  if (filters.minPrice && filters.minPrice > product.price) {
-    return false;
-  }
-
-  if (filters.maxPrice && filters.maxPrice < product.price) {
+  if (!(product.filters && checkCategory(category, product) && checkPrice(filters, product))) {
     return false;
   }
 
   switch (category) {
     case CategoryType.ESTATE:
-      return filterEstates(params, filters);
+      return (
+        checkEstateType(filters, product) &&
+        checkEstateSquare(filters, product) &&
+        checkEstateRoomsCount(filters, product)
+      );
     case CategoryType.LAPTOPS:
-      return filterLaptops(params, filters);
+      return (
+        checkLaptopType(filters, product) &&
+        checkLaptopRam(filters, product) &&
+        checkLaptopScreenSize(filters, product) &&
+        checkLaptopCpu(filters, product)
+      );
     case CategoryType.CAMERA:
-      return filterCameras(params, filters);
+      return (
+        checkCameraType(filters, product) &&
+        checkCameraMatrix(filters, product) &&
+        checkCameraVideo(filters, product)
+      );
     case CategoryType.CARS:
-      return filterCars(params, filters);
+      return (
+        checkCarProductionYear(filters, product) &&
+        checkCarTransmission(filters, product) &&
+        checkCarBodyType(filters, product)
+      );
     default:
       return true;
   }

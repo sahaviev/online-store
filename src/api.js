@@ -48,7 +48,7 @@ export class Api {
     return response.json();
   }
 
-  static catchError(err) {
-    throw err;
+  static catchError(error) {
+    console.error(error.message);
   }
 }

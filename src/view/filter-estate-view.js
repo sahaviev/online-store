@@ -19,7 +19,7 @@ const createEstateFilterTemplate = (disabled = ``, selectedFilters = {}) => `<di
         <label for="flat_type">Квартира</label>
       </li>
       <li class="filter__checkboxes-item">
-        <input class="visually-hidden" type="checkbox" name="estate-type" value="apartments" id="apartments_type"
+        <input class="visually-hidden" type="checkbox" name="estate-type" value="apartment" id="apartments_type"
             ${disabled}
             ${selectedFilters[`estate-type`] && selectedFilters[`estate-type`].includes(`apartments`) ? `checked` : ``}
         />

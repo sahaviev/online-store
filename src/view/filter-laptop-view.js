@@ -5,7 +5,7 @@ const createLaptopFilterTemplate = (disabled = ``, selectedFilters = {}) => `<di
       <legend>Тип ноутбука</legend>
       <ul class="filter__checkboxes-list filter__checkboxes-list--laptop-ram" id="laptop-type">
         <li class="filter__checkboxes-item">
-          <input class="visually-hidden" type="checkbox" name="laptop-type" value="ultra" id="ultra"
+          <input class="visually-hidden" type="checkbox" name="laptop-type" value="ultrabook" id="ultra"
             ${disabled}
             ${selectedFilters[`laptop-type`] && selectedFilters[`laptop-type`].includes(`ultra`) ? `checked` : ``}
           />
