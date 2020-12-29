@@ -1,7 +1,7 @@
-import { remove, render, replace } from '../utils/render';
-import { categories, UpdateType } from '../const';
+import {remove, render, replace} from '../utils/render.js';
+import {categories, UpdateType} from '../const.js';
 
-import { CategoriesView } from '../view/categories-view';
+import {CategoriesView} from '../view/categories-view.js';
 
 export class CategoriesPresenter {
   constructor(categoriesContainer, categoryModel, favoritesModel) {

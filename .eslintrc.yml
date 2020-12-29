@@ -5,9 +5,14 @@ parserOptions:
 env:
   es2020: true
   browser: true
+  jest: true
+
+globals:
+  L: true
+  rSlider: true
 
 extends:
-  - 'airbnb-base'
+  - 'htmlacademy/es6'
 
 plugins:
   - import

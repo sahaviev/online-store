@@ -1,4 +1,4 @@
-import { AbstractView } from './abstract-view.js';
+import {AbstractView} from './abstract-view.js';
 
 export class CategoriesView extends AbstractView {
   constructor(categories, selected, disabled) {
@@ -13,13 +13,13 @@ export class CategoriesView extends AbstractView {
   getTemplate() {
     const categoryOptions = this.categories
       .map((category) => (
-        `<option value="${category.name}" ${category.name === this.selected && 'selected'}>${category.title}</option>`
+        `<option value="${category.name}" ${category.name === this.selected && `selected`}>${category.title}</option>`
       ))
-      .join('');
+      .join(``);
 
     return `<div class="filter__select-wrapper">
         <label for="categories">Категория товаров</label>
-        <select id="categories" name="categories" ${this.disabled && 'disabled'}>
+        <select id="categories" name="categories" ${this.disabled && `disabled`}>
           ${categoryOptions}
         </select>
         <svg width="14" height="8" viewBox="0 0 14 8" xmlns="http://www.w3.org/2000/svg">
@@ -28,13 +28,13 @@ export class CategoriesView extends AbstractView {
       </div>`;
   }
 
+  setCategoryChangeHandler(callback) {
+    this.callbacks.categoryChange = callback;
+    this.getElement().querySelector(`#categories`).addEventListener(`change`, this.categoryChangeHandler);
+  }
+
   categoryChangeHandler(evt) {
     evt.preventDefault();
     this.callbacks.categoryChange(evt.target.value);
-  }
-
-  setCategoryChangeHandler(callback) {
-    this.callbacks.categoryChange = callback;
-    this.getElement().querySelector('#categories').addEventListener('change', this.categoryChangeHandler);
   }
 }

@@ -1,4 +1,4 @@
-import { AbstractView } from './abstract-view.js';
+import {AbstractView} from './abstract-view.js';
 
 export class ProductLayoutView extends AbstractView {
   constructor() {
@@ -7,11 +7,11 @@ export class ProductLayoutView extends AbstractView {
   }
 
   getSortingContainer() {
-    return this.getElement().querySelector('.sorting__form');
+    return this.getElement().querySelector(`.sorting__form`);
   }
 
   getProductListContainer() {
-    return this.getElement().querySelector('.results__list');
+    return this.getElement().querySelector(`.results__list`);
   }
 
   getTemplate() {
@@ -26,16 +26,16 @@ export class ProductLayoutView extends AbstractView {
     </section>`;
   }
 
+  setProductsScrollHandler(callback) {
+    this.callbacks.productScrollHandler = callback;
+    this.getProductListContainer().addEventListener(`scroll`, this.productsScrollHandler);
+  }
+
   productsScrollHandler() {
     const listContainer = this.getProductListContainer();
     const containerHeight = listContainer.scrollTop + listContainer.offsetHeight;
     if (containerHeight === listContainer.scrollHeight) {
       this.callbacks.productScrollHandler();
     }
-  }
-
-  setProductsScrollHandler(callback) {
-    this.callbacks.productScrollHandler = callback;
-    this.getProductListContainer().addEventListener('scroll', this.productsScrollHandler);
   }
 }

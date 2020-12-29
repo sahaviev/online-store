@@ -1,126 +1,109 @@
-import { CategoryType } from '../const';
+import {CategoryType} from '../const.js';
 
-export function getCategoryProducts(products, category) {
+export const getCategoryProducts = (products, category) => {
   return products.filter((product) => product.category === category);
-}
+};
 
-export function getProductsPriceRanges(products) {
+export const getProductsPriceRanges = (products) => {
   const prices = products.map((product) => product.price);
 
   return {
     min: Math.min.apply(null, prices),
     max: Math.max.apply(null, prices),
   };
-}
+};
 
-function filterEstates(params, filters) {
-  if (filters['estate-type'] && filters['estate-type'].length > 0 && !filters['estate-type'].includes(params.type)) {
-    return false;
-  }
+const checkEstateType = (estateTypeFilter, productType) =>
+  !estateTypeFilter || estateTypeFilter.length === 0 || estateTypeFilter.length > 0 && estateTypeFilter.includes(productType);
 
-  if (filters['min-square'] && Number(filters['min-square']) > params.area) {
-    return false;
-  }
+const checkEstateSquare = (minSquareFilter, productArea) => !minSquareFilter || productArea > Number(minSquareFilter);
 
-  if (filters.rooms && filters.rooms !== 'any') {
-    const exactCount = Number(filters.rooms) !== params['rooms-count'];
-    const fiveAndMore = filters.rooms === 'five_and_more' && params['rooms-count'] < 5;
-    if (exactCount || fiveAndMore) {
-      return false;
-    }
-  }
+const checkEstateRoomsCount = (roomsFilter, productRoomsCount) => {
+  const exactCount = Number(roomsFilter) === productRoomsCount;
+  const fiveAndMore = roomsFilter === `five_and_more` && productRoomsCount >= 5;
+  return !roomsFilter || roomsFilter === `any` || exactCount || fiveAndMore;
+};
 
-  return true;
-}
+const checkLaptopType = (laptopType, productType) =>
+  !laptopType || laptopType.length === 0 || laptopType.length > 0 && laptopType.includes(productType);
 
-function filterLaptops(params, filters) {
-  const laptopType = filters['laptop-type'];
-  if (laptopType && laptopType.length > 0 && !laptopType.includes(params.type)) {
-    return false;
-  }
+const checkLaptopRam = (ram, productRam) => {
+  return !ram || ram === `any` || Number(ram) === productRam;
+};
 
-  if (filters.ram && filters.ram !== 'any' && Number(filters.ram) !== params['ram-value']) {
-    return false;
-  }
+const checkLaptopScreenSize = (diagonal, productScreenSize) => {
+  return !diagonal || diagonal === `any` || Number(diagonal) === Math.floor(productScreenSize);
+};
 
-  const screenSize = filters.diagonal;
-  if (screenSize && screenSize !== 'any' && Number(screenSize) !== Math.floor(params['screen-size'])) {
-    return false;
-  }
+const checkLaptopCpu = (processor, productCpu) => {
+  return !processor || processor.length === 0 || processor.length > 0 && processor.includes(productCpu);
+};
 
-  const cpuType = filters['laptop-processor'];
-  if (cpuType && cpuType.length > 0 && !cpuType.includes(params['cpu-type'])) {
-    return false;
-  }
+const checkCameraType = (cameraType, productType) => {
+  return !cameraType || cameraType.length === 0 || cameraType.length > 0 && cameraType.includes(productType);
+};
 
-  return true;
-}
+const checkCameraMatrix = (matrixResolution, productMatrix) => {
+  return !matrixResolution || matrixResolution === `any` || Math.floor(productMatrix) >= Number(matrixResolution);
+};
 
-function filterCameras(params, filters) {
-  const cameraType = filters['camera-type'];
-  if (cameraType && cameraType.length > 0 && !cameraType.includes(params.type)) {
-    return false;
-  }
+const checkCameraVideo = (videoResolution, productVideoSupporting) => {
+  return !videoResolution || videoResolution === `any` || videoResolution === productVideoSupporting.toLowerCase();
+};
 
-  const matrixResolution = filters['resolution-matrix'];
-  if (matrixResolution && matrixResolution !== 'any' && Number(matrixResolution) < Math.floor(params['matrix-resolution'])) {
-    return false;
-  }
+const checkCarProductionYear = (productionYear, productProductionYear) => {
+  return !productionYear || productionYear === `any` || Number(productProductionYear) >= Number(productionYear);
+};
 
-  const videoResolution = filters['resolution-video'];
-  if (videoResolution && videoResolution !== 'any' && videoResolution !== params.supporting.toLowerCase()) {
-    return false;
-  }
+const checkCarTransmission = (transmission, productTransmission) => {
+  return !transmission || transmission === `any` || transmission === productTransmission;
+};
 
-  return true;
-}
+const checkCarBodyType = (bodyType, productBodyType) => {
+  return !bodyType || bodyType.length > 0 && bodyType.includes(productBodyType);
+};
 
-function filterCars(params, filters) {
-  const productionYear = filters['production-year'];
-  if (productionYear && productionYear !== 'any' && Number(productionYear) > Number(params['production-year'])) {
-    return false;
-  }
 
-  const { transmission } = filters;
-  if (transmission && transmission !== 'any' && transmission !== params.transmission) {
-    return false;
-  }
+const checkCategory = (category, product) => {
+  return category === CategoryType.ALL || product.category === category;
+};
 
-  const bodyType = filters['body-type'];
-  if (bodyType && bodyType.length > 0 && !bodyType.includes(params['body-type'])) {
-    return false;
-  }
-
-  return true;
-}
+const checkPrice = (filters, product) => (
+  (!filters.minPrice || product.price >= filters.minPrice) &&
+  (!filters.maxPrice || product.price <= filters.maxPrice)
+);
 
 export const filterProducts = (products, category, filters) => products.filter((product) => {
-  if (category !== CategoryType.ALL && product.category !== category) {
-    return false;
-  }
-
-  const params = product.filters;
-  if (!params) {
-    return false;
-  }
-
-  if (filters.minPrice && filters.minPrice > product.price) {
-    return false;
-  }
-
-  if (filters.maxPrice && filters.maxPrice < product.price) {
+  if (!(product.filters && checkCategory(category, product) && checkPrice(filters, product))) {
     return false;
   }
 
   switch (category) {
     case CategoryType.ESTATE:
-      return filterEstates(params, filters);
+      return (
+        checkEstateType(filters[`estate-type`], product.filters.type) &&
+        checkEstateSquare(filters[`min-square`], product.filters.area) &&
+        checkEstateRoomsCount(filters.rooms, product.filters[`rooms-count`])
+      );
     case CategoryType.LAPTOPS:
-      return filterLaptops(params, filters);
+      return (
+        checkLaptopType(filters[`laptop-type`], product.filters.type) &&
+        checkLaptopRam(filters.ram, product.filters[`ram-value`]) &&
+        checkLaptopScreenSize(filters.diagonal, product.filters[`screen-size`]) &&
+        checkLaptopCpu(filters[`laptop-processor`], product.filters[`cpu-type`])
+      );
     case CategoryType.CAMERA:
-      return filterCameras(params, filters);
+      return (
+        checkCameraType(filters[`camera-type`], product.filters.type) &&
+        checkCameraMatrix(filters[`resolution-matrix`], product.filters[`matrix-resolution`]) &&
+        checkCameraVideo(filters[`resolution-video`], product.filters.supporting)
+      );
     case CategoryType.CARS:
-      return filterCars(params, filters);
+      return (
+        checkCarProductionYear(filters[`production-year`], product.filters[`production-year`]) &&
+        checkCarTransmission(filters.transmission, product.filters.transmission) &&
+        checkCarBodyType(filters[`body-type`], product.filters[`body-type`])
+      );
     default:
       return true;
   }

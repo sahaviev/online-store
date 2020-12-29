@@ -35,7 +35,9 @@ export class LocalStorageWrapper {
     for (let i = 0; i < rowsCount; i += 1) {
       const key = localStorage.key(i);
 
-      if (key.startsWith(this.prefix)) this.delete(key);
+      if (key.startsWith(this.prefix)) {
+        this.delete(key);
+      }
     }
   }
 

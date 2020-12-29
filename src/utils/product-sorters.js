@@ -1,4 +1,4 @@
-import { SortingOrder } from '../const';
+import {SortingOrder} from '../const.js';
 
 const sortByPrice = (product1, product2) => product1.price - product2.price;
 
@@ -15,4 +15,4 @@ export const sortProducts = (products, sortingOrder) => {
   }
 };
 
-export const sortFavoriteProducts = (products) => products.filter((product) => product.is_favorite);
+export const sortFavoriteProducts = (products) => products.filter((product) => product.isFavorite);

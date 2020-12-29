@@ -1,8 +1,8 @@
 const Method = {
-  GET: 'GET',
-  PUT: 'PUT',
-  POST: 'POST',
-  DELETE: 'DELETE',
+  GET: `GET`,
+  PUT: `PUT`,
+  POST: `POST`,
+  DELETE: `DELETE`,
 };
 
 const SuccessHTTPStatusRange = {
@@ -16,7 +16,7 @@ export class Api {
   }
 
   getProducts() {
-    return this.load({ url: 'db' })
+    return this.load({url: `db`})
       .then(Api.toJSON);
   }
 
@@ -27,8 +27,8 @@ export class Api {
     headers = new Headers(),
   }) {
     return fetch(
-      `${this.endPoint}/${url}`,
-      { method, body, headers },
+        `${this.endPoint}/${url}`,
+        {method, body, headers},
     )
       .then(Api.checkStatus)
       .catch(Api.catchError);
@@ -48,7 +48,7 @@ export class Api {
     return response.json();
   }
 
-  static catchError(err) {
-    throw err;
+  static catchError(error) {
+    console.error(error.message);
   }
 }

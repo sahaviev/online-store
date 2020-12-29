@@ -1,9 +1,9 @@
-import { AbstractView } from './abstract-view.js';
+import {AbstractView} from './abstract-view.js';
 
 export class SortingFavoritesView extends AbstractView {
   constructor() {
     super();
-    this.showFavoriteClickHandler = this.showFavoriteClickHandler.bind(this);
+    this.showFavoriteChangeHandler = this.showFavoriteChangeHandler.bind(this);
   }
 
   getTemplate() {
@@ -18,13 +18,13 @@ export class SortingFavoritesView extends AbstractView {
       </div>`;
   }
 
-  showFavoriteClickHandler(evt) {
-    evt.preventDefault();
-    this.callbacks.showFavoriteClick(evt.target.checked);
+  setShowFavoriteChangeHandler(callback) {
+    this.callbacks.showFavoriteChange = callback;
+    this.getElement().querySelector(`#favourites`).addEventListener(`change`, this.showFavoriteChangeHandler);
   }
 
-  setShowFavoriteClickHandler(callback) {
-    this.callbacks.showFavoriteClick = callback;
-    this.getElement().querySelector('#favourites').addEventListener('change', this.showFavoriteClickHandler);
+  showFavoriteChangeHandler(evt) {
+    evt.preventDefault();
+    this.callbacks.showFavoriteChange(evt.target.checked);
   }
 }

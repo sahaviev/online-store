@@ -1,16 +1,16 @@
-import { LocalStorageWrapper } from '../utils/localstorage-wrapper';
-import {
-  adaptCategory, adaptDate, formatPrice, getPublishDateDifference, getPublishDateString,
-} from '../utils/product-adapters';
-import { UpdateType } from '../const';
+import {LocalStorageWrapper} from '../utils/localstorage-wrapper.js';
+import {adaptCategory, formatPrice} from '../utils/product-adapters.js';
+import {convertStringTimestampToDate, getPublishDateDifference, getPublishDateString} from '../utils/date.js';
 
-import { AbstractModel } from './abstract-model';
+import {UpdateType} from '../const.js';
+
+import {AbstractModel} from './abstract-model.js';
 
 export class ProductModel extends AbstractModel {
   constructor() {
     super();
     this.products = [];
-    this.favoritesStorage = new LocalStorageWrapper('favorites');
+    this.favoritesStorage = new LocalStorageWrapper(`favorites`);
   }
 
   setProducts(updateType, products) {
@@ -27,17 +27,17 @@ export class ProductModel extends AbstractModel {
     this.favoritesStorage.save(product.id, favorite);
 
     this.updateProduct(UpdateType.MINOR,
-      {
-        ...product,
-        is_favorite: favorite,
-      });
+        {
+          ...product,
+          isFavorite: favorite,
+        });
   }
 
   updateProduct(updateType, newProduct) {
     const index = this.products.findIndex((product) => product.id === newProduct.id);
 
     if (index === -1) {
-      throw new Error('Can\'t update non-existent product');
+      throw new Error(`Can't update non-existent product`);
     }
 
     this.products = [
@@ -49,19 +49,18 @@ export class ProductModel extends AbstractModel {
     this.observer.notify(updateType, newProduct);
   }
 
-  // ToDo: запросить возврат id со стороны сервера
   adaptToClient(products) {
     return products.map((product, index) => {
-      const date = adaptDate(product['publish-date']);
+      const date = convertStringTimestampToDate(product[`publish-date`]);
       return {
         ...product,
-        id: index + 1,
-        is_favorite: this.favoritesStorage.fetch(index + 1),
-        date,
-        category: adaptCategory(product.category),
+        'id': index + 1,
+        'isFavorite': this.favoritesStorage.fetch(index + 1),
+        'category': adaptCategory(product.category),
         'formatted-price': formatPrice(product.price),
-        dateString: getPublishDateString(date),
-        dateDifference: getPublishDateDifference(date),
+        'dateString': getPublishDateString(date),
+        'dateDifference': getPublishDateDifference(date),
+        date,
       };
     });
   }
