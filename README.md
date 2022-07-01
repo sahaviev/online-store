@@ -1,26 +1,16 @@
-# Сайт объявлений
+# Advertisement board on Vanilla JS + Object Oriented Design
 
-## Техническое задание
-https://www.notion.so/eb49f3a5e5a54f76ac1c02044ff904b8
+## Technical description
 
-## Техническое описание проекта
+* MVP Architecture
+* Developed with object orient design
+* Mostly in declarative style without mutations
+* Clean JavaScript, without libraries and 3rd party tools
 
-* Архитектура MVP
-* Код написан с использованием объектно-ориентированного подхода
-* Код написан преимущественно в декларативном стиле, без мутаций
-* Код написан на чистом JavaScript, без библиотек и внешних зависимостей
-
-## Описание файловой структуры 
+## File structure description
  
-Каталоги:
- * model - модели отвечают за данные, их изменение
- * presenter - посредники отвечают за взаимодействие отображения и моделей
- * view - реализует отображение данных
- * utils - вспомогательные утилиты проекта
-
-
-## ToDo
- * Написание unit-тестов
- * Написание cypress e2e-тестов
-  
-  
+Directories:
+ * model - modules responsible for data and data changing
+ * presenter - responsible for interactions models and views
+ * view - implement rendering behaviour
+ * utils - functions and utils
