@@ -1,4 +1,4 @@
-# Advertisement board on Vanilla JS + Object Oriented Design
+# Advertisement application developed on clean JS + Object Oriented Design
 
 ## Technical description
 
